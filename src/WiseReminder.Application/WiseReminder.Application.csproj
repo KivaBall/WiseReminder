@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WiseReminder.Domain\WiseReminder.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
