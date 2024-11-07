@@ -12,7 +12,7 @@ using WiseReminder.Infrastructure.Data;
 namespace WiseReminder.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241107071753_Initial")]
+    [Migration("20241107111433_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
