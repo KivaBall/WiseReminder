@@ -8,8 +8,8 @@ public abstract class Entity
         AddedAt = DateTime.Now;
     }
 
-    public Guid Id { get; }
-    public DateTime AddedAt { get; }
+    public Guid Id { get; init; }
+    public DateTime AddedAt { get; init; }
     public DateTime? DeletedAt { get; private set; }
 
     internal Entity DeleteEntity()
