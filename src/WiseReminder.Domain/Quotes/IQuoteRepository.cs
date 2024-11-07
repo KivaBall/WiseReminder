@@ -1,6 +1,4 @@
-﻿using WiseReminder.Domain.Categories;
-
-namespace WiseReminder.Domain.Quotes;
+﻿namespace WiseReminder.Domain.Quotes;
 
 public interface IQuoteRepository
 {

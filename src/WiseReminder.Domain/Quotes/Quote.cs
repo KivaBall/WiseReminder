@@ -1,12 +1,12 @@
-﻿using System.Net.Http.Headers;
-using WiseReminder.Domain.Abstractions;
+﻿using WiseReminder.Domain.Abstractions;
+using WiseReminder.Domain.Authors;
 using WiseReminder.Domain.Categories;
 
 namespace WiseReminder.Domain.Quotes;
 
 public sealed class Quote : Entity
 {
-    public Quote(QuoteText text, Guid authorId, Author author, Guid categoryId, Category category, QuoteDate quoteDate)
+    internal Quote(QuoteText text, Guid authorId, Author author, Guid categoryId, Category category, QuoteDate quoteDate)
     {
         Text = text;
         AuthorId = authorId;
@@ -16,6 +16,7 @@ public sealed class Quote : Entity
         QuoteDate = quoteDate;
     }
 
+    // ReSharper disable once UnusedMember.Local
     private Quote()
     {
     }
