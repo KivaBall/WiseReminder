@@ -1,5 +1,4 @@
 ﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Application.Authors.CreateAuthor;
 
 namespace WiseReminder.Application.Quotes.CreateQuote;
 

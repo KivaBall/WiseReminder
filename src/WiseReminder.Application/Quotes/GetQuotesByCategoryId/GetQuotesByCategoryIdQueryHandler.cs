@@ -4,7 +4,7 @@ using WiseReminder.Domain.Abstractions;
 using WiseReminder.Domain.Categories;
 using WiseReminder.Domain.Quotes;
 
-namespace WiseReminder.Application.Quotes.GetQoutesByCategoryId;
+namespace WiseReminder.Application.Quotes.GetQuotesByCategoryId;
 
 public sealed class GetQuotesByCategoryIdQueryHandler(IQuoteRepository quoteRepository, IMapper mapper)
     : IQueryHandler<GetQuotesByCategoryIdQuery, ICollection<QuoteVm>>
