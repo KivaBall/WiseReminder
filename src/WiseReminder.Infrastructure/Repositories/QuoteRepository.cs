@@ -46,6 +46,6 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
 
     public async Task<Quote> GetRandomQuote()
     {
-        return await _context.Quotes.OrderBy(quote => new Guid()).FirstAsync();
+        return await _context.Quotes.OrderBy(quote => Guid.NewGuid()).FirstAsync();
     }
 }
