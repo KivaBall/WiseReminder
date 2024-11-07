@@ -28,7 +28,7 @@ public sealed class AuthorRepository(
     {
         _authorService.DeleteAuthor(author);
         var quotes = await _quoteRepository.GetQuotesByAuthorId(author.Id);
-        foreach (var quote in quotes)
+        foreach (var quote in quotes!)
             _quoteRepository.DeleteQuote(quote);
         _context.Authors.Update(author);
     }
