@@ -15,7 +15,7 @@ public class AdminController(IJwtService jwtService) : ControllerBase
     {
         if (request.Login == "DORKVMSJEUHDJFKW" && request.Password == "AIWNFLTISJDNVYWT")
         {
-            var token = jwtService.GenerateJwtToken();
+            var token = _jwtService.GenerateJwtToken();
             Response.Cookies.Append("admin", token);
             return Task.FromResult<IActionResult>(Ok());
         }
