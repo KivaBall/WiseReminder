@@ -5,7 +5,7 @@ namespace WiseReminder.Domain.Authors;
 
 public sealed class Author : Entity
 {
-    public Author(AuthorName name, AuthorBiography biography, AuthorDateOfBirth dateOfBirth,
+    internal Author(AuthorName name, AuthorBiography biography, AuthorDateOfBirth dateOfBirth,
         AuthorDateOfDeath dateOfDeath)
     {
         Name = name;

@@ -6,7 +6,7 @@ namespace WiseReminder.Domain.Quotes;
 
 public sealed class Quote : Entity
 {
-    public Quote(QuoteText text, Guid authorId, Author author, Guid categoryId, Category category, QuoteDate quoteDate)
+    internal Quote(QuoteText text, Guid authorId, Author author, Guid categoryId, Category category, QuoteDate quoteDate)
     {
         Text = text;
         AuthorId = authorId;

@@ -5,7 +5,7 @@ namespace WiseReminder.Domain.Categories;
 
 public sealed class Category : Entity
 {
-    public Category(CategoryName name, CategoryDescription description)
+    internal Category(CategoryName name, CategoryDescription description)
     {
         Name = name;
         Description = description;
