@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WiseReminder.Application.Categories.CreateCategory;
 using WiseReminder.Application.Categories.DeleteCategory;
@@ -15,6 +16,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("create")]
+    [Authorize]
     public async Task<IActionResult> CreateCategory(CreateCategoryRequest request)
     {
         var command = new CreateCategoryCommand(request.Name, request.Description);
@@ -45,6 +47,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("update")]
+    [Authorize]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
     {
         var command = new UpdateCategoryCommand(request.Id, request.Name, request.Description);
@@ -55,6 +58,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("delete")]
+    [Authorize]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
         var command = new DeleteCategoryCommand(id);

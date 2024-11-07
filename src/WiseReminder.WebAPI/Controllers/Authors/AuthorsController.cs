@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WiseReminder.Application.Authors.CreateAuthor;
 using WiseReminder.Application.Authors.DeleteAuthor;
@@ -15,6 +16,7 @@ public sealed class AuthorsController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("create")]
+    [Authorize]
     public async Task<IActionResult> CreateAuthor(CreateAuthorRequest request)
     {
         var command =
@@ -46,6 +48,7 @@ public sealed class AuthorsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("update")]
+    [Authorize]
     public async Task<IActionResult> UpdateAuthor(UpdateAuthorRequest request)
     {
         var command = new UpdateAuthorCommand(request.Id, request.Name, request.Biography, request.DateOfBirth,
@@ -57,6 +60,7 @@ public sealed class AuthorsController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("delete")]
+    [Authorize]
     public async Task<IActionResult> DeleteAuthor(Guid id)
     {
         var command = new DeleteAuthorCommand(id);
