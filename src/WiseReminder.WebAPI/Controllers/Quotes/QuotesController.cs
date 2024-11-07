@@ -6,6 +6,7 @@ using WiseReminder.Application.Quotes.DeleteQuote;
 using WiseReminder.Application.Quotes.GetQuoteById;
 using WiseReminder.Application.Quotes.GetQuotesByAuthorId;
 using WiseReminder.Application.Quotes.GetQuotesByCategoryId;
+using WiseReminder.Application.Quotes.GetRandomQuote;
 using WiseReminder.Application.Quotes.UpdateQuote;
 
 namespace WiseReminder.WebAPI.Controllers.Quotes;
@@ -55,6 +56,16 @@ public class QuotesController(ISender sender) : ControllerBase
         var result = await _sender.Send(query);
 
         return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+    }
+
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandomQuote()
+    {
+        var query = new GetRandomQuoteQuery();
+
+        var result = await _sender.Send(query);
+
+        return Ok(result.Entity);
     }
 
     [HttpPut("update")]
