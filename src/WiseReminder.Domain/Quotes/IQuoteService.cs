@@ -1,5 +1,4 @@
-﻿using System.Net;
-using WiseReminder.Domain.Authors;
+﻿using WiseReminder.Domain.Authors;
 using WiseReminder.Domain.Categories;
 
 namespace WiseReminder.Domain.Quotes;

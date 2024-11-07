@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using WiseReminder.Domain.Abstractions;
+﻿using WiseReminder.Domain.Abstractions;
 using WiseReminder.Domain.Authors;
 using WiseReminder.Domain.Categories;
 

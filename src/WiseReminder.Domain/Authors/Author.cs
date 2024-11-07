@@ -1,5 +1,4 @@
 ﻿using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Categories;
 using WiseReminder.Domain.Quotes;
 
 namespace WiseReminder.Domain.Authors;
