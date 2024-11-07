@@ -1,13 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WiseReminder.Domain\WiseReminder.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\WiseReminder.Domain\WiseReminder.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Abstractions\MediatR\" />
+		<Folder Include="Authors\CreateAuthor\" />
+		<Folder Include="Authors\DeleteAuthor\" />
+		<Folder Include="Authors\GetAuthorById\" />
+		<Folder Include="Authors\GetAllAuthors\" />
+		<Folder Include="Authors\UpdateAuthor\" />
+		<Folder Include="Categories\CreateCategory\" />
+		<Folder Include="Categories\DeleteCategory\" />
+		<Folder Include="Categories\GetCategoryById\" />
+		<Folder Include="Categories\GetAllCategories\" />
+		<Folder Include="Categories\UpdateCategory\" />
+		<Folder Include="Quotes\CreateQuote\" />
+		<Folder Include="Quotes\DeleteQuote\" />
+		<Folder Include="Quotes\GetQuoteById\" />
+		<Folder Include="Quotes\GetQoutesByCategoryId\" />
+		<Folder Include="Quotes\GetQuotesByAuthorId\" />
+		<Folder Include="Quotes\UpdateQuote\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="MediatR" Version="12.4.1" />
+	</ItemGroup>
 
 </Project>
