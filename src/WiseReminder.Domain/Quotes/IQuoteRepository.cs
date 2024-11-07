@@ -6,6 +6,6 @@ public interface IQuoteRepository
     void UpdateQuote(Quote quote);
     void DeleteQuote(Quote quote);
     Task<Quote?> GetQuoteById(Guid id);
-    Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId);
-    Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId);
+    Task<ICollection<Quote>?> GetQuotesByCategoryId(Guid categoryId);
+    Task<ICollection<Quote>?> GetQuotesByAuthorId(Guid authorId);
 }
