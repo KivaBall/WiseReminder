@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WiseReminder.Application.Abstractions.JWT;
 using WiseReminder.Domain.Abstractions;
 using WiseReminder.Domain.Authors;
 using WiseReminder.Domain.Categories;
 using WiseReminder.Domain.Quotes;
 using WiseReminder.Infrastructure.Data;
+using WiseReminder.Infrastructure.JWT;
 using WiseReminder.Infrastructure.Repositories;
 
 namespace WiseReminder.Infrastructure;
@@ -26,6 +28,8 @@ public static class InfrastructureExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IQuoteRepository, QuoteRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+        services.AddScoped<IJwtService, JwtService>();
 
         return services;
     }
