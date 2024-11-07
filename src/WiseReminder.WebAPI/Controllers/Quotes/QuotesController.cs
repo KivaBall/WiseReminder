@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WiseReminder.Application.Quotes.CreateQuote;
 using WiseReminder.Application.Quotes.DeleteQuote;
@@ -16,6 +17,7 @@ public class QuotesController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("create")]
+    [Authorize]
     public async Task<IActionResult> CreateQuote(CreateQuoteRequest request)
     {
         var command = new CreateQuoteCommand(request.Text, request.AuthorId, request.CategoryId, request.QuoteDate);
@@ -56,6 +58,7 @@ public class QuotesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("update")]
+    [Authorize]
     public async Task<IActionResult> UpdateQuote(UpdateQuoteRequest request)
     {
         var command = new UpdateQuoteCommand(request.Id, request.Text, request.AuthorId, request.CategoryId,
@@ -67,6 +70,7 @@ public class QuotesController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("delete")]
+    [Authorize]
     public async Task<IActionResult> DeleteQuote(Guid id)
     {
         var command = new DeleteQuoteCommand(id);
