@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Domain.Categories;
 
-public class CategoryService : ICategoryService
+public sealed class CategoryService : ICategoryService
 {
     public Category CreateCategory(CategoryName name, CategoryDescription description)
     {

@@ -1,3 +1,3 @@
 ﻿namespace WiseReminder.Domain.Categories;
 
-public record CategoryName(string Value);
+public sealed record CategoryName(string Value);
