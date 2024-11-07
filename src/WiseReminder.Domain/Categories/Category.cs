@@ -11,6 +11,7 @@ public sealed class Category : Entity
         Description = description;
     }
 
+    // ReSharper disable once UnusedMember.Local
     private Category()
     {
 

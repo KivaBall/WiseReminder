@@ -14,6 +14,7 @@ public sealed class Author : Entity
         DateOfDeath = dateOfDeath;
     }
 
+    // ReSharper disable once UnusedMember.Local
     private Author()
     {
 

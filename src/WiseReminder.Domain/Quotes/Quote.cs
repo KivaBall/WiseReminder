@@ -17,6 +17,7 @@ public sealed class Quote : Entity
         QuoteDate = quoteDate;
     }
 
+    // ReSharper disable once UnusedMember.Local
     private Quote()
     {
     }
