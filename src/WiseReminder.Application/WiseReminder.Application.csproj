@@ -18,10 +18,6 @@
 		<Folder Include="Authors\GetAllAuthors\" />
 		<Folder Include="Authors\UpdateAuthor\" />
 		<Folder Include="Categories\CreateCategory\" />
-		<Folder Include="Categories\DeleteCategory\" />
-		<Folder Include="Categories\GetCategoryById\" />
-		<Folder Include="Categories\GetAllCategories\" />
-		<Folder Include="Categories\UpdateCategory\" />
 		<Folder Include="Quotes\CreateQuote\" />
 		<Folder Include="Quotes\DeleteQuote\" />
 		<Folder Include="Quotes\GetQuoteById\" />
