@@ -32,11 +32,15 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
 
     public async Task<ICollection<Quote>?> GetQuotesByCategoryId(Guid categoryId)
     {
-        return await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
+        if (_context.Categories.Any(category => category.Id == categoryId))
+            return await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
+        return null;
     }
 
     public async Task<ICollection<Quote>?> GetQuotesByAuthorId(Guid authorId)
     {
-        return await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
+        if (_context.Authors.Any(author => author.Id == authorId))
+            return await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
+        return null;
     }
 }
