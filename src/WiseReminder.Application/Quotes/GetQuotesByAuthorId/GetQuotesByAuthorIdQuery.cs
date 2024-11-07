@@ -1,6 +1,4 @@
 ﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Application.Categories;
-using WiseReminder.Application.Quotes.GetQuoteById;
 
 namespace WiseReminder.Application.Quotes.GetQuotesByAuthorId;
 

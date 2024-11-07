@@ -11,17 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Abstractions\MediatR\" />
-		<Folder Include="Authors\UpdateAuthor\" />
-		<Folder Include="Categories\CreateCategory\" />
-		<Folder Include="Quotes\CreateQuote\" />
-		<Folder Include="Quotes\DeleteQuote\" />
-		<Folder Include="Quotes\GetQuoteById\" />
-		<Folder Include="Quotes\GetQuotesByAuthorId\" />
-		<Folder Include="Quotes\UpdateQuote\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="MediatR" Version="12.4.1" />
 	</ItemGroup>
