@@ -7,4 +7,5 @@ public interface IQuoteRepository
     void DeleteQuote(Quote quote);
     Task<Quote> GetQuoteById(Guid id);
     Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId);
+    Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId);
 }
