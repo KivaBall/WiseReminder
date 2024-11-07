@@ -14,7 +14,6 @@ public sealed class Category : Entity
     // ReSharper disable once UnusedMember.Local
     private Category()
     {
-
     }
 
     public CategoryName Name { get; internal set; }

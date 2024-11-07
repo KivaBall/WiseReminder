@@ -5,7 +5,8 @@ namespace WiseReminder.Domain.Authors;
 
 public sealed class Author : Entity
 {
-    public Author(AuthorName name, AuthorBiography biography, AuthorDateOfBirth dateOfBirth, AuthorDateOfDeath dateOfDeath)
+    public Author(AuthorName name, AuthorBiography biography, AuthorDateOfBirth dateOfBirth,
+        AuthorDateOfDeath dateOfDeath)
     {
         Name = name;
         Biography = biography;
@@ -16,7 +17,6 @@ public sealed class Author : Entity
     // ReSharper disable once UnusedMember.Local
     private Author()
     {
-
     }
 
     public AuthorName Name { get; internal set; }
