@@ -8,6 +8,8 @@ public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
 {
     public void Configure(EntityTypeBuilder<Author> builder)
     {
+        builder.HasQueryFilter(author => author.DeletedAt == null);
+
         builder.Property(author => author.Name)
             .HasMaxLength(64)
             .HasConversion(name => name.Value, value => new AuthorName(value));
