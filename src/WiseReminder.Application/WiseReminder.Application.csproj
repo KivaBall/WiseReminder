@@ -13,9 +13,7 @@
 	<ItemGroup>
 		<Folder Include="Abstractions\MediatR\" />
 		<Folder Include="Authors\CreateAuthor\" />
-		<Folder Include="Authors\DeleteAuthor\" />
-		<Folder Include="Authors\GetAuthorById\" />
-		<Folder Include="Authors\GetAllAuthors\" />
+Query		<Folder Include="Authors\GetAllAuthors\" />
 		<Folder Include="Authors\UpdateAuthor\" />
 		<Folder Include="Categories\CreateCategory\" />
 		<Folder Include="Quotes\CreateQuote\" />
