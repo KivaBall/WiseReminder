@@ -43,4 +43,9 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
             return await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
         return null;
     }
+
+    public async Task<Quote> GetRandomQuote()
+    {
+        return await _context.Quotes.OrderBy(quote => new Guid()).FirstAsync();
+    }
 }

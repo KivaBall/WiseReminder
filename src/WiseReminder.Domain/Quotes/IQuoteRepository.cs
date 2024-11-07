@@ -8,4 +8,5 @@ public interface IQuoteRepository
     Task<Quote?> GetQuoteById(Guid id);
     Task<ICollection<Quote>?> GetQuotesByCategoryId(Guid categoryId);
     Task<ICollection<Quote>?> GetQuotesByAuthorId(Guid authorId);
+    Task<Quote> GetRandomQuote();
 }
