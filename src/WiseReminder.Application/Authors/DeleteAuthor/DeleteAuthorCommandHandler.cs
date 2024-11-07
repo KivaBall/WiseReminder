@@ -16,7 +16,7 @@ public sealed class DeleteAuthorCommandHandler(IAuthorRepository authorRepositor
 
         if (author == null) return Result.Failure(AuthorErrors.AuthorNotFound);
 
-        _authorRepository.DeleteAuthor(author);
+        await _authorRepository.DeleteAuthor(author);
 
         return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);
     }
