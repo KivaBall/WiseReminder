@@ -17,7 +17,6 @@
 		<Folder Include="Quotes\CreateQuote\" />
 		<Folder Include="Quotes\DeleteQuote\" />
 		<Folder Include="Quotes\GetQuoteById\" />
-		<Folder Include="Quotes\GetQoutesByCategoryId\" />
 		<Folder Include="Quotes\GetQuotesByAuthorId\" />
 		<Folder Include="Quotes\UpdateQuote\" />
 	</ItemGroup>
