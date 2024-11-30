@@ -1,70 +1,43 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using WiseReminder.Application.Categories.CreateCategory;
-using WiseReminder.Application.Categories.DeleteCategory;
-using WiseReminder.Application.Categories.GetAllCategories;
-using WiseReminder.Application.Categories.GetCategoryById;
-using WiseReminder.Application.Categories.UpdateCategory;
+﻿namespace WiseReminder.WebAPI.Controllers.Categories;
 
-namespace WiseReminder.WebAPI.Controllers.Categories;
-
-[ApiController]
 [Route("api/categories")]
-public class CategoriesController(ISender sender) : ControllerBase
+public sealed class CategoriesController(ISender sender) : GenericController(sender)
 {
-    private readonly ISender _sender = sender;
-
-    [HttpPost("create")]
+    [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateCategory(CreateCategoryRequest request)
+    public async Task<IActionResult> CreateCategory(BaseCategoryRequest request)
     {
-        var command = new CreateCategoryCommand(request.Name, request.Description);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        var command = request.ToCreateCategoryCommand();
+        return await ExecuteCommand(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
         var query = new GetCategoryByIdQuery(id);
-
-        var result = await _sender.Send(query);
-
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return await ExecuteQuery(query);
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
         var query = new GetAllCategoriesQuery();
-
-        var result = await _sender.Send(query);
-
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return await ExecuteQuery(query);
     }
 
-    [HttpPut("update")]
+    [HttpPut]
     [Authorize]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
     {
-        var command = new UpdateCategoryCommand(request.Id, request.Name, request.Description);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        var command = request.ToUpdateCategoryCommand();
+        return await ExecuteCommand(command);
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete]
     [Authorize]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
         var command = new DeleteCategoryCommand(id);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        return await ExecuteCommand(command);
     }
 }

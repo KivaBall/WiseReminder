@@ -2,5 +2,10 @@
 
 namespace WiseReminder.Application.Authors.CreateAuthor;
 
-public sealed record CreateAuthorCommand(string Name, string Biography, DateOnly DateOfBirth, DateOnly DateOfDeath)
-    : ICommand;
+public sealed record CreateAuthorCommand : ICommand
+{
+    public string Name { get; init; }
+    public string Biography { get; init; }
+    public DateOnly DateOfBirth { get; init; }
+    public DateOnly DateOfDeath { get; init; }
+}

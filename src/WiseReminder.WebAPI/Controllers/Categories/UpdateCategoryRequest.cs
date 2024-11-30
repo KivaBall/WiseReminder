@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Categories;
 
-public sealed record UpdateCategoryRequest(Guid Id, string Name, string Description);
+public sealed record UpdateCategoryRequest : BaseCategoryRequest
+{
+    public Guid? Id { get; init; }
+}

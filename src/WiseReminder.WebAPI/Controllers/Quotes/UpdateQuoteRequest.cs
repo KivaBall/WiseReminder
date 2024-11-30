@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
 
-public sealed record UpdateQuoteRequest(Guid Id, string Text, Guid AuthorId, Guid CategoryId, DateOnly QuoteDate);
+public sealed record UpdateQuoteRequest : BaseQuoteRequest
+{
+    public Guid? Id { get; init; }
+}

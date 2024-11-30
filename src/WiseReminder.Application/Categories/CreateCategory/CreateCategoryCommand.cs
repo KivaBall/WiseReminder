@@ -2,4 +2,8 @@
 
 namespace WiseReminder.Application.Categories.CreateCategory;
 
-public sealed record CreateCategoryCommand(string Name, string Description) : ICommand;
+public sealed record CreateCategoryCommand : ICommand
+{
+    public string Name { get; init; }
+    public string Description { get; init; }
+}
