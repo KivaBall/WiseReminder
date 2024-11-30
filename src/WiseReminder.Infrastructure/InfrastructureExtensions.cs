@@ -1,4 +1,5 @@
 ﻿//TODO: Add GlobalUsings.cs
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +22,7 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            //TODO: Change name of database
-            options.UseSqlServer(configuration.GetConnectionString("Database"));
+            options.UseSqlServer(configuration.GetConnectionString("WiseReminderDatabase"));
         });
 
         services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<AppDbContext>());
