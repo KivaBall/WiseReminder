@@ -2,5 +2,11 @@
 
 namespace WiseReminder.Application.Quotes.UpdateQuote;
 
-public sealed record UpdateQuoteCommand(Guid Id, string Text, Guid AuthorId, Guid CategoryId, DateOnly QuoteDate)
-    : ICommand;
+public sealed record UpdateQuoteCommand : ICommand
+{
+    public Guid Id { get; init; }
+    public string Text { get; init; }
+    public Guid AuthorId { get; init; }
+    public Guid CategoryId { get; init; }
+    public DateOnly QuoteDate { get; init; }
+}

@@ -2,4 +2,10 @@
 
 namespace WiseReminder.Application.Quotes.CreateQuote;
 
-public sealed record CreateQuoteCommand(string Text, Guid AuthorId, Guid CategoryId, DateOnly QuoteDate) : ICommand;
+public sealed record CreateQuoteCommand : ICommand
+{
+    public string Text { get; init; }
+    public Guid AuthorId { get; init; }
+    public Guid CategoryId { get; init; }
+    public DateOnly QuoteDate { get; init; }
+}
