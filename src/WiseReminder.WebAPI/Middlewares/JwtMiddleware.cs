@@ -1,5 +1,6 @@
 namespace WiseReminder.WebAPI.Middlewares;
 
+//TODO: Delete this
 public sealed class JwtMiddleware
 {
     private readonly RequestDelegate _next;

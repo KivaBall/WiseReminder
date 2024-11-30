@@ -11,6 +11,7 @@ using WiseReminder.Application.Quotes.UpdateQuote;
 
 namespace WiseReminder.WebAPI.Controllers.Quotes;
 
+//TODO: Create GenericRepository
 [ApiController]
 [Route("api/quotes")]
 public class QuotesController(ISender sender) : ControllerBase

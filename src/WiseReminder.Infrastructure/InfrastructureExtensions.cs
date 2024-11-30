@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿//TODO: Add GlobalUsings.cs
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +21,13 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<AppDbContext>(options =>
         {
+            //TODO: Change name of database
             options.UseSqlServer(configuration.GetConnectionString("Database"));
         });
 
         services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<AppDbContext>());
 
+        //TODO: Create GenericRepository
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IQuoteRepository, QuoteRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -36,6 +39,7 @@ public static class InfrastructureExtensions
 
     public static void ApplyMigrations(this IApplicationBuilder app)
     {
+        //TODO: Replace all of this by .sql files
         using var scope = app.ApplicationServices.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var authorService = scope.ServiceProvider.GetRequiredService<IAuthorService>();

@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using WiseReminder.Application.Abstractions.JWT;
 
@@ -12,8 +13,13 @@ public class JwtService : IJwtService
         var key = "ThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKey"u8
             .ToArray();
 
+        var claims = new ClaimsIdentity();
+        claims.AddClaim(new Claim("Email", "DSasd@gmail.com"));
+        claims.AddClaim(new Claim("PasswordToken", "ASD83JF9SK"));
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Subject = claims,
             Issuer = "WiseReminder.com",
             Audience = "WiseReminder.com",
             Expires = DateTime.UtcNow.AddHours(1),

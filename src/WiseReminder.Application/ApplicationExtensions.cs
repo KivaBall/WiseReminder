@@ -10,6 +10,7 @@ public static class ApplicationExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        //TODO: Replace AutoMapper (obsolete)
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
