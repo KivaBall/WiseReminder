@@ -1,3 +1,4 @@
+//TODO: Create GlobalUsings.cs
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WiseReminder.Application;
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//TODO: Move to another class 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -37,6 +39,7 @@ var app = builder.Build();
 
 app.ApplyMigrations();
 
+//TODO: Replace
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -45,6 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//TODO: Remove Middleware (why isn't stateless?)
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthentication();
