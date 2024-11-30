@@ -1,94 +1,57 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using WiseReminder.Application.Quotes.CreateQuote;
-using WiseReminder.Application.Quotes.DeleteQuote;
-using WiseReminder.Application.Quotes.GetQuoteById;
-using WiseReminder.Application.Quotes.GetQuotesByAuthorId;
-using WiseReminder.Application.Quotes.GetQuotesByCategoryId;
-using WiseReminder.Application.Quotes.GetRandomQuote;
-using WiseReminder.Application.Quotes.UpdateQuote;
+﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
 
-namespace WiseReminder.WebAPI.Controllers.Quotes;
-
-//TODO: Create GenericRepository
-[ApiController]
 [Route("api/quotes")]
-public class QuotesController(ISender sender) : ControllerBase
+public sealed class QuotesController(ISender sender) : GenericController(sender)
 {
-    private readonly ISender _sender = sender;
-
-    [HttpPost("create")]
+    [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateQuote(CreateQuoteRequest request)
+    public async Task<IActionResult> CreateQuote(BaseQuoteRequest request)
     {
-        var command = new CreateQuoteCommand(request.Text, request.AuthorId, request.CategoryId, request.QuoteDate);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        var command = request.ToCreateQuoteCommand();
+        return await ExecuteCommand(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuoteById(Guid id)
     {
         var query = new GetQuoteByIdQuery(id);
-
-        var result = await _sender.Send(query);
-
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return await ExecuteQuery(query);
     }
 
     [HttpGet("by-author/{authorId}")]
     public async Task<IActionResult> GetQuotesByAuthorId(Guid authorId)
     {
         var query = new GetQuotesByAuthorIdQuery(authorId);
-
-        var result = await _sender.Send(query);
-
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return await ExecuteQuery(query);
     }
 
     [HttpGet("by-category/{categoryId}")]
     public async Task<IActionResult> GetQuotesByCategoryId(Guid categoryId)
     {
         var query = new GetQuotesByCategoryIdQuery(categoryId);
-
-        var result = await _sender.Send(query);
-
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return await ExecuteQuery(query);
     }
 
     [HttpGet("random")]
     public async Task<IActionResult> GetRandomQuote()
     {
         var query = new GetRandomQuoteQuery();
-
-        var result = await _sender.Send(query);
-
-        return Ok(result.Entity);
+        return await ExecuteQuery(query);
     }
 
-    [HttpPut("update")]
+    [HttpPut]
     [Authorize]
     public async Task<IActionResult> UpdateQuote(UpdateQuoteRequest request)
     {
-        var command = new UpdateQuoteCommand(request.Id, request.Text, request.AuthorId, request.CategoryId,
-            request.QuoteDate);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        var command = request.ToUpdateQuoteCommand();
+        return await ExecuteCommand(command);
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete]
     [Authorize]
     public async Task<IActionResult> DeleteQuote(Guid id)
     {
         var command = new DeleteQuoteCommand(id);
-
-        var result = await _sender.Send(command);
-
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        return await ExecuteCommand(command);
     }
 }
