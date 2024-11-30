@@ -2,4 +2,9 @@
 
 namespace WiseReminder.Application.Categories.UpdateCategory;
 
-public sealed record UpdateCategoryCommand(Guid Id, string Name, string Description) : ICommand;
+public sealed record UpdateCategoryCommand : ICommand
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string Description { get; init; }
+}
