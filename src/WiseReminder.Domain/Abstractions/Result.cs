@@ -14,11 +14,6 @@ public class Result(bool isSuccess, Error error)
     {
         return new Result(false, error);
     }
-}
-
-public sealed class Result<TEntity>(bool isSuccess, Error error, TEntity? entity) : Result(isSuccess, error)
-{
-    public TEntity? Entity { get; } = entity;
 
     public static Result<T> Success<T>(T entity)
     {
@@ -29,4 +24,9 @@ public sealed class Result<TEntity>(bool isSuccess, Error error, TEntity? entity
     {
         return new Result<T>(false, error, entity);
     }
+}
+
+public sealed class Result<TEntity>(bool isSuccess, Error error, TEntity? entity) : Result(isSuccess, error)
+{
+    public TEntity? Entity { get; } = entity;
 }

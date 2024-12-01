@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-
-namespace WiseReminder.Application.Authors.CreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthor;
 
 public sealed class CreateAuthorCommandHandler(
     IAuthorRepository authorRepository,

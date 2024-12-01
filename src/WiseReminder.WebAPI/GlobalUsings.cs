@@ -32,6 +32,7 @@ global using WiseReminder.Application.Quotes.UpdateQuote;
 global using WiseReminder.Infrastructure;
 global using WiseReminder.WebAPI;
 global using WiseReminder.WebAPI.Abstractions;
+global using WiseReminder.WebAPI.Controllers.Authorization;
 global using WiseReminder.WebAPI.Controllers.Authors;
 global using WiseReminder.WebAPI.Controllers.Categories;
 global using WiseReminder.WebAPI.Controllers.Quotes;

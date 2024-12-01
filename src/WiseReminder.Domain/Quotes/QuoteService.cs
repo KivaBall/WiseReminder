@@ -1,7 +1,4 @@
-﻿using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Categories;
-
-namespace WiseReminder.Domain.Quotes;
+﻿namespace WiseReminder.Domain.Quotes;
 
 public sealed class QuoteService : IQuoteService
 {

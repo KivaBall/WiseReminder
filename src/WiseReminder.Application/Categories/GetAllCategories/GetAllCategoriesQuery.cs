@@ -1,5 +1,3 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
+﻿namespace WiseReminder.Application.Categories.GetAllCategories;
 
-namespace WiseReminder.Application.Categories.GetAllCategories;
-
-public sealed record GetAllCategoriesQuery : IQuery<ICollection<CategoryVm>>;
+public sealed record GetAllCategoriesQuery : IQuery<ICollection<CategoryDto>>;

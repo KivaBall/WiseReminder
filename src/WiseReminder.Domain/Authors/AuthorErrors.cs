@@ -1,6 +1,4 @@
-﻿using WiseReminder.Domain.Abstractions;
-
-namespace WiseReminder.Domain.Authors;
+﻿namespace WiseReminder.Domain.Authors;
 
 public static class AuthorErrors
 {

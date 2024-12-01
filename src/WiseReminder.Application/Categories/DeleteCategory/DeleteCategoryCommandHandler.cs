@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Categories;
-
-namespace WiseReminder.Application.Categories.DeleteCategory;
+﻿namespace WiseReminder.Application.Categories.DeleteCategory;
 
 public sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     : ICommandHandler<DeleteCategoryCommand>
@@ -14,7 +10,10 @@ public sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRep
     {
         var category = await _categoryRepository.GetCategoryById(request.Id);
 
-        if (category == null) return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (category == null)
+        {
+            return Result.Failure(CategoryErrors.CategoryNotFound);
+        }
 
         await _categoryRepository.DeleteCategory(category);
 

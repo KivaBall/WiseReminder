@@ -1,5 +1,3 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
+﻿namespace WiseReminder.Application.Quotes.GetRandomQuote;
 
-namespace WiseReminder.Application.Quotes.GetRandomQuote;
-
-public sealed record GetRandomQuoteQuery : IQuery<QuoteVm>;
+public sealed record GetRandomQuoteQuery : IQuery<QuoteDto>;
