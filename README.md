@@ -24,7 +24,8 @@ The subject area includes three classes that are used in the form of Entity:
 
 ## API methods
 
-![image](https://github.com/user-attachments/assets/1003ea57-f3ac-4a40-80a1-a96ddb2a4918)
+![image](https://github.com/user-attachments/assets/75c062b2-bb4e-421b-bbf6-228a383fd964)
+
 
 ### Authorization
 
