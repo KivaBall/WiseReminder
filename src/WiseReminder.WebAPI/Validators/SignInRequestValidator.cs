@@ -1,6 +1,4 @@
-﻿using WiseReminder.WebAPI.Controllers.Authorization;
-
-namespace WiseReminder.WebAPI.Validators;
+﻿namespace WiseReminder.WebAPI.Validators;
 
 public sealed class SignInRequestValidator : AbstractValidator<SignInRequest>
 {
