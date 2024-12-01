@@ -1,9 +1,11 @@
 ﻿namespace WiseReminder.Infrastructure.Repositories;
 
-public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteService) : IQuoteRepository
+public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteService, ICacheService cacheService)
+    : IQuoteRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IQuoteService _quoteService = quoteService;
+    private readonly ICacheService _cacheService = cacheService;
 
     public void CreateQuote(Quote quote)
     {
@@ -23,14 +25,43 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
 
     public async Task<Quote?> GetQuoteById(Guid id)
     {
-        return await _context.Quotes.FirstOrDefaultAsync(quote => quote.Id == id);
+        var key = $"quote-{id}";
+
+        var quote = await _cacheService.GetAsync<Quote>(key);
+
+        if (quote != null)
+        {
+            return quote;
+        }
+
+        var dbQuote = await _context.Quotes.FirstOrDefaultAsync(q => q.Id == id);
+
+        if (dbQuote != null)
+        {
+            await _cacheService.CreateAsync(key, dbQuote);
+        }
+
+        return dbQuote;
     }
 
     public async Task<ICollection<Quote>?> GetQuotesByCategoryId(Guid categoryId)
     {
+        var key = $"quote-category-{categoryId}";
+
+        var quotes = await _cacheService.GetAsync<ICollection<Quote>>(key);
+
+        if (quotes != null)
+        {
+            return quotes;
+        }
+
         if (_context.Categories.Any(category => category.Id == categoryId))
         {
-            return await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
+            var dbQuotes = await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
+
+            await _cacheService.CreateAsync(key, dbQuotes);
+
+            return dbQuotes;
         }
 
         return null;
@@ -38,9 +69,22 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
 
     public async Task<ICollection<Quote>?> GetQuotesByAuthorId(Guid authorId)
     {
+        var key = $"quote-author-{authorId}";
+
+        var quotes = await _cacheService.GetAsync<ICollection<Quote>>(key);
+
+        if (quotes != null)
+        {
+            return quotes;
+        }
+
         if (_context.Authors.Any(author => author.Id == authorId))
         {
-            return await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
+            var dbQuotes = await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
+
+            await _cacheService.CreateAsync(key, dbQuotes);
+
+            return dbQuotes;
         }
 
         return null;
