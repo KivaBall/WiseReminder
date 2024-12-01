@@ -47,7 +47,7 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> DeleteQuote(Guid id)
     {

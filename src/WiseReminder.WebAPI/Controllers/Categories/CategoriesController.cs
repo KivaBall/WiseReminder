@@ -33,7 +33,7 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {

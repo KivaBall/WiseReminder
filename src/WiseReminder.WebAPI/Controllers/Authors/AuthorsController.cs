@@ -33,7 +33,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> DeleteAuthor(Guid id)
     {
