@@ -16,6 +16,13 @@ public static class InfrastructureExtensions
         services.AddScoped<IQuoteRepository, QuoteRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
 
+        services.AddMemoryCache();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("RedisCache");
+        });
+        services.AddSingleton<ICacheService, CacheService>();
+
         services.AddScoped<IJwtService, JwtService>();
 
         return services;
