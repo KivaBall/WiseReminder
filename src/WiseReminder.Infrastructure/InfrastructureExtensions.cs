@@ -37,10 +37,18 @@ public static class InfrastructureExtensions
         if (!context.Categories.Any())
         {
             var categoryFile = File.ReadAllText("../WiseReminder.Infrastructure/Seeding/CategorySeed.sql");
-            var authorFile = File.ReadAllText("../WiseReminder.Infrastructure/Seeding/AuthorSeed.sql");
-            var quoteFile = File.ReadAllText("../WiseReminder.Infrastructure/Seeding/QuoteSeed.sql");
             context.Database.ExecuteSqlRaw(categoryFile);
+        }
+
+        if (!context.Authors.Any())
+        {
+            var authorFile = File.ReadAllText("../WiseReminder.Infrastructure/Seeding/AuthorSeed.sql");
             context.Database.ExecuteSqlRaw(authorFile);
+        }
+
+        if (!context.Quotes.Any())
+        {
+            var quoteFile = File.ReadAllText("../WiseReminder.Infrastructure/Seeding/QuoteSeed.sql");
             context.Database.ExecuteSqlRaw(quoteFile);
         }
     }

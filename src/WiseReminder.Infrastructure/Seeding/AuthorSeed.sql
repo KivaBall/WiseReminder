@@ -1,4 +1,4 @@
-INSERT INTO Auhtors (Id, Name, Biography, DateOfBirth, DateOfDeath, AddedAt)
+INSERT INTO Authors (Id, Name, Biography, DateOfBirth, DateOfDeath, AddedAt)
 VALUES
 ('6dc8eed6-643b-4b74-bf37-353dbab335ab', 'Charmaine Tasseler', 'Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.', '6/7/1934', '5/7/1976', '11/30/2024'),
 ('71c12634-9cd3-419e-853d-2d3d687d5915', 'Devina Schultes', 'Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.', '11/26/1943', '5/29/1968', '11/30/2024'),
