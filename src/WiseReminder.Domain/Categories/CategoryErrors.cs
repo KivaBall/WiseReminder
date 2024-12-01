@@ -1,6 +1,4 @@
-﻿using WiseReminder.Domain.Abstractions;
-
-namespace WiseReminder.Domain.Categories;
+﻿namespace WiseReminder.Domain.Categories;
 
 public static class CategoryErrors
 {

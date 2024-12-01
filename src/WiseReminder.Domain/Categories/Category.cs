@@ -1,7 +1,4 @@
-﻿using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Domain.Categories;
+﻿namespace WiseReminder.Domain.Categories;
 
 public sealed class Category : Entity
 {

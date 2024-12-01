@@ -1,6 +1,4 @@
-﻿using WiseReminder.Domain.Abstractions;
-
-namespace WiseReminder.Domain.Quotes;
+﻿namespace WiseReminder.Domain.Quotes;
 
 public static class QuoteErrors
 {
