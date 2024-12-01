@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Categories;
-
-namespace WiseReminder.Application.Categories.CreateCategory;
+﻿namespace WiseReminder.Application.Categories.CreateCategory;
 
 public sealed class CreateCategoryCommandHandler(
     ICategoryRepository categoryRepository,

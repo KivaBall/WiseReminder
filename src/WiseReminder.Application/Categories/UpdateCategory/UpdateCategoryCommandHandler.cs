@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Categories;
-
-namespace WiseReminder.Application.Categories.UpdateCategory;
+﻿namespace WiseReminder.Application.Categories.UpdateCategory;
 
 public sealed class UpdateCategoryCommandHandler(
     ICategoryRepository categoryRepository,
@@ -18,10 +14,15 @@ public sealed class UpdateCategoryCommandHandler(
     {
         var category = await _categoryRepository.GetCategoryById(request.Id);
 
-        if (category == null) return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (category == null)
+        {
+            return Result.Failure(CategoryErrors.CategoryNotFound);
+        }
 
-        _categoryService.UpdateCategory(category, new CategoryName(request.Name),
-            new CategoryDescription(request.Description));
+        var categoryName = new CategoryName(request.Name);
+        var categoryDescription = new CategoryDescription(request.Description);
+
+        _categoryService.UpdateCategory(category, categoryName, categoryDescription);
         _categoryRepository.UpdateCategory(category);
 
         return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);
