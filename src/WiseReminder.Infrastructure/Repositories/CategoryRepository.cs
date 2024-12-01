@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WiseReminder.Domain.Categories;
-using WiseReminder.Domain.Quotes;
-using WiseReminder.Infrastructure.Data;
-
-namespace WiseReminder.Infrastructure.Repositories;
+﻿namespace WiseReminder.Infrastructure.Repositories;
 
 public sealed class CategoryRepository(
     AppDbContext context,
@@ -27,9 +22,13 @@ public sealed class CategoryRepository(
     public async Task DeleteCategory(Category category)
     {
         _categoryService.DeleteCategory(category);
+
         var quotes = await _quoteRepository.GetQuotesByCategoryId(category.Id);
         foreach (var quote in quotes!)
+        {
             _quoteRepository.DeleteQuote(quote);
+        }
+
         _context.Categories.Update(category);
     }
 
