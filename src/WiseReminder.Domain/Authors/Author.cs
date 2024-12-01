@@ -1,7 +1,4 @@
-﻿using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Domain.Authors;
+﻿namespace WiseReminder.Domain.Authors;
 
 public sealed class Author : Entity
 {
