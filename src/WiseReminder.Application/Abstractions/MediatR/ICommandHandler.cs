@@ -1,7 +1,4 @@
-﻿using MediatR;
-using WiseReminder.Domain.Abstractions;
-
-namespace WiseReminder.Application.Abstractions.MediatR;
+﻿namespace WiseReminder.Application.Abstractions.MediatR;
 
 public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, Result> where TCommand : ICommand;
 
