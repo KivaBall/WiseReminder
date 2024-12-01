@@ -24,38 +24,38 @@ The subject area includes three classes that are used in the form of Entity:
 
 ## API methods
 
-![image](https://github.com/user-attachments/assets/1003ea57-f3ac-4a40-80a1-a96ddb2a4918)
+![image](https://github.com/user-attachments/assets/75c062b2-bb4e-421b-bbf6-228a383fd964)
 
-### Admin
 
-- **POST** `/api/admin/login` - login as admin
-- **POST** `/api/admin/logout` - logout as admin
+### Authorization
+
+- **POST** `/api/auth/login-as-admin` - login as admin (for CUD HTTP methods)
 
 ### Authors
 
-- **POST** `/api/authors/create` - create new author
+- **POST** `/api/authors` - create new author
 - **GET** `/api/authors/{id}` - get author by his id
-- **GET** `/api/authors/all` - get all authors
-- **PUT** `/api/authors/update` - update author
-- **DELETE** `/api/authors/delete` - delete author
+- **GET** `/api/authors` - get all authors
+- **PUT** `/api/authors` - update author
+- **DELETE** `/api/authors/{id}` - delete author
 
 ### Categories
 
-- **POST** `/api/categories/create` - create new category
+- **POST** `/api/categories` - create new category
 - **GET** `/api/categories/{id}` - get category by its id
-- **GET** `/api/categories/all` - get all categories
-- **PUT** `/api/categories/update` - update category
-- **DELETE** `/api/categories/delete` - delete category
+- **GET** `/api/categories` - get all categories
+- **PUT** `/api/categories` - update category
+- **DELETE** `/api/categories/{id}` - delete category
 
 ### Quotes
 
-- **POST** `/api/quotes/create` - create new quote
+- **POST** `/api/quotes` - create new quote
 - **GET** `/api/quotes/{id}` - get quote by its id
 - **GET** `/api/quotes/by-author/{authorId}` - get all quotes by author id
 - **GET** `/api/quotes/by-category/{categoryId}` - get all quotes by category id
 - **GET** `/api/quotes/random` - get random quote
-- **PUT** `/api/quotes/update` - update quote
-- **DELETE** `/api/quotes/delete` - delete quote
+- **PUT** `/api/quotes` - update quote
+- **DELETE** `/api/quotes/{id}` - delete quote
 
 ## Authorization
 
@@ -67,7 +67,7 @@ The project uses the following technologies and architectural approaches:
 - Clean Architecture
 - Domain-Driven Design (DDD)
 - MediatR
-- AutoMapper
+- FluentValidation
 - JWT Bearer
 - Entity Framework Core
 - Microsoft SQL Server
