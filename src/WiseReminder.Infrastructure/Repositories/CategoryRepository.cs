@@ -3,11 +3,13 @@
 public sealed class CategoryRepository(
     AppDbContext context,
     ICategoryService categoryService,
-    IQuoteRepository quoteRepository) : ICategoryRepository
+    IQuoteRepository quoteRepository,
+    IMemoryCache memoryCache) : ICategoryRepository
 {
     private readonly ICategoryService _categoryService = categoryService;
     private readonly AppDbContext _context = context;
     private readonly IQuoteRepository _quoteRepository = quoteRepository;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public void CreateCategory(Category category)
     {
@@ -34,11 +36,23 @@ public sealed class CategoryRepository(
 
     public async Task<Category?> GetCategoryById(Guid id)
     {
-        return await _context.Categories.FirstOrDefaultAsync(category => category.Id == id);
+        var key = $"category-{id}";
+
+        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        {
+            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
+            return await _context.Categories.FirstOrDefaultAsync(category => category.Id == id);
+        });
     }
 
     public async Task<ICollection<Category>> GetAllCategories()
     {
-        return await _context.Categories.ToListAsync();
+        var key = $"category-all";
+
+        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        {
+            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
+            return await _context.Categories.ToListAsync();
+        }) ?? [];
     }
 }

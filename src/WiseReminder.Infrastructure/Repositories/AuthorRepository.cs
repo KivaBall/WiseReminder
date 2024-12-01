@@ -3,11 +3,13 @@
 public sealed class AuthorRepository(
     AppDbContext context,
     IAuthorService authorService,
-    IQuoteRepository quoteRepository) : IAuthorRepository
+    IQuoteRepository quoteRepository,
+    IMemoryCache memoryCache) : IAuthorRepository
 {
     private readonly IAuthorService _authorService = authorService;
     private readonly AppDbContext _context = context;
     private readonly IQuoteRepository _quoteRepository = quoteRepository;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public void CreateAuthor(Author author)
     {
@@ -35,11 +37,23 @@ public sealed class AuthorRepository(
 
     public async Task<Author?> GetAuthorById(Guid id)
     {
-        return await _context.Authors.FirstOrDefaultAsync(author => author.Id == id);
+        var key = $"author-{id}";
+
+        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        {
+            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
+            return await _context.Authors.FirstOrDefaultAsync(author => author.Id == id);
+        });
     }
 
     public async Task<ICollection<Author>> GetAllAuthors()
     {
-        return await _context.Authors.ToListAsync();
+        var key = "author-all";
+
+        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        {
+            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
+            return await _context.Authors.ToListAsync();
+        }) ?? [];
     }
 }
