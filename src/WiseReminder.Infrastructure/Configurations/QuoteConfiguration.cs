@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Infrastructure.Configurations;
+﻿namespace WiseReminder.Infrastructure.Configurations;
 
 public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 {
