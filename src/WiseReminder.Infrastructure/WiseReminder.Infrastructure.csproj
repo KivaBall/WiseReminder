@@ -21,4 +21,10 @@
 	  </PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Seeding\Seed.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
