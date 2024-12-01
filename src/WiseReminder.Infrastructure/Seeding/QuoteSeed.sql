@@ -1,0 +1,14 @@
+INSERT INTO Quotes (Id, Text, AuthorId, CategoryId, QuoteDate, AddedAt)
+VALUES
+('24c8e0ad-5edc-4967-87e3-649881a5a8fe', 'Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.', '6dc8eed6-643b-4b74-bf37-353dbab335ab', '6602da7d-efcf-4f2e-bdca-628354349446', '10/12/1956', '11/30/2024'),
+('c4572f58-619c-482d-a9de-f5295f14f790', 'Success usually comes to those who are too busy to be looking for it.', '6dc8eed6-643b-4b74-bf37-353dbab335ab', 'e7f4a9b2-6b3a-4a1f-8c65-d17e3b9a2b3c', '5/4/1970', '11/30/2024'),
+('93a651a8-2d69-4f0f-9746-57c4931572cc', 'The road to success is always under construction.', '6dc8eed6-643b-4b74-bf37-353dbab335ab', 'c0f7d8e9-9e87-4c2f-9d98-f4c3d0e5f7e9', '2/20/1963', '11/30/2024'),
+('24c8e0ad-5edc-4967-87e3-649881a5a8fe', 'Creativity takes courage and a willingness to fail. Only then can you succeed.', '71c12634-9cd3-419e-853d-2d3d687d5915', 'f3a0b2c3-c2a9-4f5f-9fbc-f7c6d3f8a0b2', '7/15/1958', '11/30/2024'),
+('c4572f58-619c-482d-a9de-f5295f14f790', 'Leadership is not about being in charge. It is about taking care of those in your charge.', '71c12634-9cd3-419e-853d-2d3d687d5915', 'e2f9f0a1-b198-4e4f-9fab-f6c5d2e7f9a1', '3/25/1960', '11/30/2024'),
+('93a651a8-2d69-4f0f-9746-57c4931572cc', 'The unexamined life is not worth living.', '71c12634-9cd3-419e-853d-2d3d687d5915', '85a2bd6e-a3f3-4301-9353-5fe480b99362', '12/10/1963', '11/30/2024'),
+('93a651a8-2d69-4f0f-9746-57c4931572cc', 'Happiness is not something ready-made. It comes from your own actions.', 'c5d6b99e-b2d5-41db-833d-76129cdf85b8', 'f0a2cbe1-5a2e-4e35-b77e-9f52c1e9a4d1', '6/15/1935', '11/30/2024'),
+('7595e8e8-6007-438b-a205-522c2609d3da', 'A friend is one who overlooks your broken fence and admires the flowers in your garden.', 'c5d6b99e-b2d5-41db-833d-76129cdf85b8', 'd6e3f7b0-7f65-49b7-bc23-123f57f8a4c5', '11/22/1927', '11/30/2024'),
+('e6dfa667-8175-460e-9534-3a0d2702c142', 'Life is what happens when you’re busy making other plans.', 'c5d6b99e-b2d5-41db-833d-76129cdf85b8', 'a8f5b3c4-7c65-48a1-9b76-f2c1b8d3e5f7', '2/18/1949', '11/30/2024'),
+('620e6f68-a1ed-4d34-bca2-593b0429216b', 'Happiness is the secret to all beauty; there is no beauty without happiness.', 'e648367f-9b3b-403d-b30c-f3829171a96d', 'f0a2cbe1-5a2e-4e35-b77e-9f52c1e9a4d1', '10/14/1942', '11/30/2024'),
+('6d91fed2-6242-4f10-af63-0a7cee545b0f', 'Wisdom begins in wonder.', 'e648367f-9b3b-403d-b30c-f3829171a96d', 'c1d2ad58-2cfa-4a8d-91d8-e2c1d36f7d2f', '5/22/1929', '11/30/2024'),
+('92b22f31-ee93-4ca9-a4aa-8c2163157c0e', 'Creativity is seeing what everyone else has seen and thinking what no one else has thought.', 'e648367f-9b3b-403d-b30c-f3829171a96d', 'f3a0b2c3-c2a9-4f5f-9fbc-f7c6d3f8a0b2', '11/18/1951', '11/30/2024');
