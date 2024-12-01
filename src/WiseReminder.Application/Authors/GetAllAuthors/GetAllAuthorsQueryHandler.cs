@@ -1,21 +1,17 @@
-﻿using AutoMapper;
-using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
+﻿namespace WiseReminder.Application.Authors.GetAllAuthors;
 
-namespace WiseReminder.Application.Authors.GetAllAuthors;
-
-public sealed class GetAllAuthorsQueryHandler(IAuthorRepository authorRepository, IMapper mapper)
-    : IQueryHandler<GetAllAuthorsQuery, ICollection<AuthorVm>>
+public sealed class GetAllAuthorsQueryHandler(IAuthorRepository authorRepository)
+    : IQueryHandler<GetAllAuthorsQuery, ICollection<AuthorDto>>
 {
     private readonly IAuthorRepository _authorRepository = authorRepository;
-    private readonly IMapper _mapper = mapper;
 
-    public async Task<Result<ICollection<AuthorVm>>> Handle(GetAllAuthorsQuery request,
+    public async Task<Result<ICollection<AuthorDto>>> Handle(GetAllAuthorsQuery request,
         CancellationToken cancellationToken)
     {
-        var categories = await _authorRepository.GetAllAuthors();
+        var authors = await _authorRepository.GetAllAuthors();
 
-        return Result<ICollection<AuthorVm>>.Success(_mapper.Map<ICollection<AuthorVm>>(categories));
+        var dtoAuthors = authors.Select(c => c.ToAuthorDto()).ToList();
+
+        return Result.Success((ICollection<AuthorDto>)dtoAuthors);
     }
 }

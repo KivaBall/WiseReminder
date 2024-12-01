@@ -1,12 +1,10 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-
-namespace WiseReminder.Application.Authors.UpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthor;
 
 public sealed record UpdateAuthorCommand : ICommand
 {
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public string Biography { get; init; }
-    public DateOnly DateOfBirth { get; init; }
-    public DateOnly DateOfDeath { get; init; }
+    public required Guid Id { get; init; }
+    public required string Name { get; init; }
+    public required string Biography { get; init; }
+    public required DateOnly DateOfBirth { get; init; }
+    public required DateOnly DateOfDeath { get; init; }
 }

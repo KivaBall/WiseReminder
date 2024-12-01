@@ -1,11 +1,9 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-
-namespace WiseReminder.Application.Authors.CreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthor;
 
 public sealed record CreateAuthorCommand : ICommand
 {
-    public string Name { get; init; }
-    public string Biography { get; init; }
-    public DateOnly DateOfBirth { get; init; }
-    public DateOnly DateOfDeath { get; init; }
+    public required string Name { get; init; }
+    public required string Biography { get; init; }
+    public required DateOnly DateOfBirth { get; init; }
+    public required DateOnly DateOfDeath { get; init; }
 }

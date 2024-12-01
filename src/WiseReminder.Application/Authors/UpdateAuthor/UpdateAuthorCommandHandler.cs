@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-
-namespace WiseReminder.Application.Authors.UpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthor;
 
 public sealed class UpdateAuthorCommandHandler(
     IAuthorRepository authorRepository,
@@ -18,11 +14,18 @@ public sealed class UpdateAuthorCommandHandler(
     {
         var author = await _authorRepository.GetAuthorById(request.Id);
 
-        if (author == null) return Result.Failure(AuthorErrors.AuthorNotFound);
+        if (author == null)
+        {
+            return Result.Failure(AuthorErrors.AuthorNotFound);
+        }
 
-        _authorService.UpdateAuthor(author, new AuthorName(request.Name),
-            new AuthorBiography(request.Biography), new AuthorDateOfBirth(request.DateOfBirth),
-            new AuthorDateOfDeath(request.DateOfDeath));
+        var authorName = new AuthorName(request.Name);
+        var authorBiography = new AuthorBiography(request.Biography);
+        var authorDateOfBirth = new AuthorDateOfBirth(request.DateOfBirth);
+        var authorDateOfDeath = new AuthorDateOfDeath(request.DateOfDeath);
+
+        _authorService.UpdateAuthor(author, authorName, authorBiography, authorDateOfBirth, authorDateOfDeath);
+
         _authorRepository.UpdateAuthor(author);
 
         return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);

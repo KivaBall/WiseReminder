@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-
-namespace WiseReminder.Application.Authors.DeleteAuthor;
+﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
 
 public sealed class DeleteAuthorCommandHandler(IAuthorRepository authorRepository, IUnitOfWork unitOfWork)
     : ICommandHandler<DeleteAuthorCommand>
@@ -14,7 +10,10 @@ public sealed class DeleteAuthorCommandHandler(IAuthorRepository authorRepositor
     {
         var author = await _authorRepository.GetAuthorById(request.Id);
 
-        if (author == null) return Result.Failure(AuthorErrors.AuthorNotFound);
+        if (author == null)
+        {
+            return Result.Failure(AuthorErrors.AuthorNotFound);
+        }
 
         await _authorRepository.DeleteAuthor(author);
 
