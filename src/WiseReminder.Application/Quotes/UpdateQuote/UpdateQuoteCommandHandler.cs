@@ -1,10 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Categories;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Application.Quotes.UpdateQuote;
+﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
 
 public sealed class UpdateQuoteCommandHandler(
     IQuoteRepository quoteRepository,
@@ -24,18 +18,27 @@ public sealed class UpdateQuoteCommandHandler(
     {
         var quote = await _quoteRepository.GetQuoteById(request.Id);
 
-        if (quote == null) return Result.Failure(QuoteErrors.QuoteNotFound);
+        if (quote == null)
+        {
+            return Result.Failure(QuoteErrors.QuoteNotFound);
+        }
 
         var quoteText = new QuoteText(request.Text);
         var quoteDate = new QuoteDate(request.QuoteDate);
 
         var author = await _authorRepository.GetAuthorById(request.AuthorId);
 
-        if (author == null) return Result.Failure(AuthorErrors.AuthorNotFound);
+        if (author == null)
+        {
+            return Result.Failure(AuthorErrors.AuthorNotFound);
+        }
 
         var category = await _categoryRepository.GetCategoryById(request.CategoryId);
 
-        if (category == null) return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (category == null)
+        {
+            return Result.Failure(CategoryErrors.CategoryNotFound);
+        }
 
         _quoteService.UpdateQuote(quote, quoteText, author.Id, author, category.Id, category, quoteDate);
         _quoteRepository.UpdateQuote(quote);

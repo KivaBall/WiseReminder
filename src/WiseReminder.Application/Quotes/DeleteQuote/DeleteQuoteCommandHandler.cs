@@ -1,8 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Application.Quotes.DeleteQuote;
+﻿namespace WiseReminder.Application.Quotes.DeleteQuote;
 
 public sealed class DeleteQuoteCommandHandler(IQuoteRepository quoteRepository, IUnitOfWork unitOfWork)
     : ICommandHandler<DeleteQuoteCommand>
@@ -14,7 +10,10 @@ public sealed class DeleteQuoteCommandHandler(IQuoteRepository quoteRepository, 
     {
         var quote = await _quoteRepository.GetQuoteById(request.Id);
 
-        if (quote == null) return Result.Failure(QuoteErrors.QuoteNotFound);
+        if (quote == null)
+        {
+            return Result.Failure(QuoteErrors.QuoteNotFound);
+        }
 
         _quoteRepository.DeleteQuote(quote);
 

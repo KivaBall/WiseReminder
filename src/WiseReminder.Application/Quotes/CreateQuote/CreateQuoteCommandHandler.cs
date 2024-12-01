@@ -1,10 +1,4 @@
-﻿using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Categories;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Application.Quotes.CreateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuote;
 
 public sealed class CreateQuoteCommandHandler(
     IQuoteRepository quoteRepository,
@@ -27,11 +21,17 @@ public sealed class CreateQuoteCommandHandler(
 
         var author = await _authorRepository.GetAuthorById(request.AuthorId);
 
-        if (author == null) return Result.Failure(AuthorErrors.AuthorNotFound);
+        if (author == null)
+        {
+            return Result.Failure(AuthorErrors.AuthorNotFound);
+        }
 
         var category = await _categoryRepository.GetCategoryById(request.CategoryId);
 
-        if (category == null) return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (category == null)
+        {
+            return Result.Failure(CategoryErrors.CategoryNotFound);
+        }
 
         var quote = _quoteService.CreateQuote(quoteText, author.Id, author, category.Id, category, quoteDate);
 

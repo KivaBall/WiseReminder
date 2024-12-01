@@ -1,25 +1,22 @@
-﻿using AutoMapper;
-using WiseReminder.Application.Abstractions.MediatR;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Quotes;
+﻿namespace WiseReminder.Application.Quotes.GetQuotesByAuthorId;
 
-namespace WiseReminder.Application.Quotes.GetQuotesByAuthorId;
-
-public sealed class GetQuotesByAuthorIdQueryHandler(IQuoteRepository quoteRepository, IMapper mapper)
-    : IQueryHandler<GetQuotesByAuthorIdQuery, ICollection<QuoteVm>>
+public sealed class GetQuotesByAuthorIdQueryHandler(IQuoteRepository quoteRepository)
+    : IQueryHandler<GetQuotesByAuthorIdQuery, ICollection<QuoteDto>>
 {
-    private readonly IMapper _mapper = mapper;
     private readonly IQuoteRepository _quoteRepository = quoteRepository;
 
-    public async Task<Result<ICollection<QuoteVm>>> Handle(GetQuotesByAuthorIdQuery request,
+    public async Task<Result<ICollection<QuoteDto>>> Handle(GetQuotesByAuthorIdQuery request,
         CancellationToken cancellationToken)
     {
         var quotes = await _quoteRepository.GetQuotesByAuthorId(request.AuthorId);
 
         if (quotes == null)
-            return Result<ICollection<QuoteVm>>.Failure<ICollection<QuoteVm>>(null, AuthorErrors.AuthorNotFound);
+        {
+            return Result.Failure<ICollection<QuoteDto>>(null, AuthorErrors.AuthorNotFound);
+        }
 
-        return Result<ICollection<QuoteVm>>.Success(_mapper.Map<ICollection<QuoteVm>>(quotes));
+        var dtoQuotes = quotes.Select(q => q.ToQuoteDto()).ToList();
+
+        return Result.Success<ICollection<QuoteDto>>(dtoQuotes);
     }
 }
