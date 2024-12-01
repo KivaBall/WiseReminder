@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Quotes;
-using WiseReminder.Infrastructure.Data;
-
-namespace WiseReminder.Infrastructure.Repositories;
+﻿namespace WiseReminder.Infrastructure.Repositories;
 
 public sealed class AuthorRepository(
     AppDbContext context,
@@ -27,9 +22,14 @@ public sealed class AuthorRepository(
     public async Task DeleteAuthor(Author author)
     {
         _authorService.DeleteAuthor(author);
-        var quotes = await _quoteRepository.GetQuotesByAuthorId(author.Id);
-        foreach (var quote in quotes!)
+
+        var quotes = await _quoteRepository.GetQuotesByAuthorId(author.Id) ??
+                     throw new InvalidOperationException("AuthorId was not found");
+        foreach (var quote in quotes)
+        {
             _quoteRepository.DeleteQuote(quote);
+        }
+
         _context.Authors.Update(author);
     }
 

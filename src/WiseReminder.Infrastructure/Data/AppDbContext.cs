@@ -1,11 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using WiseReminder.Domain.Abstractions;
-using WiseReminder.Domain.Authors;
-using WiseReminder.Domain.Categories;
-using WiseReminder.Domain.Quotes;
-
-namespace WiseReminder.Infrastructure.Data;
+﻿namespace WiseReminder.Infrastructure.Data;
 
 public sealed class AppDbContext : DbContext, IUnitOfWork
 {
@@ -25,6 +18,5 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        base.OnModelCreating(modelBuilder);
     }
 }
