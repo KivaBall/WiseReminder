@@ -3,31 +3,44 @@
 public sealed class UpdateAuthorCommandHandler(
     IAuthorRepository authorRepository,
     IAuthorService authorService,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    ISender sender)
     : ICommandHandler<UpdateAuthorCommand>
 {
     private readonly IAuthorRepository _authorRepository = authorRepository;
     private readonly IAuthorService _authorService = authorService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ISender _sender = sender;
 
-    public async Task<Result> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        UpdateAuthorCommand request,
+        CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetAuthorById(request.Id);
+        var result = await _sender.Send(new GetAuthorByIdQuery(request.Id), cancellationToken);
 
-        if (author == null)
+        if (!result.IsSuccess)
         {
-            return Result.Failure(AuthorErrors.AuthorNotFound);
+            return Result.Failure(result.Error);
         }
+
+        var author = result.Entity!;
 
         var authorName = new AuthorName(request.Name);
         var authorBiography = new AuthorBiography(request.Biography);
         var authorDateOfBirth = new AuthorDateOfBirth(request.DateOfBirth);
         var authorDateOfDeath = new AuthorDateOfDeath(request.DateOfDeath);
 
-        _authorService.UpdateAuthor(author, authorName, authorBiography, authorDateOfBirth, authorDateOfDeath);
+        _authorService.UpdateAuthor(
+            author,
+            authorName,
+            authorBiography,
+            authorDateOfBirth,
+            authorDateOfDeath);
 
         _authorRepository.UpdateAuthor(author);
 
-        return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);
+        return await _unitOfWork.SaveChangesAsync()
+            ? Result.Success()
+            : Result.Failure(Error.Database);
     }
 }

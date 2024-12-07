@@ -1,22 +1,32 @@
 ﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
 
-public sealed class DeleteAuthorCommandHandler(IAuthorRepository authorRepository, IUnitOfWork unitOfWork)
+public sealed class DeleteAuthorCommandHandler(
+    IAuthorRepository authorRepository,
+    IUnitOfWork unitOfWork,
+    ISender sender)
     : ICommandHandler<DeleteAuthorCommand>
 {
     private readonly IAuthorRepository _authorRepository = authorRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ISender _sender = sender;
 
-    public async Task<Result> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        DeleteAuthorCommand request,
+        CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetAuthorById(request.Id);
+        var result = await _sender.Send(new GetAuthorByIdQuery(request.Id), cancellationToken);
 
-        if (author == null)
+        if (!result.IsSuccess)
         {
-            return Result.Failure(AuthorErrors.AuthorNotFound);
+            return Result.Failure(result.Error);
         }
+
+        var author = result.Entity!;
 
         await _authorRepository.DeleteAuthor(author);
 
-        return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);
+        return await _unitOfWork.SaveChangesAsync()
+            ? Result.Success()
+            : Result.Failure(Error.Database);
     }
 }

@@ -44,7 +44,7 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
         return dbQuote;
     }
 
-    public async Task<ICollection<Quote>?> GetQuotesByCategoryId(Guid categoryId)
+    public async Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId)
     {
         var key = $"quote-category-{categoryId}";
 
@@ -55,19 +55,14 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
             return quotes;
         }
 
-        if (_context.Categories.Any(category => category.Id == categoryId))
-        {
-            var dbQuotes = await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
+        var dbQuotes = await _context.Quotes.Where(quote => quote.CategoryId == categoryId).ToListAsync();
 
-            await _cacheService.CreateAsync(key, dbQuotes);
+        await _cacheService.CreateAsync(key, dbQuotes);
 
-            return dbQuotes;
-        }
-
-        return null;
+        return dbQuotes;
     }
 
-    public async Task<ICollection<Quote>?> GetQuotesByAuthorId(Guid authorId)
+    public async Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId)
     {
         var key = $"quote-author-{authorId}";
 
@@ -78,16 +73,11 @@ public sealed class QuoteRepository(AppDbContext context, IQuoteService quoteSer
             return quotes;
         }
 
-        if (_context.Authors.Any(author => author.Id == authorId))
-        {
-            var dbQuotes = await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
+        var dbQuotes = await _context.Quotes.Where(quote => quote.AuthorId == authorId).ToListAsync();
 
-            await _cacheService.CreateAsync(key, dbQuotes);
+        await _cacheService.CreateAsync(key, dbQuotes);
 
-            return dbQuotes;
-        }
-
-        return null;
+        return dbQuotes;
     }
 
     public async Task<Quote> GetRandomQuote()

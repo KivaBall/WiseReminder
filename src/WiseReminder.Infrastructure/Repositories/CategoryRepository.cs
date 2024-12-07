@@ -26,7 +26,8 @@ public sealed class CategoryRepository(
         _categoryService.DeleteCategory(category);
 
         var quotes = await _quoteRepository.GetQuotesByCategoryId(category.Id);
-        foreach (var quote in quotes!)
+
+        foreach (var quote in quotes)
         {
             _quoteRepository.DeleteQuote(quote);
         }

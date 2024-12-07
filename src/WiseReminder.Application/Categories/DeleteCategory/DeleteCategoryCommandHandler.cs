@@ -1,22 +1,32 @@
 ﻿namespace WiseReminder.Application.Categories.DeleteCategory;
 
-public sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
+public sealed class DeleteCategoryCommandHandler(
+    ICategoryRepository categoryRepository,
+    IUnitOfWork unitOfWork,
+    ISender sender)
     : ICommandHandler<DeleteCategoryCommand>
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ISender _sender = sender;
 
-    public async Task<Result> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        DeleteCategoryCommand request,
+        CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetCategoryById(request.Id);
+        var result = await _sender.Send(new GetCategoryByIdQuery(request.Id), cancellationToken);
 
-        if (category == null)
+        if (!result.IsSuccess)
         {
-            return Result.Failure(CategoryErrors.CategoryNotFound);
+            return Result.Failure(result.Error);
         }
+
+        var category = result.Entity!;
 
         await _categoryRepository.DeleteCategory(category);
 
-        return await _unitOfWork.SaveChangesAsync() ? Result.Success() : Result.Failure(Error.Database);
+        return await _unitOfWork.SaveChangesAsync()
+            ? Result.Success()
+            : Result.Failure(Error.Database);
     }
 }
