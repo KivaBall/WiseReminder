@@ -14,7 +14,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAuthorById(Guid id)
     {
-        var query = new GetAuthorByIdQuery(id);
+        var query = new GetAuthorDtoByIdQuery(id);
         return await ExecuteQuery(query);
     }
 

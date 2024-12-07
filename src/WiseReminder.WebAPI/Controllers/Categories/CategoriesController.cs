@@ -14,7 +14,7 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
-        var query = new GetCategoryByIdQuery(id);
+        var query = new GetCategoryDtoByIdQuery(id);
         return await ExecuteQuery(query);
     }
 

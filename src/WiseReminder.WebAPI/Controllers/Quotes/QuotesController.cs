@@ -14,7 +14,7 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuoteById(Guid id)
     {
-        var query = new GetQuoteByIdQuery(id);
+        var query = new GetQuoteDtoByIdQuery(id);
         return await ExecuteQuery(query);
     }
 
