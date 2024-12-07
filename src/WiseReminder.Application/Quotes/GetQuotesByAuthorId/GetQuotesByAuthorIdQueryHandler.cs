@@ -1,19 +1,25 @@
 ﻿namespace WiseReminder.Application.Quotes.GetQuotesByAuthorId;
 
-public sealed class GetQuotesByAuthorIdQueryHandler(IQuoteRepository quoteRepository)
+public sealed class GetQuotesByAuthorIdQueryHandler(
+    IQuoteRepository quoteRepository,
+    ISender sender)
     : IQueryHandler<GetQuotesByAuthorIdQuery, ICollection<QuoteDto>>
 {
     private readonly IQuoteRepository _quoteRepository = quoteRepository;
+    private readonly ISender _sender = sender;
 
-    public async Task<Result<ICollection<QuoteDto>>> Handle(GetQuotesByAuthorIdQuery request,
+    public async Task<Result<ICollection<QuoteDto>>> Handle(
+        GetQuotesByAuthorIdQuery request,
         CancellationToken cancellationToken)
     {
-        var quotes = await _quoteRepository.GetQuotesByAuthorId(request.AuthorId);
+        var result = await _sender.Send(new GetAuthorByIdQuery(request.AuthorId), cancellationToken);
 
-        if (quotes == null)
+        if (!result.IsSuccess)
         {
-            return Result.Failure<ICollection<QuoteDto>>(null, AuthorErrors.AuthorNotFound);
+            return Result.Failure<ICollection<QuoteDto>>(null, result.Error);
         }
+
+        var quotes = await _quoteRepository.GetQuotesByAuthorId(request.AuthorId);
 
         var dtoQuotes = quotes.Select(q => q.ToQuoteDto()).ToList();
 
