@@ -30,18 +30,15 @@ public sealed class CreateQuoteCommandHandler(
             return Result.Failure(resultCategory.Error);
         }
 
-        var author = resultAuthor.Entity!;
-        var category = resultCategory.Entity!;
-
         var quoteText = new QuoteText(request.Text);
         var quoteDate = new QuoteDate(request.QuoteDate);
 
         var quote = _quoteService.CreateQuote(
             quoteText,
-            author.Id,
-            author,
-            category.Id,
-            category,
+            request.AuthorId,
+            null,
+            request.CategoryId,
+            null,
             quoteDate);
 
         _quoteRepository.CreateQuote(quote);
