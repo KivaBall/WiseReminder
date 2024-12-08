@@ -1,4 +1,4 @@
-# WiseReminder
+# 🔔 WiseReminder 📜
 
 **WiseReminder** is a Web API designed to generate philosophical quotes stored in a database. Users can browse for quotes, their categories, and authors. There is also an additional part developed from the administrator's point of view, which can add, update or delete all entities
 
