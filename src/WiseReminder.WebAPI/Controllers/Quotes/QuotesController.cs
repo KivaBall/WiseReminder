@@ -1,4 +1,6 @@
-﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
+﻿using WiseReminder.Application.Quotes.GetRecentAddedQuotes;
+
+namespace WiseReminder.WebAPI.Controllers.Quotes;
 
 [Route("api/quotes")]
 public sealed class QuotesController(ISender sender) : GenericController(sender)
@@ -36,6 +38,27 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     public async Task<IActionResult> GetRandomQuote()
     {
         var query = new GetRandomQuoteQuery();
+        return await ExecuteQuery(query);
+    }
+
+    [HttpGet("random/{amount}")]
+    public async Task<IActionResult> GetRandomQuotes(int amount)
+    {
+        var query = new GetRandomQuotesQuery(amount);
+        return await ExecuteQuery(query);
+    }
+
+    [HttpGet("daily")]
+    public async Task<IActionResult> GetQuoteOfTheDay()
+    {
+        var query = new GetQuoteOfTheDay();
+        return await ExecuteQuery(query);
+    }
+
+    [HttpGet("recent/{amount}")]
+    public async Task<IActionResult> GetRecentAddedQuotes(int amount)
+    {
+        var query = new GetRecentAddedQuotes(amount);
         return await ExecuteQuery(query);
     }
 
