@@ -2,10 +2,10 @@
 
 public sealed class QuoteService : IQuoteService
 {
-    public Quote CreateQuote(QuoteText text, Guid authorId, Author author, Guid categoryId, Category category,
+    public Quote CreateQuote(QuoteText text, Guid authorId, Author? author, Guid categoryId, Category? category,
         QuoteDate quoteDate)
     {
-        return new Quote(text, authorId, author, categoryId, category, quoteDate);
+        return new Quote(text, authorId, author!, categoryId, category!, quoteDate);
     }
 
     public Quote UpdateQuote(Quote quote, QuoteText text, Guid authorId, Author author, Guid categoryId,

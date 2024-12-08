@@ -10,8 +10,8 @@ public sealed class GetRandomQuoteQueryHandler(
         GetRandomQuoteQuery request,
         CancellationToken cancellationToken)
     {
-        var quote = await _quoteRepository.GetRandomQuote();
+        var quote = await _quoteRepository.GetRandomQuotes(1);
 
-        return Result.Success(quote.ToQuoteDto());
+        return Result.Success(quote.First().ToQuoteDto());
     }
 }
