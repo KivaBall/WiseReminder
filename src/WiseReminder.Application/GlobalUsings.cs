@@ -9,7 +9,6 @@ global using WiseReminder.Application.Categories;
 global using WiseReminder.Application.Categories.GetCategoryById;
 global using WiseReminder.Application.Quotes;
 global using WiseReminder.Application.Quotes.GetQuoteById;
-global using WiseReminder.Application.Quotes.GetQuoteDtoById;
 global using WiseReminder.Domain.Abstractions;
 global using WiseReminder.Domain.Authors;
 global using WiseReminder.Domain.Categories;
