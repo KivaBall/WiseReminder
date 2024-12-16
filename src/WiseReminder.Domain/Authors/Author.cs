@@ -58,26 +58,11 @@ public sealed class Author : Entity<Author>
             return true;
         }
 
-        if (birthDate.Year > deathDate.Year)
+        if (deathDate.Year - birthDate.Year >= 10)
         {
-            return false;
-        }
-
-        if (birthDate.Year == deathDate.Year)
-        {
-            if (birthDate.Month > deathDate.Month)
-            {
-                return false;
-            }
-
-            if (birthDate.Month == deathDate.Month)
-            {
-                return birthDate.Day <= deathDate.Day;
-            }
-
             return true;
         }
-
-        return true;
+        
+        return false;
     }
 }
