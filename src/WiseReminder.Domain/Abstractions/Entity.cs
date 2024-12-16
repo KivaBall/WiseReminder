@@ -1,20 +1,16 @@
 ﻿namespace WiseReminder.Domain.Abstractions;
 
-public abstract class Entity
+public abstract class Entity<T> where T : Entity<T>
 {
-    internal Entity()
-    {
-        Id = Guid.NewGuid();
-        AddedAt = DateTime.Now;
-    }
-
-    public Guid Id { get; init; }
-    public DateTime AddedAt { get; init; }
+    public Guid Id { get; } = Guid.NewGuid();
+    public DateTime AddedAt { get; } = DateTime.Now;
+    public bool IsDeleted { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
-    internal Entity DeleteEntity()
+    public T Delete()
     {
+        IsDeleted = true;
         DeletedAt = DateTime.Now;
-        return this;
+        return (T)this;
     }
 }
