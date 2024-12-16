@@ -2,5 +2,6 @@
 
 public static class AuthorErrors
 {
-    public static Error AuthorNotFound => new("Author error", "Author by Id was not found");
+    public static IError AuthorNotFound =>
+        new Error("Author by Id was not found");
 }

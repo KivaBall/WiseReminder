@@ -2,5 +2,6 @@
 
 public static class QuoteErrors
 {
-    public static Error QuoteNotFound => new("Quote error", "Quote by Id was not found");
+    public static IError QuoteNotFound =>
+        new Error("Quote by Id was not found");
 }
