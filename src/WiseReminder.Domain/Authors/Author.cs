@@ -62,7 +62,7 @@ public sealed class Author : Entity<Author>
         {
             return true;
         }
-        
+
         return false;
     }
 }

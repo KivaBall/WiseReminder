@@ -61,7 +61,7 @@ public sealed class Quote : Entity<Quote>
         {
             return birthDate.Year + 10 <= quoteDate.Year;
         }
-        
+
         if (birthDate.Year + 10 > quoteDate.Year || quoteDate.Year >= deathDate.Year)
         {
             return false;
