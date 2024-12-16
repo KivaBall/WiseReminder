@@ -1,8 +1,8 @@
 ﻿namespace WiseReminder.Domain.Categories;
 
-public sealed class Category : Entity
+public sealed class Category : Entity<Category>
 {
-    internal Category(CategoryName name, CategoryDescription description)
+    public Category(CategoryName name, CategoryDescription description)
     {
         Name = name;
         Description = description;
@@ -13,7 +13,16 @@ public sealed class Category : Entity
     {
     }
 
-    public CategoryName Name { get; internal set; }
-    public CategoryDescription Description { get; internal set; }
+    public CategoryName Name { get; private set; }
+    public CategoryDescription Description { get; private set; }
+
     public ICollection<Quote> Quotes { get; } = [];
+
+    public Category Update(CategoryName name, CategoryDescription description)
+    {
+        Name = name;
+        Description = description;
+
+        return this;
+    }
 }
