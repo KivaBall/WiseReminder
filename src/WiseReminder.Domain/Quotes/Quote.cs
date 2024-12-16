@@ -59,9 +59,14 @@ public sealed class Quote : Entity<Quote>
     {
         if (deathDate == null)
         {
-            return birthDate.Year < quoteDate.Year;
+            return birthDate.Year + 10 <= quoteDate.Year;
         }
 
-        return birthDate.Year < quoteDate.Year && deathDate.Year > quoteDate.Year;
+        if (birthDate.Year + 10 > quoteDate.Year || quoteDate.Year >= deathDate.Year)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

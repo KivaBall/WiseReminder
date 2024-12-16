@@ -16,8 +16,9 @@ public sealed record Date
     public static Result<Date> Create(short year, byte month, byte day)
     {
         const short minYear = 1;
+        const short maxYear = 2048;
 
-        if (year < minYear || year > DateTime.Now.Year)
+        if (year < minYear || year > maxYear)
         {
             return Result.Fail("Year must be between 1 and the current one");
         }
