@@ -10,7 +10,8 @@ public static class QuoteToDtoMapper
             Text = quote.Text.Value,
             AuthorId = quote.AuthorId,
             CategoryId = quote.CategoryId,
-            QuoteDate = quote.QuoteDate.Value
+            QuoteDate = new DateOnly(quote.QuoteDate.Year, quote.QuoteDate.Month,
+                quote.QuoteDate.Day)
         };
     }
 }

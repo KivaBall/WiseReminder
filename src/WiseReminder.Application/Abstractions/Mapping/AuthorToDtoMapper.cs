@@ -9,8 +9,11 @@ public static class AuthorToDtoMapper
             Id = author.Id,
             Name = author.Name.Value,
             Biography = author.Biography.Value,
-            DateOfBirth = author.DateOfBirth.Value,
-            DateOfDeath = author.DateOfDeath.Value
+            DateOfBirth = new DateOnly(author.BirthDate.Year, author.BirthDate.Month,
+                author.BirthDate.Day),
+            DateOfDeath = author.DeathDate == null
+                ? null
+                : new DateOnly(author.DeathDate.Year, author.DeathDate.Month, author.DeathDate.Day)
         };
     }
 }
