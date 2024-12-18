@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.GetCategoryById;
 
-public sealed record GetCategoryByIdQuery(Guid Id) : IQuery<Category>;
+public sealed record GetCategoryByIdQuery : IQuery<Category>
+{
+    public Guid Id { get; init; }
+}

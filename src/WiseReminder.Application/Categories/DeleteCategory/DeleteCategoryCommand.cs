@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.DeleteCategory;
 
-public sealed record DeleteCategoryCommand(Guid Id) : ICommand;
+public sealed record DeleteCategoryCommand : ICommand
+{
+    public Guid Id { get; init; }
+}
