@@ -1,6 +1,7 @@
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Reflection;
 global using System.Text;
+global using FluentResults;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +14,7 @@ global using Newtonsoft.Json;
 global using Newtonsoft.Json.Serialization;
 global using WiseReminder.Application.Abstractions.Caching;
 global using WiseReminder.Application.Abstractions.JWT;
-global using WiseReminder.Domain.Abstractions;
+global using WiseReminder.Application.Abstractions.Repository;
 global using WiseReminder.Domain.Authors;
 global using WiseReminder.Domain.Categories;
 global using WiseReminder.Domain.Quotes;
