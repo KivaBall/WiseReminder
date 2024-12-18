@@ -2,11 +2,10 @@
 
 public sealed class JwtService(IConfiguration configuration) : IJwtService
 {
-    private readonly IConfiguration _configuration = configuration;
-
     public string GenerateJwtToken()
     {
-        var jwtPassword = _configuration["JWTPassword"] ?? throw new Exception("JWTPassword isn't in appsettings.json");
+        var jwtPassword = configuration["JWTPassword"] ??
+                          throw new Exception("JWTPassword isn't in appsettings.json");
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -15,7 +14,8 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
             Audience = "WiseReminder.com",
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
