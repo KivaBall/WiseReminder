@@ -4,14 +4,12 @@ public sealed class GetRandomQuoteQueryHandler(
     IQuoteRepository quoteRepository)
     : IQueryHandler<GetRandomQuoteQuery, QuoteDto>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-
     public async Task<Result<QuoteDto>> Handle(
         GetRandomQuoteQuery request,
         CancellationToken cancellationToken)
     {
-        var quote = await _quoteRepository.GetRandomQuotes(1);
+        var quote = await quoteRepository.GetRandomQuotes(1);
 
-        return Result.Success(quote.First().ToQuoteDto());
+        return Result.Ok(quote.First().ToQuoteDto());
     }
 }

@@ -5,24 +5,25 @@ public sealed class GetQuotesByAuthorIdQueryHandler(
     ISender sender)
     : IQueryHandler<GetQuotesByAuthorIdQuery, ICollection<QuoteDto>>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-    private readonly ISender _sender = sender;
-
     public async Task<Result<ICollection<QuoteDto>>> Handle(
         GetQuotesByAuthorIdQuery request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetAuthorByIdQuery(request.AuthorId), cancellationToken);
+        var query = new GetAuthorByIdQuery { Id = request.AuthorId };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure<ICollection<QuoteDto>>(null, result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var quotes = await _quoteRepository.GetQuotesByAuthorId(request.AuthorId);
+        var quotes = await quoteRepository.GetQuotesByAuthorId(request.AuthorId);
 
-        var dtoQuotes = quotes.Select(q => q.ToQuoteDto()).ToList();
+        var dtoQuotes = quotes
+            .Select(q => q.ToQuoteDto())
+            .ToList();
 
-        return Result.Success<ICollection<QuoteDto>>(dtoQuotes);
+        return Result.Ok<ICollection<QuoteDto>>(dtoQuotes);
     }
 }
