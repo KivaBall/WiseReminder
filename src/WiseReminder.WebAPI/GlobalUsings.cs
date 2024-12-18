@@ -30,6 +30,7 @@ global using WiseReminder.Application.Quotes.GetQuotesByAuthorId;
 global using WiseReminder.Application.Quotes.GetQuotesByCategoryId;
 global using WiseReminder.Application.Quotes.GetRandomQuote;
 global using WiseReminder.Application.Quotes.GetRandomQuotes;
+global using WiseReminder.Application.Quotes.GetRecentAddedQuotes;
 global using WiseReminder.Application.Quotes.UpdateQuote;
 global using WiseReminder.Infrastructure;
 global using WiseReminder.WebAPI;

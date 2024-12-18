@@ -1,6 +1,4 @@
-﻿using WiseReminder.Application.Quotes.GetRecentAddedQuotes;
-
-namespace WiseReminder.WebAPI.Controllers.Quotes;
+﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
 
 [Route("api/quotes")]
 public sealed class QuotesController(ISender sender) : GenericController(sender)
@@ -10,27 +8,27 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     public async Task<IActionResult> CreateQuote(BaseQuoteRequest request)
     {
         var command = request.ToCreateQuoteCommand();
-        return await ExecuteCommand(command);
+        return await ExecuteCommandWithEntity(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuoteById(Guid id)
     {
-        var query = new GetQuoteDtoByIdQuery(id);
+        var query = new GetQuoteDtoByIdQuery { Id = id };
         return await ExecuteQuery(query);
     }
 
     [HttpGet("by-author/{authorId}")]
     public async Task<IActionResult> GetQuotesByAuthorId(Guid authorId)
     {
-        var query = new GetQuotesByAuthorIdQuery(authorId);
+        var query = new GetQuotesByAuthorIdQuery { AuthorId = authorId };
         return await ExecuteQuery(query);
     }
 
     [HttpGet("by-category/{categoryId}")]
     public async Task<IActionResult> GetQuotesByCategoryId(Guid categoryId)
     {
-        var query = new GetQuotesByCategoryIdQuery(categoryId);
+        var query = new GetQuotesByCategoryIdQuery { CategoryId = categoryId };
         return await ExecuteQuery(query);
     }
 
@@ -44,7 +42,7 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     [HttpGet("random/{amount}")]
     public async Task<IActionResult> GetRandomQuotes(int amount)
     {
-        var query = new GetRandomQuotesQuery(amount);
+        var query = new GetRandomQuotesQuery { Amount = amount };
         return await ExecuteQuery(query);
     }
 
@@ -58,7 +56,7 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     [HttpGet("recent/{amount}")]
     public async Task<IActionResult> GetRecentAddedQuotes(int amount)
     {
-        var query = new GetRecentAddedQuotes(amount);
+        var query = new GetRecentAddedQuotes { Amount = amount };
         return await ExecuteQuery(query);
     }
 
@@ -74,7 +72,7 @@ public sealed class QuotesController(ISender sender) : GenericController(sender)
     [Authorize]
     public async Task<IActionResult> DeleteQuote(Guid id)
     {
-        var command = new DeleteQuoteCommand(id);
+        var command = new DeleteQuoteCommand { Id = id };
         return await ExecuteCommand(command);
     }
 }

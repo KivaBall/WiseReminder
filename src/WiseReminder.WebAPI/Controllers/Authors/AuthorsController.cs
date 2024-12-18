@@ -8,13 +8,13 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
     public async Task<IActionResult> CreateAuthor(BaseAuthorRequest request)
     {
         var command = request.ToCreateAuthorCommand();
-        return await ExecuteCommand(command);
+        return await ExecuteCommandWithEntity(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAuthorById(Guid id)
     {
-        var query = new GetAuthorDtoByIdQuery(id);
+        var query = new GetAuthorDtoByIdQuery { Id = id };
         return await ExecuteQuery(query);
     }
 
@@ -37,7 +37,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
     [Authorize]
     public async Task<IActionResult> DeleteAuthor(Guid id)
     {
-        var command = new DeleteAuthorCommand(id);
+        var command = new DeleteAuthorCommand { Id = id };
         return await ExecuteCommand(command);
     }
 }
