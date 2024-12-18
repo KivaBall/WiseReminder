@@ -2,47 +2,42 @@
 
 public sealed class AuthorRepository(
     AppDbContext context,
-    IAuthorService authorService,
     IQuoteRepository quoteRepository,
     IMemoryCache memoryCache) : IAuthorRepository
 {
-    private readonly IAuthorService _authorService = authorService;
-    private readonly AppDbContext _context = context;
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-    private readonly IMemoryCache _memoryCache = memoryCache;
-
     public void CreateAuthor(Author author)
     {
-        _context.Authors.Add(author);
+        context.Authors.Add(author);
     }
 
     public void UpdateAuthor(Author author)
     {
-        _context.Authors.Update(author);
+        context.Authors.Update(author);
     }
 
     public async Task DeleteAuthor(Author author)
     {
-        _authorService.DeleteAuthor(author);
+        author.Delete();
 
-        var quotes = await _quoteRepository.GetQuotesByAuthorId(author.Id) ??
-                     throw new InvalidOperationException("AuthorId was not found");
+        var quotes = await quoteRepository.GetQuotesByAuthorId(author.Id);
+
         foreach (var quote in quotes)
         {
-            _quoteRepository.DeleteQuote(quote);
+            quoteRepository.DeleteQuote(quote);
         }
 
-        _context.Authors.Update(author);
+        context.Authors.Update(author);
     }
 
     public async Task<Author?> GetAuthorById(Guid id)
     {
         var key = $"author-{id}";
 
-        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        return await memoryCache.GetOrCreateAsync(key, async factory =>
         {
             factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-            return await _context.Authors.FirstOrDefaultAsync(author => author.Id == id);
+
+            return await context.Authors.FirstOrDefaultAsync(author => author.Id == id);
         });
     }
 
@@ -50,10 +45,11 @@ public sealed class AuthorRepository(
     {
         var key = "author-all";
 
-        return await _memoryCache.GetOrCreateAsync(key, async factory =>
+        return await memoryCache.GetOrCreateAsync(key, async factory =>
         {
             factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-            return await _context.Authors.ToListAsync();
+
+            return await context.Authors.ToListAsync();
         }) ?? [];
     }
 }
