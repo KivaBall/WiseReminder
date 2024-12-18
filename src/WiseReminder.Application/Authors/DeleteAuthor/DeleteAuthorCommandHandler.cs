@@ -6,27 +6,30 @@ public sealed class DeleteAuthorCommandHandler(
     ISender sender)
     : ICommandHandler<DeleteAuthorCommand>
 {
-    private readonly IAuthorRepository _authorRepository = authorRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         DeleteAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetAuthorByIdQuery(request.Id), cancellationToken);
+        var query = new GetAuthorByIdQuery { Id = request.Id };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure(result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var author = result.Entity!;
+        var author = result.Value;
 
-        await _authorRepository.DeleteAuthor(author);
+        await authorRepository.DeleteAuthor(author);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }
