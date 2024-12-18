@@ -4,14 +4,19 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.HasQueryFilter(category => category.DeletedAt == null);
+        builder.HasKey(c => c.Id);
+        builder.Property(a => a.AddedAt);
 
-        builder.Property(category => category.Name)
+        builder.HasQueryFilter(c => c.DeletedAt == null);
+        builder.HasQueryFilter(c => c.IsDeleted == false);
+
+        builder.Property(c => c.Name)
             .HasMaxLength(64)
             .HasConversion(name => name.Value, value => new CategoryName(value));
 
-        builder.Property(category => category.Description)
+        builder.Property(c => c.Description)
             .HasMaxLength(1024)
-            .HasConversion(description => description.Value, value => new CategoryDescription(value));
+            .HasConversion(description => description.Value,
+                value => new CategoryDescription(value));
     }
 }

@@ -4,13 +4,29 @@ public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 {
     public void Configure(EntityTypeBuilder<Quote> builder)
     {
-        builder.HasQueryFilter(quote => quote.DeletedAt == null);
+        builder.HasKey(q => q.Id);
+        builder.Property(a => a.AddedAt);
 
-        builder.Property(quote => quote.Text)
+        builder.HasQueryFilter(q => q.DeletedAt == null);
+        builder.HasQueryFilter(q => q.IsDeleted == false);
+
+        builder.Property(q => q.Text)
             .HasMaxLength(1024)
             .HasConversion(text => text.Value, value => new QuoteText(value));
 
-        builder.Property(quote => quote.QuoteDate)
-            .HasConversion(quoteDate => quoteDate.Value, value => new QuoteDate(value));
+        builder.OwnsOne(q => q.QuoteDate, dateBuilder =>
+        {
+            dateBuilder.Property(d => d.Year)
+                .HasConversion(year => year, year => year)
+                .HasColumnName("QuoteYear");
+
+            dateBuilder.Property(d => d.Month)
+                .HasConversion(month => month, month => month)
+                .HasColumnName("QuoteMonth");
+
+            dateBuilder.Property(d => d.Day)
+                .HasConversion(day => day, day => day)
+                .HasColumnName("QuoteDay");
+        });
     }
 }
