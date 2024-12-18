@@ -2,41 +2,40 @@
 
 public sealed class UpdateCategoryCommandHandler(
     ICategoryRepository categoryRepository,
-    ICategoryService categoryService,
     IUnitOfWork unitOfWork,
     ISender sender)
     : ICommandHandler<UpdateCategoryCommand>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-    private readonly ICategoryService _categoryService = categoryService;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         UpdateCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetCategoryByIdQuery(request.Id), cancellationToken);
+        var query = new GetCategoryByIdQuery { Id = request.Id };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure(result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var category = result.Entity!;
+        var category = result.Value;
 
-        var categoryName = new CategoryName(request.Name);
-        var categoryDescription = new CategoryDescription(request.Description);
+        var name = new CategoryName(request.Name);
 
-        _categoryService.UpdateCategory(
-            category,
-            categoryName,
-            categoryDescription);
+        var description = new CategoryDescription(request.Description);
 
-        _categoryRepository.UpdateCategory(category);
+        category.Update(name, description);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        categoryRepository.UpdateCategory(category);
+
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }
