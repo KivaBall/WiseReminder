@@ -10,9 +10,14 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Author> Authors { get; set; }
     public DbSet<Quote> Quotes { get; set; }
 
-    public async Task<bool> SaveChangesAsync()
+    public async Task<Result> SaveChangesAsync()
     {
-        return await base.SaveChangesAsync() > 0;
+        if (await base.SaveChangesAsync() <= 0)
+        {
+            return Result.Fail("Database operation failed");
+        }
+
+        return Result.Ok();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,19 +1,22 @@
 ﻿namespace WiseReminder.Application.Categories.GetCategoryDtoById;
 
 public sealed class GetCategoryDtoByIdQueryHandler(
-    ICategoryRepository categoryRepository)
+    ISender sender)
     : IQueryHandler<GetCategoryDtoByIdQuery, CategoryDto>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-
     public async Task<Result<CategoryDto>> Handle(
         GetCategoryDtoByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetCategoryById(request.Id);
+        var query = new GetCategoryByIdQuery { Id = request.Id };
 
-        return category != null
-            ? Result.Success(category.ToCategoryDto())
-            : Result.Failure<CategoryDto>(null, CategoryErrors.CategoryNotFound);
+        var result = await sender.Send(query);
+
+        if (result.IsFailed)
+        {
+            return Result.Fail(result.Errors);
+        }
+
+        return Result.Ok(result.Value.ToCategoryDto());
     }
 }

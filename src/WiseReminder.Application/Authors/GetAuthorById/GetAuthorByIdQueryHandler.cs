@@ -4,16 +4,17 @@ public sealed class GetAuthorByIdQueryHandler(
     IAuthorRepository authorRepository)
     : IQueryHandler<GetAuthorByIdQuery, Author>
 {
-    private readonly IAuthorRepository _authorRepository = authorRepository;
-
     public async Task<Result<Author>> Handle(
         GetAuthorByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetAuthorById(request.Id);
+        var author = await authorRepository.GetAuthorById(request.Id);
 
-        return author != null
-            ? Result.Success(author)
-            : Result.Failure<Author>(null, AuthorErrors.AuthorNotFound);
+        if (author == null)
+        {
+            return Result.Fail(AuthorErrors.AuthorNotFound);
+        }
+
+        return Result.Ok(author);
     }
 }

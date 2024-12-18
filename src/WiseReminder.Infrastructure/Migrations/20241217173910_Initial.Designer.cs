@@ -12,7 +12,7 @@ using WiseReminder.Infrastructure.Data;
 namespace WiseReminder.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241107111433_Initial")]
+    [Migration("20241217173910_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace WiseReminder.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,14 +39,11 @@ namespace WiseReminder.Infrastructure.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("DateOfDeath")
-                        .HasColumnType("date");
-
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -74,6 +71,9 @@ namespace WiseReminder.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -103,8 +103,8 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("QuoteDate")
-                        .HasColumnType("date");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -118,6 +118,64 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Quotes");
+                });
+
+            modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
+                {
+                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "BirthDate", b1 =>
+                        {
+                            b1.Property<Guid>("AuthorId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<byte>("Day")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("BirthDay");
+
+                            b1.Property<byte>("Month")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("BirthMonth");
+
+                            b1.Property<short>("Year")
+                                .HasColumnType("smallint")
+                                .HasColumnName("BirthYear");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "DeathDate", b1 =>
+                        {
+                            b1.Property<Guid>("AuthorId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<byte>("Day")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("DeathDay");
+
+                            b1.Property<byte>("Month")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("DeathMonth");
+
+                            b1.Property<short>("Year")
+                                .HasColumnType("smallint")
+                                .HasColumnName("DeathYear");
+
+                            b1.HasKey("AuthorId");
+
+                            b1.ToTable("Authors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AuthorId");
+                        });
+
+                    b.Navigation("BirthDate")
+                        .IsRequired();
+
+                    b.Navigation("DeathDate");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Quotes.Quote", b =>
@@ -134,9 +192,37 @@ namespace WiseReminder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "QuoteDate", b1 =>
+                        {
+                            b1.Property<Guid>("QuoteId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<byte>("Day")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("QuoteDay");
+
+                            b1.Property<byte>("Month")
+                                .HasColumnType("tinyint")
+                                .HasColumnName("QuoteMonth");
+
+                            b1.Property<short>("Year")
+                                .HasColumnType("smallint")
+                                .HasColumnName("QuoteYear");
+
+                            b1.HasKey("QuoteId");
+
+                            b1.ToTable("Quotes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("QuoteId");
+                        });
+
                     b.Navigation("Author");
 
                     b.Navigation("Category");
+
+                    b.Navigation("QuoteDate")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>

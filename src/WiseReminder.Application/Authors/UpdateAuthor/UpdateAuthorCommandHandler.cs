@@ -2,45 +2,56 @@
 
 public sealed class UpdateAuthorCommandHandler(
     IAuthorRepository authorRepository,
-    IAuthorService authorService,
     IUnitOfWork unitOfWork,
     ISender sender)
     : ICommandHandler<UpdateAuthorCommand>
 {
-    private readonly IAuthorRepository _authorRepository = authorRepository;
-    private readonly IAuthorService _authorService = authorService;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         UpdateAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetAuthorByIdQuery(request.Id), cancellationToken);
+        var query = new GetAuthorByIdQuery { Id = request.Id };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure(result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var author = result.Entity!;
+        var author = result.Value;
 
-        var authorName = new AuthorName(request.Name);
-        var authorBiography = new AuthorBiography(request.Biography);
-        var authorDateOfBirth = new AuthorDateOfBirth(request.DateOfBirth);
-        var authorDateOfDeath = new AuthorDateOfDeath(request.DateOfDeath);
+        var name = new AuthorName(request.Name);
 
-        _authorService.UpdateAuthor(
-            author,
-            authorName,
-            authorBiography,
-            authorDateOfBirth,
-            authorDateOfDeath);
+        var biography = new AuthorBiography(request.Biography);
 
-        _authorRepository.UpdateAuthor(author);
+        var birthDate = Date.Create((short)request.DateOfBirth.Year,
+            (byte)request.DateOfBirth.Month, (byte)request.DateOfBirth.Day);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        if (birthDate.IsFailed)
+        {
+            return Result.Fail(birthDate.Errors);
+        }
+
+        var deathDate = Date.Create((short)request.DateOfDeath.Year,
+            (byte)request.DateOfDeath.Month, (byte)request.DateOfDeath.Day);
+
+        if (deathDate.IsFailed)
+        {
+            return Result.Fail(deathDate.Errors);
+        }
+
+        author.Update(name, biography, birthDate.Value, deathDate.Value);
+
+        authorRepository.UpdateAuthor(author);
+
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }

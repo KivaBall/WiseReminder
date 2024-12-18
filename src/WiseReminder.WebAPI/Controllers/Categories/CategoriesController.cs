@@ -8,13 +8,13 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
     public async Task<IActionResult> CreateCategory(BaseCategoryRequest request)
     {
         var command = request.ToCreateCategoryCommand();
-        return await ExecuteCommand(command);
+        return await ExecuteCommandWithEntity(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
-        var query = new GetCategoryDtoByIdQuery(id);
+        var query = new GetCategoryDtoByIdQuery { Id = id };
         return await ExecuteQuery(query);
     }
 
@@ -37,7 +37,7 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
     [Authorize]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
-        var command = new DeleteCategoryCommand(id);
+        var command = new DeleteCategoryCommand { Id = id };
         return await ExecuteCommand(command);
     }
 }

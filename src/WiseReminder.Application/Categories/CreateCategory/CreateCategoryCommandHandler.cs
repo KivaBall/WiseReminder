@@ -2,29 +2,27 @@
 
 public sealed class CreateCategoryCommandHandler(
     ICategoryRepository categoryRepository,
-    ICategoryService categoryService,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateCategoryCommand>
+    : ICommandHandler<CreateCategoryCommand, Guid>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-    private readonly ICategoryService _categoryService = categoryService;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
-    public async Task<Result> Handle(
+    public async Task<Result<Guid>> Handle(
         CreateCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var categoryName = new CategoryName(request.Name);
-        var categoryDescription = new CategoryDescription(request.Description);
+        var name = new CategoryName(request.Name);
+        var description = new CategoryDescription(request.Description);
 
-        var category = _categoryService.CreateCategory(
-            categoryName,
-            categoryDescription);
+        var category = new Category(name, description);
 
-        _categoryRepository.CreateCategory(category);
+        categoryRepository.CreateCategory(category);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok(category.Id);
     }
 }

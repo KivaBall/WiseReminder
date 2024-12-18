@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorDtoById;
 
-public sealed record GetAuthorDtoByIdQuery(Guid Id) : IQuery<AuthorDto>;
+public sealed record GetAuthorDtoByIdQuery : IQuery<AuthorDto>
+{
+    public Guid Id { get; init; }
+}

@@ -1,3 +1,6 @@
 ﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
 
-public sealed record DeleteAuthorCommand(Guid Id) : ICommand;
+public sealed record DeleteAuthorCommand : ICommand
+{
+    public Guid Id { get; init; }
+}

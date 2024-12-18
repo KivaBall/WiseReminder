@@ -4,14 +4,12 @@ public sealed class GetQuoteOfTheDayHandler(
     IQuoteRepository quoteRepository)
     : IQueryHandler<GetQuoteOfTheDay, QuoteDto>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-
     public async Task<Result<QuoteDto>> Handle(
         GetQuoteOfTheDay request,
         CancellationToken cancellationToken)
     {
-        var quote = await _quoteRepository.GetQuoteOfTheDay();
+        var quote = await quoteRepository.GetQuoteOfTheDay();
 
-        return Result.Success(quote.ToQuoteDto());
+        return Result.Ok(quote.ToQuoteDto());
     }
 }

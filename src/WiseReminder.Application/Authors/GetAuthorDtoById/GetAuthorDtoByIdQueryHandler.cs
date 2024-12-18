@@ -1,19 +1,22 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorDtoById;
 
 public sealed class GetAuthorDtoByIdQueryHandler(
-    IAuthorRepository authorRepository)
+    ISender sender)
     : IQueryHandler<GetAuthorDtoByIdQuery, AuthorDto>
 {
-    private readonly IAuthorRepository _authorRepository = authorRepository;
-
     public async Task<Result<AuthorDto>> Handle(
         GetAuthorDtoByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetAuthorById(request.Id);
+        var query = new GetAuthorByIdQuery { Id = request.Id };
 
-        return author != null
-            ? Result.Success(author.ToAuthorDto())
-            : Result.Failure<AuthorDto>(null, AuthorErrors.AuthorNotFound);
+        var result = await sender.Send(query);
+
+        if (result.IsFailed)
+        {
+            return Result.Fail(result.Errors);
+        }
+
+        return Result.Ok(result.Value.ToAuthorDto());
     }
 }

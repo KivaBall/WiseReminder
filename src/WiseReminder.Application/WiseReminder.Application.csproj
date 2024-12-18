@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>13</LangVersion>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\WiseReminder.Domain\WiseReminder.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\WiseReminder.Domain\WiseReminder.Domain.csproj"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="MediatR" Version="12.4.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.4.1"/>
+    </ItemGroup>
 
 </Project>

@@ -6,27 +6,30 @@ public sealed class DeleteQuoteCommandHandler(
     ISender sender)
     : ICommandHandler<DeleteQuoteCommand>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         DeleteQuoteCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetQuoteByIdQuery(request.Id), cancellationToken);
+        var query = new GetQuoteByIdQuery { Id = request.Id };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure(result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var quote = result.Entity!;
+        var quote = result.Value;
 
-        _quoteRepository.DeleteQuote(quote);
+        quoteRepository.DeleteQuote(quote);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }

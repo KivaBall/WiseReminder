@@ -6,27 +6,30 @@ public sealed class DeleteCategoryCommandHandler(
     ISender sender)
     : ICommandHandler<DeleteCategoryCommand>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         DeleteCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetCategoryByIdQuery(request.Id), cancellationToken);
+        var query = new GetCategoryByIdQuery { Id = request.Id };
 
-        if (!result.IsSuccess)
+        var result = await sender.Send(query, cancellationToken);
+
+        if (result.IsFailed)
         {
-            return Result.Failure(result.Error);
+            return Result.Fail(result.Errors);
         }
 
-        var category = result.Entity!;
+        var category = result.Value;
 
-        await _categoryRepository.DeleteCategory(category);
+        await categoryRepository.DeleteCategory(category);
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }

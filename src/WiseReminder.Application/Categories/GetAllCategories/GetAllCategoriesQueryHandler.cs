@@ -4,16 +4,16 @@ public sealed class GetAllCategoriesQueryHandler(
     ICategoryRepository categoryRepository)
     : IQueryHandler<GetAllCategoriesQuery, ICollection<CategoryDto>>
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-
     public async Task<Result<ICollection<CategoryDto>>> Handle(
         GetAllCategoriesQuery request,
         CancellationToken cancellationToken)
     {
-        var categories = await _categoryRepository.GetAllCategories();
+        var categories = await categoryRepository.GetAllCategories();
 
-        var dtoCategories = categories.Select(c => c.ToCategoryDto()).ToList();
+        var dtoCategories = categories
+            .Select(c => c.ToCategoryDto())
+            .ToList();
 
-        return Result.Success<ICollection<CategoryDto>>(dtoCategories);
+        return Result.Ok<ICollection<CategoryDto>>(dtoCategories);
     }
 }

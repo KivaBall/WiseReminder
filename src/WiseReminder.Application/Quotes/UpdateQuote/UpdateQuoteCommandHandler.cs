@@ -2,61 +2,68 @@
 
 public sealed class UpdateQuoteCommandHandler(
     IQuoteRepository quoteRepository,
-    IQuoteService quoteService,
     IUnitOfWork unitOfWork,
     ISender sender)
     : ICommandHandler<UpdateQuoteCommand>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-    private readonly IQuoteService _quoteService = quoteService;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ISender _sender = sender;
-
     public async Task<Result> Handle(
         UpdateQuoteCommand request,
         CancellationToken cancellationToken)
     {
-        var resultQuote = await _sender.Send(new GetQuoteByIdQuery(request.Id), cancellationToken);
+        var quoteQuery = new GetQuoteByIdQuery { Id = request.Id };
 
-        if (!resultQuote.IsSuccess)
+        var quoteResult = await sender.Send(quoteQuery, cancellationToken);
+
+        if (quoteResult.IsFailed)
         {
-            return Result.Failure(resultQuote.Error);
+            return Result.Fail(quoteResult.Errors);
         }
 
-        var resultAuthor = await _sender.Send(new GetAuthorByIdQuery(request.AuthorId), cancellationToken);
+        var quote = quoteResult.Value;
 
-        if (!resultAuthor.IsSuccess)
+        var authorQuery = new GetAuthorByIdQuery { Id = request.AuthorId };
+
+        var authorResult = await sender.Send(authorQuery, cancellationToken);
+
+        if (authorResult.IsFailed)
         {
-            return Result.Failure(resultAuthor.Error);
+            return Result.Fail(authorResult.Errors);
         }
 
-        var resultCategory = await _sender.Send(new GetCategoryByIdQuery(request.CategoryId), cancellationToken);
+        var author = authorResult.Value;
 
-        if (!resultCategory.IsSuccess)
+        var categoryQuery = new GetCategoryByIdQuery { Id = request.CategoryId };
+
+        var categoryResult = await sender.Send(categoryQuery, cancellationToken);
+
+        if (categoryResult.IsFailed)
         {
-            return Result.Failure(resultCategory.Error);
+            return Result.Fail(categoryResult.Errors);
         }
 
-        var quote = resultQuote.Entity!;
-        var author = resultAuthor.Entity!;
-        var category = resultCategory.Entity!;
+        var category = categoryResult.Value;
 
         var quoteText = new QuoteText(request.Text);
-        var quoteDate = new QuoteDate(request.QuoteDate);
 
-        _quoteService.UpdateQuote(
-            quote,
-            quoteText,
-            author.Id,
-            author,
-            category.Id,
-            category,
-            quoteDate);
+        var quoteDate = Date.Create((short)request.QuoteDate.Year, (byte)request.QuoteDate.Month,
+            (byte)request.QuoteDate.Day);
 
-        _quoteRepository.UpdateQuote(quote);
+        if (quoteDate.IsFailed)
+        {
+            return Result.Fail(quoteDate.Errors);
+        }
 
-        return await _unitOfWork.SaveChangesAsync()
-            ? Result.Success()
-            : Result.Failure(Error.Database);
+        quote.Update(quoteText, author, category, quoteDate.Value);
+
+        quoteRepository.UpdateQuote(quote);
+
+        var isSaved = await unitOfWork.SaveChangesAsync();
+
+        if (isSaved.IsFailed)
+        {
+            return Result.Fail(isSaved.Errors);
+        }
+
+        return Result.Ok();
     }
 }

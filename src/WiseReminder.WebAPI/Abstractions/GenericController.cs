@@ -3,28 +3,29 @@
 [ApiController]
 public abstract class GenericController(ISender sender) : ControllerBase
 {
-    private readonly ISender _sender = sender;
-
     protected async Task<IActionResult> ExecuteCommand(ICommand command)
     {
-        var result = await _sender.Send(command);
+        var result = await sender.Send(command);
 
-        return result.IsSuccess ? Ok() : BadRequest(result);
+        return result.IsSuccess ? Ok() : BadRequest(result.Errors.Select(e => e.Message).ToList());
     }
 
-    protected async Task<IActionResult> ExecuteCommandWithEntity<TResponse>(ICommand<TResponse> command)
-        where TResponse : class
+    protected async Task<IActionResult> ExecuteCommandWithEntity<TResponse>(
+        ICommand<TResponse> command)
     {
-        var result = await _sender.Send(command);
+        var result = await sender.Send(command);
 
-        return result.IsSuccess ? Ok(result.Entity) : BadRequest(result);
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : BadRequest(result.Errors.Select(e => e.Message).ToList());
     }
 
     protected async Task<IActionResult> ExecuteQuery<TResponse>(IQuery<TResponse> query)
-        where TResponse : class
     {
-        var result = await _sender.Send(query);
+        var result = await sender.Send(query);
 
-        return result.IsSuccess ? Ok(result.Entity) : NotFound(result);
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : NotFound(result.Errors.Select(e => e.Message).ToList());
     }
 }

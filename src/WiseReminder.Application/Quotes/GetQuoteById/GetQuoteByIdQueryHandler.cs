@@ -4,16 +4,17 @@ public sealed class GetQuoteByIdQueryHandler(
     IQuoteRepository quoteRepository)
     : IQueryHandler<GetQuoteByIdQuery, Quote>
 {
-    private readonly IQuoteRepository _quoteRepository = quoteRepository;
-
     public async Task<Result<Quote>> Handle(
         GetQuoteByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var quote = await _quoteRepository.GetQuoteById(request.Id);
+        var quote = await quoteRepository.GetQuoteById(request.Id);
 
-        return quote != null
-            ? Result.Success(quote)
-            : Result.Failure<Quote>(null, QuoteErrors.QuoteNotFound);
+        if (quote == null)
+        {
+            return Result.Fail(QuoteErrors.QuoteNotFound);
+        }
+
+        return Result.Ok(quote);
     }
 }
