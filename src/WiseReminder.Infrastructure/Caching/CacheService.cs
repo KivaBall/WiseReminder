@@ -2,9 +2,7 @@
 
 public sealed class CacheService(IDistributedCache distributedCache) : ICacheService
 {
-    private readonly IDistributedCache _distributedCache = distributedCache;
-
-    public async Task CreateAsync<T>(string key, T entity, TimeSpan? time = null) where T : class
+    public async Task CreateAsync<T>(string key, T entity, TimeSpan? time = null) where T : notnull
     {
         var obj = JsonConvert.SerializeObject(entity);
 
@@ -13,12 +11,12 @@ public sealed class CacheService(IDistributedCache distributedCache) : ICacheSer
             AbsoluteExpirationRelativeToNow = time ?? TimeSpan.FromMinutes(2)
         };
 
-        await _distributedCache.SetStringAsync(key, obj, options);
+        await distributedCache.SetStringAsync(key, obj, options);
     }
 
     public async Task<T?> GetAsync<T>(string key) where T : class
     {
-        var obj = await _distributedCache.GetStringAsync(key);
+        var obj = await distributedCache.GetStringAsync(key);
 
         if (obj == null)
         {
