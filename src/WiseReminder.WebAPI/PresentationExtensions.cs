@@ -29,7 +29,8 @@ public static class PresentationExtensions
                     ValidAudience = "WiseReminder.com",
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["JWTPassword"] ??
-                                               throw new Exception("JWTPassword isn't in appsettings.json")))
+                                               throw new Exception(
+                                                   "JWTPassword isn't in appsettings.json")))
                 };
             });
         services.AddAuthorization();

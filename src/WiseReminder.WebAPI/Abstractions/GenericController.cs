@@ -7,7 +7,9 @@ public abstract class GenericController(ISender sender) : ControllerBase
     {
         var result = await sender.Send(command);
 
-        return result.IsSuccess ? Ok() : BadRequest(result.Errors.Select(e => e.Message).ToList());
+        return result.IsSuccess
+            ? Ok()
+            : BadRequest(result.Errors.Select(e => e.Message).ToList());
     }
 
     protected async Task<IActionResult> ExecuteCommandWithEntity<TResponse>(

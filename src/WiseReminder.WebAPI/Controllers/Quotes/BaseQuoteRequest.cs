@@ -2,8 +2,8 @@
 
 public record BaseQuoteRequest
 {
-    public string? Text { get; init; }
-    public Guid? AuthorId { get; init; }
-    public Guid? CategoryId { get; init; }
-    public DateOnly? QuoteDate { get; init; }
+    public required string Text { get; init; }
+    public required Guid AuthorId { get; init; }
+    public required Guid CategoryId { get; init; }
+    public required DateOnly QuoteDate { get; init; }
 }

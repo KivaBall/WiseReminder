@@ -2,5 +2,5 @@
 
 public sealed record UpdateAuthorRequest : BaseAuthorRequest
 {
-    public Guid? Id { get; init; }
+    public required Guid Id { get; init; }
 }
