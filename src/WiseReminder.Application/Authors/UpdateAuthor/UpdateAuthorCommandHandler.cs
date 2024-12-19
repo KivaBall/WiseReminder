@@ -25,25 +25,34 @@ public sealed class UpdateAuthorCommandHandler(
 
         var biography = new AuthorBiography(request.Biography);
 
-        var birthDate = Date.Create((short)request.DateOfBirth.Year,
-            (byte)request.DateOfBirth.Month, (byte)request.DateOfBirth.Day);
+        var birthDate = Date.Create((short)request.BirthDate.Year,
+            (byte)request.BirthDate.Month, (byte)request.BirthDate.Day);
 
         if (birthDate.IsFailed)
         {
             return Result.Fail(birthDate.Errors);
         }
 
-        var deathDate = Date.Create((short)request.DateOfDeath.Year,
-            (byte)request.DateOfDeath.Month, (byte)request.DateOfDeath.Day);
-
-        if (deathDate.IsFailed)
+        if (request.DeathDate == null)
         {
-            return Result.Fail(deathDate.Errors);
+            author.Update(name, biography, birthDate.Value, null);
+
+            authorRepository.UpdateAuthor(author);
         }
+        else
+        {
+            var deathDate = Date.Create((short)request.DeathDate?.Year!,
+                (byte)request.DeathDate?.Month!, (byte)request.DeathDate?.Day!);
 
-        author.Update(name, biography, birthDate.Value, deathDate.Value);
+            if (deathDate.IsFailed)
+            {
+                return Result.Fail(deathDate.Errors);
+            }
 
-        authorRepository.UpdateAuthor(author);
+            author.Update(name, biography, birthDate.Value, deathDate.Value);
+
+            authorRepository.UpdateAuthor(author);
+        }
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 

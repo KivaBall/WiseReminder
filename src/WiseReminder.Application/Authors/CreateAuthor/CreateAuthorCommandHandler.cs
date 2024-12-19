@@ -13,30 +13,50 @@ public sealed class CreateAuthorCommandHandler(
 
         var biography = new AuthorBiography(request.Biography);
 
-        var birthDate = Date.Create((short)request.DateOfBirth.Year,
-            (byte)request.DateOfBirth.Month, (byte)request.DateOfBirth.Day);
+        var birthDate = Date.Create((short)request.BirthDate.Year,
+            (byte)request.BirthDate.Month, (byte)request.BirthDate.Day);
 
         if (birthDate.IsFailed)
         {
             return Result.Fail(birthDate.Errors);
         }
 
-        var deathDate = Date.Create((short)request.DateOfDeath.Year,
-            (byte)request.DateOfDeath.Month, (byte)request.DateOfDeath.Day);
+        Author author;
 
-        if (deathDate.IsFailed)
+        if (request.DeathDate == null)
         {
-            return Result.Fail(deathDate.Errors);
+            var result = Author.Create(name, biography, birthDate.Value, null);
+
+            if (result.IsFailed)
+            {
+                return Result.Fail(result.Errors);
+            }
+
+            authorRepository.CreateAuthor(result.Value);
+
+            author = result.Value;
         }
-
-        var author = Author.Create(name, biography, birthDate.Value, deathDate.Value);
-
-        if (author.IsFailed)
+        else
         {
-            return Result.Fail(author.Errors);
-        }
+            var deathDate = Date.Create((short)request.DeathDate?.Year!,
+                (byte)request.DeathDate?.Month!, (byte)request.DeathDate?.Day!);
 
-        authorRepository.CreateAuthor(author.Value);
+            if (deathDate.IsFailed)
+            {
+                return Result.Fail(deathDate.Errors);
+            }
+
+            var result = Author.Create(name, biography, birthDate.Value, deathDate.Value);
+
+            if (result.IsFailed)
+            {
+                return Result.Fail(result.Errors);
+            }
+
+            authorRepository.CreateAuthor(result.Value);
+
+            author = result.Value;
+        }
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
@@ -45,6 +65,6 @@ public sealed class CreateAuthorCommandHandler(
             return Result.Fail(isSaved.Errors);
         }
 
-        return Result.Ok(author.Value.Id);
+        return Result.Ok(author.Id);
     }
 }
