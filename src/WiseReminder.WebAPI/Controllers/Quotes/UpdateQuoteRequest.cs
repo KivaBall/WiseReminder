@@ -2,5 +2,5 @@
 
 public sealed record UpdateQuoteRequest : BaseQuoteRequest
 {
-    public Guid? Id { get; init; }
+    public required Guid Id { get; init; }
 }
