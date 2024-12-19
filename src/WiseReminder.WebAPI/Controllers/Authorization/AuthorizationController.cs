@@ -7,7 +7,8 @@ public sealed class AuthorizationController(ISender sender, IJwtService jwtServi
     [HttpPost("login-as-admin")]
     public IActionResult Login(SignInRequest request)
     {
-        if (request.Login == "DORKVMSJEUHDJFKW" && request.Password == "AIWNFLTISJDNVYWT")
+        if (request.Login == "wise-reminder-admin-login" &&
+            request.Password == "wise-reminder-admin-password")
         {
             var token = jwtService.GenerateJwtToken();
             return Ok(token);
