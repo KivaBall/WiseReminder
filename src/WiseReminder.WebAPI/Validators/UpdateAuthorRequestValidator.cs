@@ -15,10 +15,10 @@ public sealed class UpdateAuthorRequestValidator : AbstractValidator<UpdateAutho
             .NotNull().WithMessage("Biography must not be null")
             .NotEmpty().WithMessage("Biography must not be empty");
 
-        RuleFor(a => a.DateOfBirth)
+        RuleFor(a => a.BirthDate)
             .NotNull().WithMessage("Date of birth must not be null");
 
-        RuleFor(a => a.DateOfDeath)
+        RuleFor(a => a.DeathDate)
             .NotNull().WithMessage("Date of death must not be null");
     }
 }

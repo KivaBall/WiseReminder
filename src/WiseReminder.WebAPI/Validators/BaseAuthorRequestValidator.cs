@@ -12,10 +12,10 @@ public sealed class BaseAuthorRequestValidator : AbstractValidator<BaseAuthorReq
             .NotNull().WithMessage("Biography must not be null")
             .NotEmpty().WithMessage("Biography must not be empty");
 
-        RuleFor(a => a.DateOfBirth)
-            .NotNull().WithMessage("Date of birth must not be null");
+        RuleFor(a => a.BirthDate)
+            .NotEmpty().WithMessage("Date of birth must not be empty");
 
-        RuleFor(a => a.DateOfDeath)
-            .NotNull().WithMessage("Date of death must not be null");
+        RuleFor(a => a.DeathDate)
+            .NotEmpty().WithMessage("Date of death must not be empty");
     }
 }
