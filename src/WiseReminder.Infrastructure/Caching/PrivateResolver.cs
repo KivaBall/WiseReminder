@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Infrastructure.Caching;
 
-public class PrivateResolver : DefaultContractResolver
+public sealed class PrivateResolver : DefaultContractResolver
 {
     protected override JsonProperty CreateProperty(MemberInfo member,
         MemberSerialization memberSerialization)
