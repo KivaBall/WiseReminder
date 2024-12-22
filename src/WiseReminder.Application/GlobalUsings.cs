@@ -1,7 +1,12 @@
+global using System.Diagnostics;
 global using System.Reflection;
 global using FluentResults;
 global using MediatR;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Serilog;
+global using WiseReminder.Application.Abstractions.Logging;
 global using WiseReminder.Application.Abstractions.Mapping;
 global using WiseReminder.Application.Abstractions.MediatR;
 global using WiseReminder.Application.Abstractions.Repository;
