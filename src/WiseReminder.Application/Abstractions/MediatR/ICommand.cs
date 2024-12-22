@@ -1,5 +1,6 @@
 ﻿namespace WiseReminder.Application.Abstractions.MediatR;
 
-public interface ICommand : IRequest<Result>;
+public interface ICommand : ICommandQuery, IRequest<Result>;
 
-public interface ICommand<TEntity> : IRequest<Result<TEntity>>;
+public interface ICommand<TEntity> : ICommandQuery, IRequest<Result<TEntity>>;
+
