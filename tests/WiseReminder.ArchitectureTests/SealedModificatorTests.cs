@@ -1,4 +1,4 @@
-namespace WiseReminder.GenericUnitTests;
+namespace WiseReminder.ArchitectureTests;
 
 public class SealedModificatorTests(ITestOutputHelper testOutputHelper)
 {
