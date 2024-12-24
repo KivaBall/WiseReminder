@@ -1,4 +1,6 @@
-﻿namespace WiseReminder.Infrastructure;
+﻿using WiseReminder.Infrastructure.Seeding;
+
+namespace WiseReminder.Infrastructure;
 
 public static class InfrastructureExtensions
 {
@@ -7,7 +9,7 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("WiseReminderDatabase"));
+            options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection"));
         });
 
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<AppDbContext>());
@@ -19,7 +21,7 @@ public static class InfrastructureExtensions
         services.AddMemoryCache();
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString("RedisCache");
+            options.Configuration = configuration.GetConnectionString("RedisConnection");
         });
         services.AddSingleton<ICacheService, CacheService>();
 
@@ -48,26 +50,17 @@ public static class InfrastructureExtensions
         {
             if (!context.Categories.Any())
             {
-                var categoryFile =
-                    File.ReadAllText(
-                        @"C:\Users\KievBall\source\repos\WiseReminder\src\WiseReminder.Infrastructure\Seeding\CategorySeed.sql");
-                context.Database.ExecuteSqlRaw(categoryFile);
+                context.Database.ExecuteSqlRaw(CategorySeed.Sql);
             }
 
             if (!context.Authors.Any())
             {
-                var authorFile =
-                    File.ReadAllText(
-                        @"C:\Users\KievBall\source\repos\WiseReminder\src\WiseReminder.Infrastructure\Seeding\AuthorSeed.sql");
-                context.Database.ExecuteSqlRaw(authorFile);
+                context.Database.ExecuteSqlRaw(AuthorSeed.Sql);
             }
 
             if (!context.Quotes.Any())
             {
-                var quoteFile =
-                    File.ReadAllText(
-                        @"C:\Users\KievBall\source\repos\WiseReminder\src\WiseReminder.Infrastructure\Seeding\QuoteSeed.sql");
-                context.Database.ExecuteSqlRaw(quoteFile);
+                context.Database.ExecuteSqlRaw(QuoteSeed.Sql);
             }
         }
     }

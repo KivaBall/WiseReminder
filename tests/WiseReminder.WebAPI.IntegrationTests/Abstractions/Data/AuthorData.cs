@@ -6,7 +6,7 @@ public static class AuthorData
     public const string DefaultBiography = "DefaultBiography";
     public const string UpdatedName = "UpdatedName";
     public const string UpdatedBiography = "UpdatedBiography";
-    
+
     public static readonly DateOnly DefaultBirthDate = new(1980, 1, 1);
     public static readonly DateOnly DefaultDeathDate = new(2010, 01, 01);
     public static readonly DateOnly UpdatedBirthDate = new(1981, 1, 1);

@@ -8,7 +8,8 @@ public sealed class SerilogPipeline<TRequest, TResponse>(ILogger<TRequest> logge
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("SerilogPipeline | Handling request {RequestName} with payload: {@Request}",
+        logger.LogInformation(
+            "SerilogPipeline | Handling request {RequestName} with payload: {@Request}",
             typeof(TRequest).Name, request);
 
         var stopwatch = Stopwatch.StartNew();
@@ -27,7 +28,8 @@ public sealed class SerilogPipeline<TRequest, TResponse>(ILogger<TRequest> logge
         {
             logger.LogWarning(
                 "SerilogPipeline | Handled request {RequestName} with errors in {ElapsedTicks} ticks. Errors: {@Errors}",
-                typeof(TRequest).Name, stopwatch.ElapsedTicks, response.Errors.Select(x => x.Message).ToArray());
+                typeof(TRequest).Name, stopwatch.ElapsedTicks,
+                response.Errors.Select(x => x.Message).ToArray());
         }
 
         return response;

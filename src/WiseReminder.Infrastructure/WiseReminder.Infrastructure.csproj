@@ -25,13 +25,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Seeding\CategorySeed.sql">
+        <None Update="Seeding\CategorySeed.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Seeding\QuoteSeed.sql">
+        <None Update="Seeding\QuoteSeed.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Seeding\Seed.sql">
+        <None Update="Seeding\AuthorSeed.sql">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

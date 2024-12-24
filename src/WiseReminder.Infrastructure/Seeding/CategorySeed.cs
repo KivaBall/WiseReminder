@@ -1,5 +1,10 @@
-﻿INSERT INTO Categories (Id, Name, Description, AddedAt, IsDeleted)
-VALUES ('85a2bd6e-a3f3-4301-9353-5fe480b99362', 'Philosophy',
+﻿namespace WiseReminder.Infrastructure.Seeding;
+
+public static class CategorySeed
+{
+    public static string Sql =
+        @"INSERT INTO Categories (Id, Name, Description, AddedAt, IsDeleted)
+        VALUES ('85a2bd6e-a3f3-4301-9353-5fe480b99362', 'Philosophy',
         'This category features quotes that explore deep questions about existence, knowledge, ethics, and the nature of reality. It includes insights from renowned philosophers across different schools of thought.',
         '11/30/2024', 0),
        ('6602da7d-efcf-4f2e-bdca-628354349446', 'Motivation',
@@ -37,4 +42,5 @@ VALUES ('85a2bd6e-a3f3-4301-9353-5fe480b99362', 'Philosophy',
         '11/30/2024', 0),
        ('f3a0b2c3-c2a9-4f5f-9fbc-f7c6d3f8a0b2', 'Creativity',
         'Focused on imagination, innovation, and the creative process, these quotes inspire you to think outside the box and embrace your artistic side.',
-        '11/30/2024', 0);
+        '11/30/2024', 0);";
+}
