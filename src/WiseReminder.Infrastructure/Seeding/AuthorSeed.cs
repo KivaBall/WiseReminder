@@ -1,6 +1,10 @@
-INSERT INTO Authors (Id, Name, Biography, BirthYear, BirthMonth, BirthDay, DeathYear, DeathMonth, DeathDay, AddedAt,
-                     IsDeleted)
-VALUES ('6dc8eed6-643b-4b74-bf37-353dbab335ab', 'Charmaine Tasseler',
+namespace WiseReminder.Infrastructure.Seeding;
+
+public static class AuthorSeed
+{
+    public static string Sql =
+        @"INSERT INTO Authors (Id, Name, Biography, BirthYear, BirthMonth, BirthDay, DeathYear, DeathMonth, DeathDay, AddedAt, IsDeleted)
+        VALUES ('6dc8eed6-643b-4b74-bf37-353dbab335ab', 'Charmaine Tasseler',
         'Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.',
         1934, 6, 7, 1976, 5, 7, '11/30/2024', 0),
        ('71c12634-9cd3-419e-853d-2d3d687d5915', 'Devina Schultes',
@@ -29,4 +33,5 @@ VALUES ('6dc8eed6-643b-4b74-bf37-353dbab335ab', 'Charmaine Tasseler',
         1905, 5, 12, 1958, 3, 15, '11/30/2024', 0),
        ('dd562d5f-939a-4438-8351-f79aa4d09225', 'Javier Zimmer',
         'Pellentesque ultrices mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus. Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla.',
-        1927, 10, 17, 1991, 4, 25, '11/30/2024', 0);
+        1927, 10, 17, 1991, 4, 25, '11/30/2024', 0);";
+}

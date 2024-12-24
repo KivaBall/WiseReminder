@@ -1,5 +1,10 @@
-INSERT INTO Quotes (Id, Text, AuthorId, CategoryId, QuoteYear, QuoteMonth, QuoteDay, AddedAt, IsDeleted)
-VALUES ('24c8e0ad-5edc-4967-87e3-649881a5a8fe',
+namespace WiseReminder.Infrastructure.Seeding;
+
+public static class QuoteSeed
+{
+    public static string Sql =
+        @"INSERT INTO Quotes (Id, Text, AuthorId, CategoryId, QuoteYear, QuoteMonth, QuoteDay, AddedAt, IsDeleted)
+        VALUES ('24c8e0ad-5edc-4967-87e3-649881a5a8fe',
         'Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.',
         '6dc8eed6-643b-4b74-bf37-353dbab335ab', '6602da7d-efcf-4f2e-bdca-628354349446', 1956, 10, 12, '11/30/2024', 0),
        ('565c9471-c2ed-42e4-a923-09794b333a7f',
@@ -34,4 +39,5 @@ VALUES ('24c8e0ad-5edc-4967-87e3-649881a5a8fe',
         'e648367f-9b3b-403d-b30c-f3829171a96d', 'c1d2ad58-2cfa-4a8d-91d8-e2c1d36f7d2f', 1929, 5, 22, '11/30/2024', 0),
        ('8f52f3ac-ec02-4f2c-9e9a-14344a33c611',
         'Creativity is seeing what everyone else has seen and thinking what no one else has thought.',
-        'e648367f-9b3b-403d-b30c-f3829171a96d', 'f3a0b2c3-c2a9-4f5f-9fbc-f7c6d3f8a0b2', 1951, 11, 18, '11/30/2024', 0);
+        'e648367f-9b3b-403d-b30c-f3829171a96d', 'f3a0b2c3-c2a9-4f5f-9fbc-f7c6d3f8a0b2', 1951, 11, 18, '11/30/2024', 0);";
+}
