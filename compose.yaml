@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  wisereminder.webapi:
+    image: wisereminder.webapi
+    build:
+      context: .
+      dockerfile: src/WiseReminder.WebAPI/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DatabaseConnection=Server=sqlserver;Database=WiseReminder;User Id=sa;Password=312_SQL_Password_312;TrustServerCertificate=True;
+      - ConnectionStrings__RedisConnection=redis:6379
+      - ConnectionStrings__SeqConnection=http://seq:5341/
+      - JWTPassword=ThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKey
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - sqlserver
+      - seq
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "312_SQL_Password_312"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:5341"
