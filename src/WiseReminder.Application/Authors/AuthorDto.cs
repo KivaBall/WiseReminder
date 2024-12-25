@@ -7,4 +7,5 @@ public sealed record AuthorDto
     public required string Biography { get; init; }
     public required DateOnly DateOfBirth { get; init; }
     public required DateOnly? DateOfDeath { get; init; }
+    public required Guid? UserId { get; init; }
 }
