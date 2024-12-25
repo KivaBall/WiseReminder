@@ -2,15 +2,12 @@
 
 public sealed class User : Entity<User>
 {
-    public User(Username username, Login login, HashedPassword hashedPassword,
-        SubscriptionType subscriptionType, Author? author)
+    public User(Username username, Login login, HashedPassword hashedPassword)
     {
         Username = username;
         Login = login;
         HashedPassword = hashedPassword;
-        SubscriptionType = subscriptionType;
-        AuthorId = author?.Id;
-        Author = author;
+        SubscriptionType = SubscriptionType.Free;
     }
 
     // ReSharper disable once UnusedMember.Local
