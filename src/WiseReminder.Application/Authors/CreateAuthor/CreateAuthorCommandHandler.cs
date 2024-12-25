@@ -21,42 +21,29 @@ public sealed class CreateAuthorCommandHandler(
             return Result.Fail(birthDate.Errors);
         }
 
-        Author author;
+        var deathDate = request.DeathDate != null
+            ? Date.Create((short)request.DeathDate?.Year!, (byte)request.DeathDate?.Month!,
+                (byte)request.DeathDate?.Day!)
+            : null;
 
-        if (request.DeathDate == null)
+        if (deathDate != null && deathDate.IsFailed)
         {
-            var result = Author.Create(name, biography, birthDate.Value, null);
-
-            if (result.IsFailed)
-            {
-                return Result.Fail(result.Errors);
-            }
-
-            authorRepository.CreateAuthor(result.Value);
-
-            author = result.Value;
+            return Result.Fail(deathDate.Errors);
         }
-        else
+
+        var user = request.UserId != null
+            ? 
+        
+        var result = Author.Create(name, biography, birthDate.Value, deathDate.Value);
+
+        if (result.IsFailed)
         {
-            var deathDate = Date.Create((short)request.DeathDate?.Year!,
-                (byte)request.DeathDate?.Month!, (byte)request.DeathDate?.Day!);
-
-            if (deathDate.IsFailed)
-            {
-                return Result.Fail(deathDate.Errors);
-            }
-
-            var result = Author.Create(name, biography, birthDate.Value, deathDate.Value);
-
-            if (result.IsFailed)
-            {
-                return Result.Fail(result.Errors);
-            }
-
-            authorRepository.CreateAuthor(result.Value);
-
-            author = result.Value;
+            return Result.Fail(result.Errors);
         }
+
+        Author author = result.Value;
+
+        authorRepository.CreateAuthor(author);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
