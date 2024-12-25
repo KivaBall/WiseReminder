@@ -6,6 +6,6 @@ public sealed record HashedPassword
     {
         Value = value;
     }
-
+    
     public string Value { get; }
 }

@@ -6,6 +6,6 @@ public sealed record Username
     {
         Value = value;
     }
-
+    
     public string Value { get; }
 }
