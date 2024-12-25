@@ -13,7 +13,8 @@ public static class AuthorToDtoMapper
                 author.BirthDate.Day),
             DateOfDeath = author.DeathDate == null
                 ? null
-                : new DateOnly(author.DeathDate.Year, author.DeathDate.Month, author.DeathDate.Day)
+                : new DateOnly(author.DeathDate.Year, author.DeathDate.Month, author.DeathDate.Day),
+            UserId = author.UserId
         };
     }
 }
