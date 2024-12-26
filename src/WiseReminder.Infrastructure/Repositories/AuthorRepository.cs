@@ -2,8 +2,8 @@
 
 public sealed class AuthorRepository(
     AppDbContext context,
-    IQuoteRepository quoteRepository,
-    IMemoryCache memoryCache) : IAuthorRepository
+    IMemoryCache memoryCache)
+    : IAuthorRepository
 {
     public void CreateAuthor(Author author)
     {
@@ -15,16 +15,9 @@ public sealed class AuthorRepository(
         context.Authors.Update(author);
     }
 
-    public async Task DeleteAuthor(Author author)
+    public void DeleteAuthor(Author author)
     {
         author.Delete();
-
-        var quotes = await quoteRepository.GetQuotesByAuthorId(author.Id);
-
-        foreach (var quote in quotes)
-        {
-            quoteRepository.DeleteQuote(quote);
-        }
 
         context.Authors.Update(author);
     }
