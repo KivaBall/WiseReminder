@@ -19,12 +19,4 @@
         <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Users\ChangePassword\" />
-      <Folder Include="Users\ChangeUsername\" />
-      <Folder Include="Users\DeleteUser\" />
-      <Folder Include="Users\GetUserById\" />
-      <Folder Include="Users\GetUserDtoById\" />
-    </ItemGroup>
-
 </Project>
