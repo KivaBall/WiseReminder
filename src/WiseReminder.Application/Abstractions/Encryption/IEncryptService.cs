@@ -3,5 +3,5 @@
 public interface IEncryptService
 {
     string Encrypt(string value);
-    string Check(string encryptedValue, string value);
+    bool Check(string hashedValue, string value);
 }
