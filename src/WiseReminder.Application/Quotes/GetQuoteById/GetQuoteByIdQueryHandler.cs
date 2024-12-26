@@ -10,11 +10,6 @@ public sealed class GetQuoteByIdQueryHandler(
     {
         var quote = await quoteRepository.GetQuoteById(request.Id);
 
-        if (quote == null)
-        {
-            return Result.Fail(QuoteErrors.QuoteNotFound);
-        }
-
-        return Result.Ok(quote);
+        return quote == null ? Result.Fail(QuoteErrors.QuoteNotFound) : Result.Ok(quote);
     }
 }

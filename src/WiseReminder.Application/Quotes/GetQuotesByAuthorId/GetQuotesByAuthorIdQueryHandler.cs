@@ -11,11 +11,11 @@ public sealed class GetQuotesByAuthorIdQueryHandler(
     {
         var query = new GetAuthorByIdQuery { Id = request.AuthorId };
 
-        var result = await sender.Send(query, cancellationToken);
+        var author = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (author.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(author.Errors);
         }
 
         var quotes = await quoteRepository.GetQuotesByAuthorId(request.AuthorId);

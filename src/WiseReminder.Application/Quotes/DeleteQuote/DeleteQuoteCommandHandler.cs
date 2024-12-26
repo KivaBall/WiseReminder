@@ -12,24 +12,17 @@ public sealed class DeleteQuoteCommandHandler(
     {
         var query = new GetQuoteByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query, cancellationToken);
+        var quote = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (quote.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(quote.Errors);
         }
 
-        var quote = result.Value;
-
-        quoteRepository.DeleteQuote(quote);
+        quoteRepository.DeleteQuote(quote.Value);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok();
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }

@@ -10,7 +10,9 @@ public sealed class GetRecentAddedQuotesHandler(
     {
         var quotes = await quoteRepository.GetRecentAddedQuotes(request.Amount);
 
-        var dtoQuotes = quotes.Select(q => q.ToQuoteDto()).ToList();
+        var dtoQuotes = quotes
+            .Select(q => q.ToQuoteDto())
+            .ToList();
 
         return Result.Ok<ICollection<QuoteDto>>(dtoQuotes);
     }

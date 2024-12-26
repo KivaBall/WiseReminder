@@ -8,7 +8,7 @@ public sealed class GetQuoteOfTheDayHandler(
         GetQuoteOfTheDay request,
         CancellationToken cancellationToken)
     {
-        var quote = await quoteRepository.GetQuoteOfTheDay();
+        var quote = await quoteRepository.GetQuoteOfTheDay(); //TODO: Maybe create service for this?
 
         return Result.Ok(quote.ToQuoteDto());
     }

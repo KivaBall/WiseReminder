@@ -12,11 +12,6 @@ public sealed class GetQuoteDtoByIdQueryHandler(
 
         var result = await sender.Send(query);
 
-        if (result.IsFailed)
-        {
-            return Result.Fail(result.Errors);
-        }
-
-        return Result.Ok(result.Value.ToQuoteDto());
+        return result.IsFailed ? Result.Fail(result.Errors) : Result.Ok(result.Value.ToQuoteDto());
     }
 }

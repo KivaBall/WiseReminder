@@ -2,5 +2,5 @@
 
 public sealed record GetRandomQuotesQuery : IQuery<ICollection<QuoteDto>>
 {
-    public int Amount { get; init; }
+    public required int Amount { get; init; }
 }

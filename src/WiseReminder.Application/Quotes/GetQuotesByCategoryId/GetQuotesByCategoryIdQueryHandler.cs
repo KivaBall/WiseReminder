@@ -11,11 +11,11 @@ public sealed class GetQuotesByCategoryIdQueryHandler(
     {
         var query = new GetCategoryByIdQuery { Id = request.CategoryId };
 
-        var result = await sender.Send(query, cancellationToken);
+        var category = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (category.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(category.Errors);
         }
 
         var quotes = await quoteRepository.GetQuotesByCategoryId(request.CategoryId);
