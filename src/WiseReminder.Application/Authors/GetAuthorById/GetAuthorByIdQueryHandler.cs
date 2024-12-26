@@ -10,11 +10,6 @@ public sealed class GetAuthorByIdQueryHandler(
     {
         var author = await authorRepository.GetAuthorById(request.Id);
 
-        if (author == null)
-        {
-            return Result.Fail(AuthorErrors.AuthorNotFound);
-        }
-
-        return Result.Ok(author);
+        return author == null ? Result.Fail(AuthorErrors.AuthorNotFound) : Result.Ok(author);
     }
 }
