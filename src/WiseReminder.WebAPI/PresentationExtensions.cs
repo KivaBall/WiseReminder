@@ -2,16 +2,18 @@
 
 public static class PresentationExtensions
 {
-    public static IServiceCollection AddPresentationServices(this IServiceCollection services,
+    public static void AddPresentationServices(this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddControllers();
+        
         services.AddFluentValidationAutoValidation();
+        
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        
         services.AddOpenApi();
+        
         services.AddAuth(configuration);
-
-        return services;
     }
 
     private static void AddAuth(this IServiceCollection services, IConfiguration configuration)
@@ -28,9 +30,7 @@ public static class PresentationExtensions
                     ValidIssuer = "WiseReminder.com",
                     ValidAudience = "WiseReminder.com",
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JWTPassword"] ??
-                                               throw new Exception(
-                                                   "JWTPassword isn't in appsettings.json")))
+                        Encoding.UTF8.GetBytes(configuration["JWTPassword"]!))
                 };
             });
         services.AddAuthorization();
