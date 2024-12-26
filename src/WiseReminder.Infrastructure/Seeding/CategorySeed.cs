@@ -2,7 +2,7 @@
 
 public static class CategorySeed
 {
-    public static string Sql =
+    public const string Sql =
         @"INSERT INTO Categories (Id, Name, Description, AddedAt, IsDeleted)
         VALUES ('85a2bd6e-a3f3-4301-9353-5fe480b99362', 'Philosophy',
         'This category features quotes that explore deep questions about existence, knowledge, ethics, and the nature of reality. It includes insights from renowned philosophers across different schools of thought.',

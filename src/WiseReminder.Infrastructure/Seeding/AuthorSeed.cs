@@ -2,7 +2,7 @@ namespace WiseReminder.Infrastructure.Seeding;
 
 public static class AuthorSeed
 {
-    public static string Sql =
+    public const string Sql =
         @"INSERT INTO Authors (Id, Name, Biography, BirthYear, BirthMonth, BirthDay, DeathYear, DeathMonth, DeathDay, AddedAt, IsDeleted)
         VALUES ('6dc8eed6-643b-4b74-bf37-353dbab335ab', 'Charmaine Tasseler',
         'Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.',
