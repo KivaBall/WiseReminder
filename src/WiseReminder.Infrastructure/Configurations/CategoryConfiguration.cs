@@ -16,7 +16,6 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder.Property(c => c.Description)
             .HasMaxLength(1024)
-            .HasConversion(description => description.Value,
-                value => new CategoryDescription(value));
+            .HasConversion(description => description.Value, value => new Description(value));
     }
 }
