@@ -14,20 +14,21 @@ public class QuoteTests
         // Arrange
         var category = new Category(
             new CategoryName("TestName"),
-            new CategoryDescription("TestDescription"));
+            new Description("TestDescription"));
 
         var author = Author.Create(
             new AuthorName("TestName"),
-            new AuthorBiography("TestBiography"),
-            Date.Create(birthYear, 1, 1).Value,
-            Date.Create(deathYear, 1, 1).Value).Value;
+            new Biography("TestBiography"),
+            Date.Create(new DateOnly(birthYear, 1, 1)).Value,
+            Date.Create(new DateOnly(deathYear, 1, 1)).Value,
+            null);
 
         // Act
         var quote = Quote.Create(
-            new QuoteText("TestText"),
-            author,
+            new Text("TestText"),
+            author.Value,
             category,
-            Date.Create(quoteYear, 1, 1).Value);
+            Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
 
         // Assert
         quote.IsSuccess.Should().BeFalse();
@@ -45,20 +46,21 @@ public class QuoteTests
         // Arrange
         var category = new Category(
             new CategoryName("TestName"),
-            new CategoryDescription("TestDescription"));
+            new Description("TestDescription"));
 
         var author = Author.Create(
             new AuthorName("TestName"),
-            new AuthorBiography("TestBiography"),
-            Date.Create(birthYear, 1, 1).Value,
-            Date.Create(deathYear, 1, 1).Value).Value;
+            new Biography("TestBiography"),
+            Date.Create(new DateOnly(birthYear, 1, 1)).Value,
+            Date.Create(new DateOnly(deathYear, 1, 1)).Value,
+            null);
 
         // Act
         var quote = Quote.Create(
-            new QuoteText("TestText"),
-            author,
+            new Text("TestText"),
+            author.Value,
             category,
-            Date.Create(quoteYear, 1, 1).Value);
+            Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
 
         // Assert
         quote.IsSuccess.Should().BeTrue();

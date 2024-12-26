@@ -10,10 +10,8 @@ public class DateTests
     [InlineData(2504)]
     public void CreateDate_WhenYearOutOfRange_ShouldReturnFailure(short year)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(year, 6, 6);
+        var date = Date.Create(new DateOnly(year, 6, 6));
 
         // Assert
         date.IsSuccess.Should().BeFalse();
@@ -27,10 +25,8 @@ public class DateTests
     [InlineData(2048)]
     public void CreateDate_WhenYearInRange_ShouldReturnSuccess(short year)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(year, 6, 6);
+        var date = Date.Create(new DateOnly(year, 6, 6));
 
         // Assert
         date.IsSuccess.Should().BeTrue();
@@ -44,10 +40,8 @@ public class DateTests
     [InlineData(14)]
     public void CreateDate_WhenMonthOutOfRange_ShouldReturnFailure(byte month)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(2020, month, 6);
+        var date = Date.Create(new DateOnly(2020, month, 6));
 
         // Assert
         date.IsSuccess.Should().BeFalse();
@@ -61,10 +55,8 @@ public class DateTests
     [InlineData(3)]
     public void CreateDate_WhenMonthInRange_ShouldReturnSuccess(byte month)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(2020, month, 6);
+        var date = Date.Create(new DateOnly(2020, month, 6));
 
         // Assert
         date.IsSuccess.Should().BeTrue();
@@ -78,10 +70,8 @@ public class DateTests
     [InlineData(2017, 0, 15)]
     public void CreateDate_WhenDayOutOfRange_ShouldReturnFailure(short year, byte month, byte day)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(year, month, day);
+        var date = Date.Create(new DateOnly(year, month, day));
 
         // Assert
         date.IsSuccess.Should().BeFalse();
@@ -95,10 +85,8 @@ public class DateTests
     [InlineData(2000, 1, 1)]
     public void CreateDate_WhenDayInRange_ShouldReturnSuccess(short year, byte month, byte day)
     {
-        // Arrange
-
         // Act
-        var date = Date.Create(year, month, day);
+        var date = Date.Create(new DateOnly(year, month, day));
 
         // Assert
         date.IsSuccess.Should().BeTrue();

@@ -12,12 +12,12 @@ public class AuthorTests
         byte birthMonth, byte birthDay, short deathYear, byte deathMonth, byte deathDay)
     {
         // Arrange
-        var birthDate = Date.Create(birthYear, birthMonth, birthDay).Value;
-        var deathDate = Date.Create(deathYear, deathMonth, deathDay).Value;
+        var birthDate = Date.Create(new DateOnly(birthYear, birthMonth, birthDay)).Value;
+        var deathDate = Date.Create(new DateOnly(deathYear, deathMonth, deathDay)).Value;
 
         // Act
-        var author = Author.Create(new AuthorName("John Smith"), new AuthorBiography(". . ."),
-            birthDate, deathDate);
+        var author = Author.Create(new AuthorName("John Smith"), new Biography(". . ."),
+            birthDate, deathDate, null);
 
         // Assert
         author.IsSuccess.Should().BeFalse();
@@ -33,12 +33,12 @@ public class AuthorTests
         byte birthMonth, byte birthDay, short deathYear, byte deathMonth, byte deathDay)
     {
         // Arrange
-        var birthDate = Date.Create(birthYear, birthMonth, birthDay).Value;
-        var deathDate = Date.Create(deathYear, deathMonth, deathDay).Value;
+        var birthDate = Date.Create(new DateOnly(birthYear, birthMonth, birthDay)).Value;
+        var deathDate = Date.Create(new DateOnly(deathYear, deathMonth, deathDay)).Value;
 
         // Act
-        var author = Author.Create(new AuthorName("John Smith"), new AuthorBiography(". . ."),
-            birthDate, deathDate);
+        var author = Author.Create(new AuthorName("John Smith"), new Biography(". . ."),
+            birthDate, deathDate, null);
 
         // Assert
         author.IsSuccess.Should().BeTrue();
@@ -54,11 +54,11 @@ public class AuthorTests
         byte birthMonth, byte birthDay)
     {
         // Arrange
-        var birthDate = Date.Create(birthYear, birthMonth, birthDay).Value;
+        var birthDate = Date.Create(new DateOnly(birthYear, birthMonth, birthDay)).Value;
 
         // Act
-        var author = Author.Create(new AuthorName("John Smith"), new AuthorBiography(". . ."),
-            birthDate, null);
+        var author = Author.Create(new AuthorName("John Smith"), new Biography(". . ."),
+            birthDate, null, null);
 
         // Assert
         author.IsSuccess.Should().BeTrue();
