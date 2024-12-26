@@ -10,26 +10,28 @@ public sealed class DeleteAuthorCommandHandler(
         DeleteAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetAuthorByIdQuery { Id = request.Id };
+        var authorQuery = new GetAuthorByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query, cancellationToken);
+        var author = await sender.Send(authorQuery, cancellationToken);
 
-        if (result.IsFailed)
+        if (author.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(author.Errors);
         }
 
-        var author = result.Value;
+        authorRepository.DeleteAuthor(author.Value);
 
-        await authorRepository.DeleteAuthor(author);
+        var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = request.Id };
+        
+        var quotesResult = await sender.Send(quotesQuery, cancellationToken);
+
+        if (quotesResult.IsFailed)
+        {
+            return Result.Fail(quotesResult.Errors);
+        }
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok();
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }
