@@ -22,7 +22,7 @@ public sealed class DeleteAuthorCommandHandler(
         authorRepository.DeleteAuthor(author.Value);
 
         var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = request.Id };
-        
+
         var quotesResult = await sender.Send(quotesQuery, cancellationToken);
 
         if (quotesResult.IsFailed)

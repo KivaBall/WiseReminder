@@ -12,14 +12,14 @@ public sealed record Date
     public static Result<Date> Create(DateOnly dateStruct)
     {
         const short maxYear = 2048;
-        
+
         if (dateStruct.Year > maxYear)
         {
             return Result.Fail(DateErrors.YearOutOfRange);
         }
 
         var date = new Date(dateStruct);
-        
+
         return Result.Ok(date);
     }
 }

@@ -11,7 +11,7 @@ public sealed class DeleteUserCommandHandler(
         CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery { Id = request.Id };
-        
+
         var user = await sender.Send(query);
 
         if (user.IsFailed)
@@ -22,12 +22,12 @@ public sealed class DeleteUserCommandHandler(
         if (user.Value.AuthorId != null)
         {
             var authorQuery = new DeleteAuthorCommand { Id = user.Value.AuthorId.Value };
-            
+
             await sender.Send(authorQuery, cancellationToken);
         }
 
-        await userRepository.DeleteUser(user.Value);
-        
+        userRepository.DeleteUser(user.Value);
+
         var isSaved = await unitOfWork.SaveChangesAsync();
 
         return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();

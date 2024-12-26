@@ -28,7 +28,7 @@ public sealed class ChangePasswordCommandHandler(
         {
             return Result.Fail(UserErrors.PasswordNotCorrect);
         }
-        
+
         var newPassword = new HashedPassword(encryptService.Encrypt(request.NewPassword));
 
         user.Value.ChangePassword(newPassword);

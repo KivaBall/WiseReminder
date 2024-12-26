@@ -28,13 +28,13 @@ public sealed class ChangeUsernameCommandHandler(
         {
             return Result.Fail(UserErrors.PasswordNotCorrect);
         }
-        
+
         var newUsername = new Username(request.NewUsername);
-        
+
         user.Value.ChangeUsername(newUsername);
-        
+
         userRepository.UpdateUser(user.Value);
-        
+
         var isSaved = await unitOfWork.SaveChangesAsync();
 
         return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();

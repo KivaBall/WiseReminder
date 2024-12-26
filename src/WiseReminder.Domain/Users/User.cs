@@ -22,6 +22,7 @@ public sealed class User : Entity<User>
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public Guid? AuthorId { get; private set; }
+
     // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public Author? Author { get; private set; }
 

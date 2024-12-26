@@ -10,7 +10,7 @@ public sealed class CreateCategoryCommandHandler(
         CancellationToken cancellationToken)
     {
         var name = new CategoryName(request.Name);
-        
+
         var description = new Description(request.Description);
 
         var category = new Category(name, description);

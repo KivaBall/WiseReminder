@@ -9,7 +9,7 @@ public sealed class GetUserDtoByIdQueryHandler(
         CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery { Id = request.Id };
-        
+
         var user = await sender.Send(query, cancellationToken);
 
         return user.IsFailed ? Result.Fail(user.Errors) : Result.Ok(user.Value.ToUserDto());
