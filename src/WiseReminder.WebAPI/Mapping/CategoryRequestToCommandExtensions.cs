@@ -11,11 +11,12 @@ public static class CategoryRequestToCommandExtensions
         };
     }
 
-    public static UpdateCategoryCommand ToUpdateCategoryCommand(this UpdateCategoryRequest request)
+    public static UpdateCategoryCommand ToUpdateCategoryCommand(this BaseCategoryRequest request,
+        Guid id)
     {
         return new UpdateCategoryCommand
         {
-            Id = request.Id,
+            Id = id,
             Name = request.Name,
             Description = request.Description
         };

@@ -11,11 +11,11 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
         return await ExecuteCommandWithEntity(command);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
+    public async Task<IActionResult> UpdateCategory(Guid id, BaseCategoryRequest request)
     {
-        var command = request.ToUpdateCategoryCommand();
+        var command = request.ToUpdateCategoryCommand(id);
         return await ExecuteCommand(command);
     }
 
