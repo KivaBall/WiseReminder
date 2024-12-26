@@ -2,7 +2,8 @@
 
 public sealed class CreateAuthorCommandHandler(
     IAuthorRepository authorRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    ISender sender)
     : ICommandHandler<CreateAuthorCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
@@ -11,10 +12,9 @@ public sealed class CreateAuthorCommandHandler(
     {
         var name = new AuthorName(request.Name);
 
-        var biography = new AuthorBiography(request.Biography);
+        var biography = new Biography(request.Biography);
 
-        var birthDate = Date.Create((short)request.BirthDate.Year,
-            (byte)request.BirthDate.Month, (byte)request.BirthDate.Day);
+        var birthDate = Date.Create(request.BirthDate);
 
         if (birthDate.IsFailed)
         {
@@ -22,8 +22,7 @@ public sealed class CreateAuthorCommandHandler(
         }
 
         var deathDate = request.DeathDate != null
-            ? Date.Create((short)request.DeathDate?.Year!, (byte)request.DeathDate?.Month!,
-                (byte)request.DeathDate?.Day!)
+            ? Date.Create(request.DeathDate.Value)
             : null;
 
         if (deathDate != null && deathDate.IsFailed)
@@ -31,27 +30,31 @@ public sealed class CreateAuthorCommandHandler(
             return Result.Fail(deathDate.Errors);
         }
 
-        var user = request.UserId != null
-            ? 
-        
-        var result = Author.Create(name, biography, birthDate.Value, deathDate.Value);
+        Result<User>? user = null;
 
-        if (result.IsFailed)
+        if (request.UserId != null)
         {
-            return Result.Fail(result.Errors);
+            var query = new GetUserByIdQuery { Id = request.UserId.Value };
+
+            user = await sender.Send(query, cancellationToken);
+
+            if (user.IsFailed)
+            {
+                return Result.Fail(user.Errors);
+            }
         }
 
-        Author author = result.Value;
+        var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, user?.Value);
 
-        authorRepository.CreateAuthor(author);
+        if (author.IsFailed)
+        {
+            return Result.Fail(author.Errors);
+        }
+
+        authorRepository.CreateAuthor(author.Value);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok(author.Id);
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(author.Value.Id);
     }
 }
