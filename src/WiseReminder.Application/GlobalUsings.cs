@@ -18,6 +18,8 @@ global using WiseReminder.Application.Categories;
 global using WiseReminder.Application.Categories.GetCategoryById;
 global using WiseReminder.Application.Quotes;
 global using WiseReminder.Application.Quotes.GetQuoteById;
+global using WiseReminder.Application.Quotes.GetQuotesByAuthorId;
+global using WiseReminder.Application.Quotes.GetQuotesByCategoryId;
 global using WiseReminder.Application.Users;
 global using WiseReminder.Application.Users.GetUserById;
 global using WiseReminder.Domain.Authors;
