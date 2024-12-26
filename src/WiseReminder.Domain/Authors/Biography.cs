@@ -1,8 +1,8 @@
 ﻿namespace WiseReminder.Domain.Authors;
 
-public sealed record AuthorBiography
+public sealed record Biography
 {
-    public AuthorBiography(string value)
+    public Biography(string value)
     {
         Value = value;
     }

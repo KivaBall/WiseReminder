@@ -1,8 +1,8 @@
 ﻿namespace WiseReminder.Domain.Quotes;
 
-public sealed record QuoteText
+public sealed record Text
 {
-    public QuoteText(string value)
+    public Text(string value)
     {
         Value = value;
     }

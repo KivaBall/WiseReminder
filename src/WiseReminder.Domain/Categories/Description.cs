@@ -1,8 +1,8 @@
 ﻿namespace WiseReminder.Domain.Categories;
 
-public sealed record CategoryDescription
+public sealed record Description
 {
-    public CategoryDescription(string value)
+    public Description(string value)
     {
         Value = value;
     }

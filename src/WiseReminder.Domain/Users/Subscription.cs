@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Domain.Users;
 
-public enum SubscriptionType
+public enum Subscription
 {
     Free,
     Iron,
