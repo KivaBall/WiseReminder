@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Abstractions.JWT;
+﻿namespace WiseReminder.Infrastructure.JWT;
 
 public interface IJwtService
 {

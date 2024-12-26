@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Abstractions.Caching;
+﻿namespace WiseReminder.Infrastructure.Caching;
 
 public interface ICacheService
 {
