@@ -2,7 +2,7 @@
 
 public sealed record CreateUserCommand : ICommand<Guid>
 {
-    public string Username { get; init; }
-    public string Login { get; init; }
-    public string Password { get; init; }
+    public required string Username { get; init; }
+    public required string Login { get; init; }
+    public required string Password { get; init; }
 }
