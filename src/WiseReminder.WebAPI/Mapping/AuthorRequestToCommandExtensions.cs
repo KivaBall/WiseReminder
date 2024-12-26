@@ -2,14 +2,15 @@
 
 public static class AuthorRequestToCommandExtensions
 {
-    public static CreateAuthorCommand ToCreateAuthorCommand(this BaseAuthorRequest request)
+    public static CreateAuthorCommand ToCreateAuthorCommand(this CreateAuthorRequest request)
     {
         return new CreateAuthorCommand
         {
             Name = request.Name,
             Biography = request.Biography,
             BirthDate = request.BirthDate,
-            DeathDate = request.DeathDate
+            DeathDate = request.DeathDate,
+            UserId = request.UserId
         };
     }
 
