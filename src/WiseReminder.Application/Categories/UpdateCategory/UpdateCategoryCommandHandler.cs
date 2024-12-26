@@ -12,30 +12,23 @@ public sealed class UpdateCategoryCommandHandler(
     {
         var query = new GetCategoryByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query, cancellationToken);
+        var category = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (category.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(category.Errors);
         }
-
-        var category = result.Value;
 
         var name = new CategoryName(request.Name);
 
-        var description = new CategoryDescription(request.Description);
+        var description = new Description(request.Description);
 
-        category.Update(name, description);
+        category.Value.Update(name, description);
 
-        categoryRepository.UpdateCategory(category);
+        categoryRepository.UpdateCategory(category.Value);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok();
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }

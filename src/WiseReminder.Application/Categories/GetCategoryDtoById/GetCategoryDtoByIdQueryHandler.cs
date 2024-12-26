@@ -10,13 +10,10 @@ public sealed class GetCategoryDtoByIdQueryHandler(
     {
         var query = new GetCategoryByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query);
+        var category = await sender.Send(query);
 
-        if (result.IsFailed)
-        {
-            return Result.Fail(result.Errors);
-        }
-
-        return Result.Ok(result.Value.ToCategoryDto());
+        return category.IsFailed
+            ? Result.Fail(category.Errors)
+            : Result.Ok(category.Value.ToCategoryDto());
     }
 }

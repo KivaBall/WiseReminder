@@ -10,26 +10,28 @@ public sealed class DeleteCategoryCommandHandler(
         DeleteCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetCategoryByIdQuery { Id = request.Id };
+        var categoryQuery = new GetCategoryByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query, cancellationToken);
+        var category = await sender.Send(categoryQuery, cancellationToken);
 
-        if (result.IsFailed)
+        if (category.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(category.Errors);
         }
 
-        var category = result.Value;
+        categoryRepository.DeleteCategory(category.Value);
 
-        await categoryRepository.DeleteCategory(category);
+        var quotesQuery = new GetQuotesByCategoryIdQuery { CategoryId = request.Id };
+
+        var quotesResult = await sender.Send(quotesQuery, cancellationToken);
+
+        if (quotesResult.IsFailed)
+        {
+            return Result.Fail(quotesResult.Errors);
+        }
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok();
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }

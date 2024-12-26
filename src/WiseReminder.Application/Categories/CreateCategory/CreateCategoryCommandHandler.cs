@@ -10,7 +10,8 @@ public sealed class CreateCategoryCommandHandler(
         CancellationToken cancellationToken)
     {
         var name = new CategoryName(request.Name);
-        var description = new CategoryDescription(request.Description);
+        
+        var description = new Description(request.Description);
 
         var category = new Category(name, description);
 
@@ -18,11 +19,6 @@ public sealed class CreateCategoryCommandHandler(
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok(category.Id);
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(category.Id);
     }
 }
