@@ -12,21 +12,18 @@ public sealed class UpdateAuthorCommandHandler(
     {
         var query = new GetAuthorByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query, cancellationToken);
+        var author = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (author.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return Result.Fail(author.Errors);
         }
-
-        var author = result.Value;
 
         var name = new AuthorName(request.Name);
 
-        var biography = new AuthorBiography(request.Biography);
+        var biography = new Biography(request.Biography);
 
-        var birthDate = Date.Create((short)request.BirthDate.Year,
-            (byte)request.BirthDate.Month, (byte)request.BirthDate.Day);
+        var birthDate = Date.Create(request.BirthDate);
 
         if (birthDate.IsFailed)
         {
@@ -35,32 +32,24 @@ public sealed class UpdateAuthorCommandHandler(
 
         if (request.DeathDate == null)
         {
-            author.Update(name, biography, birthDate.Value, null);
-
-            authorRepository.UpdateAuthor(author);
+            author.Value.Update(name, biography, birthDate.Value, null);
         }
         else
         {
-            var deathDate = Date.Create((short)request.DeathDate?.Year!,
-                (byte)request.DeathDate?.Month!, (byte)request.DeathDate?.Day!);
+            var deathDate = Date.Create(request.DeathDate.Value);
 
             if (deathDate.IsFailed)
             {
                 return Result.Fail(deathDate.Errors);
             }
 
-            author.Update(name, biography, birthDate.Value, deathDate.Value);
-
-            authorRepository.UpdateAuthor(author);
+            author.Value.Update(name, biography, birthDate.Value, deathDate.Value);
         }
+
+        authorRepository.UpdateAuthor(author.Value);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        if (isSaved.IsFailed)
-        {
-            return Result.Fail(isSaved.Errors);
-        }
-
-        return Result.Ok();
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }
