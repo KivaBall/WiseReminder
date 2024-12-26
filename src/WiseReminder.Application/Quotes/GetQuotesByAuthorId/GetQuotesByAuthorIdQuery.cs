@@ -2,5 +2,5 @@
 
 public sealed record GetQuotesByAuthorIdQuery : IQuery<ICollection<QuoteDto>>
 {
-    public Guid AuthorId { get; init; }
+    public required Guid AuthorId { get; init; }
 }

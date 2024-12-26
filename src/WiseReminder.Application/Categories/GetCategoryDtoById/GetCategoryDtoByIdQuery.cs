@@ -2,5 +2,5 @@
 
 public sealed record GetCategoryDtoByIdQuery : IQuery<CategoryDto>
 {
-    public Guid Id { get; init; }
+    public required Guid Id { get; init; }
 }

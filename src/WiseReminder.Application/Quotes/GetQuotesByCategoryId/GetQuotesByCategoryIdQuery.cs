@@ -2,5 +2,5 @@
 
 public sealed record GetQuotesByCategoryIdQuery : IQuery<ICollection<QuoteDto>>
 {
-    public Guid CategoryId { get; init; }
+    public required Guid CategoryId { get; init; }
 }
