@@ -5,7 +5,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
 {
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateAuthor(BaseAuthorRequest request)
+    public async Task<IActionResult> CreateAuthor(CreateAuthorRequest request)
     {
         var command = request.ToCreateAuthorCommand();
         return await ExecuteCommandWithEntity(command);
