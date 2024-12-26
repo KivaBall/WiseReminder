@@ -10,7 +10,8 @@ public sealed class SerilogPipeline<TRequest, TResponse>(ILogger<TRequest> logge
     {
         logger.LogInformation(
             "SerilogPipeline | Handling request {RequestName} with payload: {@Request}",
-            typeof(TRequest).Name, request);
+            typeof(TRequest).Name,
+            request);
 
         var stopwatch = Stopwatch.StartNew();
 
@@ -22,13 +23,16 @@ public sealed class SerilogPipeline<TRequest, TResponse>(ILogger<TRequest> logge
         {
             logger.LogInformation(
                 "SerilogPipeline | Handled request {RequestName} successfully in {ElapsedTicks} ticks. Response: {@Response}",
-                typeof(TRequest).Name, stopwatch.ElapsedTicks, response);
+                typeof(TRequest).Name,
+                stopwatch.ElapsedTicks,
+                response);
         }
         else
         {
             logger.LogWarning(
                 "SerilogPipeline | Handled request {RequestName} with errors in {ElapsedTicks} ticks. Errors: {@Errors}",
-                typeof(TRequest).Name, stopwatch.ElapsedTicks,
+                typeof(TRequest).Name,
+                stopwatch.ElapsedTicks,
                 response.Errors.Select(x => x.Message).ToArray());
         }
 
