@@ -9,6 +9,7 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Category> Categories { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Quote> Quotes { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public async Task<Result> SaveChangesAsync()
     {
