@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
+﻿namespace WiseReminder.Application.Authors.DeleteAuthorAsAdmin;
 
 public sealed class DeleteAuthorAsAdminCommandHandler(
     IAuthorRepository authorRepository,
@@ -16,7 +16,7 @@ public sealed class DeleteAuthorAsAdminCommandHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         if (author.Value.UserId != null)
@@ -28,15 +28,13 @@ public sealed class DeleteAuthorAsAdminCommandHandler(
 
         var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = request.Id };
 
-        var quotesResult = await sender.Send(quotesQuery, cancellationToken);
+        var quotes = await sender.Send(quotesQuery, cancellationToken);
 
-        if (quotesResult.IsFailed)
+        if (quotes.IsFailed)
         {
-            return Result.Fail(quotesResult.Errors);
+            return quotes.ToResult();
         }
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

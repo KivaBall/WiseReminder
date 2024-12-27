@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Authors.GetAuthorByUserId;
+namespace WiseReminder.Application.Authors.GetAuthorDtoByUserId;
 
 public sealed class GetAuthorDtoByUserIdQueryHandler(
     ISender sender)
@@ -14,7 +14,7 @@ public sealed class GetAuthorDtoByUserIdQueryHandler(
 
         if (user.IsFailed)
         {
-            return Result.Fail(user.Errors);
+            return user.ToResult();
         }
 
         if (user.Value.AuthorId == null)
@@ -26,6 +26,13 @@ public sealed class GetAuthorDtoByUserIdQueryHandler(
 
         var author = await sender.Send(authorQuery, cancellationToken);
 
-        return author.IsFailed ? Result.Fail(author.Errors) : Result.Ok(author.Value.ToAuthorDto());
+        if (author.IsFailed)
+        {
+            return author.ToResult();
+        }
+
+        var authorDto = author.Value.ToAuthorDto();
+        
+        return Result.Ok(authorDto);
     }
 }

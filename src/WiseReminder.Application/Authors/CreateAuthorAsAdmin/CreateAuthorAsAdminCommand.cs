@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.CreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthorAsAdmin;
 
 public sealed record CreateAuthorAsAdminCommand : ICommand<Guid>
 {

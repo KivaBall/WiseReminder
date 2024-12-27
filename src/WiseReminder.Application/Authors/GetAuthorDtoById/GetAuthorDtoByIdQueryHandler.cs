@@ -10,10 +10,15 @@ public sealed class GetAuthorDtoByIdQueryHandler(
     {
         var query = new GetAuthorByIdQuery { Id = request.Id };
 
-        var author = await sender.Send(query);
+        var author = await sender.Send(query, cancellationToken);
 
-        return author.IsFailed
-            ? Result.Fail(author.Errors)
-            : Result.Ok(author.Value.ToAuthorDto());
+        if (author.IsFailed)
+        {
+            return author.ToResult();
+        }
+        
+        var authorDto = author.Value.ToAuthorDto();
+        
+        return Result.Ok(authorDto);
     }
 }

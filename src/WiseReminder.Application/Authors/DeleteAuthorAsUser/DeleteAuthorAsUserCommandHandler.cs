@@ -16,7 +16,7 @@ public sealed class DeleteAuthorAsUserCommandHandler(
 
         if (user.IsFailed)
         {
-            return Result.Fail(user.Errors);
+            return user.ToResult();
         }
 
         if (user.Value.AuthorId == null)
@@ -30,22 +30,20 @@ public sealed class DeleteAuthorAsUserCommandHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         authorRepository.DeleteAuthor(author.Value);
 
         var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = author.Value.Id };
 
-        var quotesResult = await sender.Send(quotesQuery, cancellationToken);
+        var quotes = await sender.Send(quotesQuery, cancellationToken);
 
-        if (quotesResult.IsFailed)
+        if (quotes.IsFailed)
         {
-            return Result.Fail(quotesResult.Errors);
+            return quotes.ToResult();
         }
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

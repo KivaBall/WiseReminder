@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.GetAllAuthors;
+﻿namespace WiseReminder.Application.Authors.GetAuthorDtos;
 
 public sealed class GetAuthorDtosQueryHandler(
     IAuthorRepository authorRepository)
@@ -10,10 +10,10 @@ public sealed class GetAuthorDtosQueryHandler(
     {
         var authors = await authorRepository.GetAllAuthors();
 
-        var dtoAuthors = authors
+        ICollection<AuthorDto> authorDtos = authors
             .Select(a => a.ToAuthorDto())
             .ToList();
 
-        return Result.Ok<ICollection<AuthorDto>>(dtoAuthors);
+        return Result.Ok(authorDtos);
     }
 }

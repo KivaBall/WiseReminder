@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Authors.GetAuthorByUserId;
+namespace WiseReminder.Application.Authors.GetAuthorDtoByUserId;
 
 public sealed record GetAuthorDtoByUserIdQuery : IQuery<AuthorDto>
 {

@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.UpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthorAsAdmin;
 
 public sealed record UpdateAuthorAsAdminCommand : ICommand
 {

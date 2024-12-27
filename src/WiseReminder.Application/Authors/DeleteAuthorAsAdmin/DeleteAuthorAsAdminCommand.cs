@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
+﻿namespace WiseReminder.Application.Authors.DeleteAuthorAsAdmin;
 
 public sealed record DeleteAuthorAsAdminCommand : ICommand
 {

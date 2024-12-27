@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.CreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthorAsUser;
 
 public sealed class CreateAuthorAsUserCommandHandler(
     IAuthorRepository authorRepository,
@@ -18,43 +18,39 @@ public sealed class CreateAuthorAsUserCommandHandler(
 
         if (birthDate.IsFailed)
         {
-            return Result.Fail(birthDate.Errors);
+            return birthDate.ToResult();
         }
 
-        var deathDate = request.DeathDate != null
-            ? Date.Create(request.DeathDate.Value)
-            : null;
+        var deathDate = request.DeathDate != null ? Date.Create(request.DeathDate.Value) : null;
 
         if (deathDate != null && deathDate.IsFailed)
         {
-            return Result.Fail(deathDate.Errors);
+            return deathDate.ToResult();
         }
 
         var query = new GetUserByIdQuery { Id = request.UserId };
-        
-        var user = await sender.Send(query);
+
+        var user = await sender.Send(query, cancellationToken);
 
         if (user.IsFailed)
         {
-            return Result.Fail(user.Errors);
+            return user.ToResult();
         }
 
         if (user.Value.AuthorId != null)
         {
             return Result.Fail(AuthorErrors.AuthorExistsForUser);
         }
-        
+
         var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, user.Value);
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         authorRepository.CreateAuthor(author.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(author.Value.Id);
+        return await unitOfWork.SaveChangesAsyncWithResult(() => author.Value.Id);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Authors.UpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthorAsAdmin;
 
 public sealed class UpdateAuthorAsAdminCommandHandler(
     IAuthorRepository authorRepository,
@@ -16,7 +16,7 @@ public sealed class UpdateAuthorAsAdminCommandHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         if (author.Value.UserId != null)
@@ -32,29 +32,20 @@ public sealed class UpdateAuthorAsAdminCommandHandler(
 
         if (birthDate.IsFailed)
         {
-            return Result.Fail(birthDate.Errors);
+            return birthDate.ToResult();
         }
 
-        if (request.DeathDate == null)
+        var deathDate = request.DeathDate != null ? Date.Create(request.DeathDate.Value) : null;
+
+        if (deathDate != null && deathDate.IsFailed)
         {
-            author.Value.Update(name, biography, birthDate.Value, null);
+            return deathDate.ToResult();
         }
-        else
-        {
-            var deathDate = Date.Create(request.DeathDate.Value);
 
-            if (deathDate.IsFailed)
-            {
-                return Result.Fail(deathDate.Errors);
-            }
-
-            author.Value.Update(name, biography, birthDate.Value, deathDate.Value);
-        }
+        author.Value.Update(name, biography, birthDate.Value, deathDate?.Value);
 
         authorRepository.UpdateAuthor(author.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }
