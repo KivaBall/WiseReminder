@@ -1,15 +1,24 @@
-﻿namespace WiseReminder.Application.Quotes.CreateQuote;
+﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
 
-public sealed class CreateQuoteCommandHandler(
+public sealed class UpdateQuoteAsAdminCommandHandler(
     IQuoteRepository quoteRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<CreateQuoteCommand, Guid>
+    : ICommandHandler<UpdateQuoteAsAdminCommand>
 {
-    public async Task<Result<Guid>> Handle(
-        CreateQuoteCommand request,
+    public async Task<Result> Handle(
+        UpdateQuoteAsAdminCommand request,
         CancellationToken cancellationToken)
     {
+        var quoteQuery = new GetQuoteByIdQuery { Id = request.Id };
+
+        var quote = await sender.Send(quoteQuery, cancellationToken);
+
+        if (quote.IsFailed)
+        {
+            return Result.Fail(quote.Errors);
+        }
+
         var authorQuery = new GetAuthorByIdQuery { Id = request.AuthorId };
 
         var author = await sender.Send(authorQuery, cancellationToken);
@@ -17,6 +26,11 @@ public sealed class CreateQuoteCommandHandler(
         if (author.IsFailed)
         {
             return Result.Fail(author.Errors);
+        }
+
+        if (author.Value.UserId != null)
+        {
+            return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
 
         var categoryQuery = new GetCategoryByIdQuery { Id = request.CategoryId };
@@ -37,17 +51,12 @@ public sealed class CreateQuoteCommandHandler(
             return Result.Fail(quoteDate.Errors);
         }
 
-        var quote = Quote.Create(text, author.Value, category.Value, quoteDate.Value);
+        quote.Value.Update(text, author.Value, category.Value, quoteDate.Value);
 
-        if (quote.IsFailed)
-        {
-            return Result.Fail(quote.Errors);
-        }
-
-        quoteRepository.CreateQuote(quote.Value);
+        quoteRepository.UpdateQuote(quote.Value);
 
         var isSaved = await unitOfWork.SaveChangesAsync();
 
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(quote.Value.Id);
+        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
     }
 }

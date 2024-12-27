@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
 
-public sealed record UpdateQuoteCommand : ICommand
+public sealed record UpdateQuoteAsAdminCommand : ICommand
 {
     public required Guid Id { get; init; }
     public required string Text { get; init; }

@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Quotes.DeleteQuote;
 
-public sealed record DeleteQuoteCommand : ICommand
+public sealed record DeleteQuoteAsAdminCommand : ICommand
 {
     public required Guid Id { get; init; }
 }
