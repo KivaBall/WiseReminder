@@ -10,4 +10,13 @@ public static class AuthorErrors
 
     public static IError EitherDeathDateOrUserRelation =>
         new Error("Must be either death date or user relation");
+
+    public static IError AdminCannotChangeAuthorOfUser =>
+        new Error("As admin you cannot change author data if it belongs to user");
+
+    public static IError AuthorExistsForUser =>
+        new Error("You have already added your author");
+    
+    public static IError AuthorNotExistsForUser =>
+        new Error("Author have not created yet");
 }
