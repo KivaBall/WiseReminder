@@ -1,13 +1,13 @@
 ﻿namespace WiseReminder.Application.Authors.CreateAuthor;
 
-public sealed class CreateAuthorCommandHandler(
+public sealed class CreateAuthorAsUserCommandHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<CreateAuthorCommand, Guid>
+    : ICommandHandler<CreateAuthorAsUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        CreateAuthorCommand request,
+        CreateAuthorAsUserCommand request,
         CancellationToken cancellationToken)
     {
         var name = new AuthorName(request.Name);
@@ -30,21 +30,21 @@ public sealed class CreateAuthorCommandHandler(
             return Result.Fail(deathDate.Errors);
         }
 
-        Result<User>? user = null;
+        var query = new GetUserByIdQuery { Id = request.UserId };
+        
+        var user = await sender.Send(query);
 
-        if (request.UserId != null)
+        if (user.IsFailed)
         {
-            var query = new GetUserByIdQuery { Id = request.UserId.Value };
-
-            user = await sender.Send(query, cancellationToken);
-
-            if (user.IsFailed)
-            {
-                return Result.Fail(user.Errors);
-            }
+            return Result.Fail(user.Errors);
         }
 
-        var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, user?.Value);
+        if (user.Value.AuthorId != null)
+        {
+            return Result.Fail(AuthorErrors.AuthorExistsForUser);
+        }
+        
+        var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, user.Value);
 
         if (author.IsFailed)
         {
