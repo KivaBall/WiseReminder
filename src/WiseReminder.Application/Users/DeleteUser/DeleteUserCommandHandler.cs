@@ -21,7 +21,7 @@ public sealed class DeleteUserCommandHandler(
 
         if (user.Value.AuthorId != null)
         {
-            var authorQuery = new DeleteAuthorCommand { Id = user.Value.AuthorId.Value };
+            var authorQuery = new DeleteAuthorAsAdminCommand { Id = user.Value.AuthorId.Value };
 
             await sender.Send(authorQuery, cancellationToken);
         }

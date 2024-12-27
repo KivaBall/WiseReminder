@@ -17,7 +17,7 @@ public sealed class ChangeUsernameCommandHandler(
 
         if (user.IsFailed)
         {
-            return Result.Fail(UserErrors.UserNotFound);
+            return Result.Fail(user.Errors);
         }
 
         var isOldPasswordCorrect = encryptService.Check(
