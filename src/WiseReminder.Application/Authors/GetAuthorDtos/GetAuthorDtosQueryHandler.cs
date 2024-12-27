@@ -1,11 +1,11 @@
 ﻿namespace WiseReminder.Application.Authors.GetAllAuthors;
 
-public sealed class GetAllAuthorsQueryHandler(
+public sealed class GetAuthorDtosQueryHandler(
     IAuthorRepository authorRepository)
-    : IQueryHandler<GetAllAuthorsQuery, ICollection<AuthorDto>>
+    : IQueryHandler<GetAuthorDtosQuery, ICollection<AuthorDto>>
 {
     public async Task<Result<ICollection<AuthorDto>>> Handle(
-        GetAllAuthorsQuery request,
+        GetAuthorDtosQuery request,
         CancellationToken cancellationToken)
     {
         var authors = await authorRepository.GetAllAuthors();
