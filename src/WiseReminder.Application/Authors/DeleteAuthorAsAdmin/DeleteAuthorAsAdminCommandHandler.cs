@@ -1,13 +1,13 @@
 ﻿namespace WiseReminder.Application.Authors.DeleteAuthor;
 
-public sealed class DeleteAuthorCommandHandler(
+public sealed class DeleteAuthorAsAdminCommandHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<DeleteAuthorCommand>
+    : ICommandHandler<DeleteAuthorAsAdminCommand>
 {
     public async Task<Result> Handle(
-        DeleteAuthorCommand request,
+        DeleteAuthorAsAdminCommand request,
         CancellationToken cancellationToken)
     {
         var authorQuery = new GetAuthorByIdQuery { Id = request.Id };
@@ -17,6 +17,11 @@ public sealed class DeleteAuthorCommandHandler(
         if (author.IsFailed)
         {
             return Result.Fail(author.Errors);
+        }
+
+        if (author.Value.UserId != null)
+        {
+            return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
 
         authorRepository.DeleteAuthor(author.Value);

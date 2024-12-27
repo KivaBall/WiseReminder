@@ -1,13 +1,13 @@
 ﻿namespace WiseReminder.Application.Authors.UpdateAuthor;
 
-public sealed class UpdateAuthorCommandHandler(
+public sealed class UpdateAuthorAsAdminCommandHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<UpdateAuthorCommand>
+    : ICommandHandler<UpdateAuthorAsAdminCommand>
 {
     public async Task<Result> Handle(
-        UpdateAuthorCommand request,
+        UpdateAuthorAsAdminCommand request,
         CancellationToken cancellationToken)
     {
         var query = new GetAuthorByIdQuery { Id = request.Id };
@@ -17,6 +17,11 @@ public sealed class UpdateAuthorCommandHandler(
         if (author.IsFailed)
         {
             return Result.Fail(author.Errors);
+        }
+
+        if (author.Value.UserId != null)
+        {
+            return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
 
         var name = new AuthorName(request.Name);
