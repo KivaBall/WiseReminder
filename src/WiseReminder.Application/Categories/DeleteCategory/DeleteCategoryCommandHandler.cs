@@ -16,22 +16,20 @@ public sealed class DeleteCategoryCommandHandler(
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         categoryRepository.DeleteCategory(category.Value);
 
         var quotesQuery = new GetQuotesByCategoryIdQuery { CategoryId = request.Id };
 
-        var quotesResult = await sender.Send(quotesQuery, cancellationToken);
+        var quotes = await sender.Send(quotesQuery, cancellationToken);
 
-        if (quotesResult.IsFailed)
+        if (quotes.IsFailed)
         {
-            return Result.Fail(quotesResult.Errors);
+            return quotes.ToResult();
         }
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

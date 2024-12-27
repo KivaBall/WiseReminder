@@ -16,7 +16,7 @@ public sealed class UpdateCategoryCommandHandler(
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         var name = new CategoryName(request.Name);
@@ -27,8 +27,6 @@ public sealed class UpdateCategoryCommandHandler(
 
         categoryRepository.UpdateCategory(category.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

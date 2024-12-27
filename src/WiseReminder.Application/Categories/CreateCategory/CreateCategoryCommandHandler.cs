@@ -17,8 +17,6 @@ public sealed class CreateCategoryCommandHandler(
 
         categoryRepository.CreateCategory(category);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(category.Id);
+        return await unitOfWork.SaveChangesAsyncWithResult(() => category.Id);
     }
 }

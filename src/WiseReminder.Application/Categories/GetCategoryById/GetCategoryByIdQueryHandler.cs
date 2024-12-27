@@ -10,8 +10,11 @@ public sealed class GetCategoryByIdQueryHandler(
     {
         var category = await categoryRepository.GetCategoryById(request.Id);
 
-        return category == null
-            ? Result.Fail(CategoryErrors.CategoryNotFound)
-            : Result.Ok(category);
+        if (category == null)
+        {
+            return Result.Fail(CategoryErrors.CategoryNotFound);
+        }
+        
+        return Result.Ok(category);
     }
 }

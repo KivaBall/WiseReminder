@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.GetAllCategories;
+﻿namespace WiseReminder.Application.Categories.GetCategoryDtos;
 
 public sealed class GetCategoryDtosQueryHandler(
     ICategoryRepository categoryRepository)
@@ -10,10 +10,10 @@ public sealed class GetCategoryDtosQueryHandler(
     {
         var categories = await categoryRepository.GetAllCategories();
 
-        var dtoCategories = categories
+        ICollection<CategoryDto> categoryDtos = categories
             .Select(c => c.ToCategoryDto())
             .ToList();
 
-        return Result.Ok<ICollection<CategoryDto>>(dtoCategories);
+        return Result.Ok(categoryDtos);
     }
 }
