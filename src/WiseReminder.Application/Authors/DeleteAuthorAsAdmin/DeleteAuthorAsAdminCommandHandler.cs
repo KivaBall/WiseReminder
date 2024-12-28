@@ -26,7 +26,7 @@ public sealed class DeleteAuthorAsAdminCommandHandler(
 
         authorRepository.DeleteAuthor(author.Value);
 
-        var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = request.Id };
+        var quotesQuery = new GetQuoteDtosByAuthorIdQuery { AuthorId = request.Id };
 
         var quotes = await sender.Send(quotesQuery, cancellationToken);
 

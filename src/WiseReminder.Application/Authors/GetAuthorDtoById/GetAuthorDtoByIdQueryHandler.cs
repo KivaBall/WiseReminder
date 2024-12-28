@@ -16,9 +16,9 @@ public sealed class GetAuthorDtoByIdQueryHandler(
         {
             return author.ToResult();
         }
-        
+
         var authorDto = author.Value.ToAuthorDto();
-        
+
         return Result.Ok(authorDto);
     }
 }

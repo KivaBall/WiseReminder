@@ -12,7 +12,7 @@ public sealed class DeleteUserCommandHandler(
     {
         var query = new GetUserByIdQuery { Id = request.Id };
 
-        var user = await sender.Send(query);
+        var user = await sender.Send(query, cancellationToken);
 
         if (user.IsFailed)
         {

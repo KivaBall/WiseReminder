@@ -14,7 +14,7 @@ public sealed class GetAuthorByIdQueryHandler(
         {
             return Result.Fail(AuthorErrors.AuthorNotFound);
         }
-        
+
         return Result.Ok(author);
     }
 }

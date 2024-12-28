@@ -32,7 +32,7 @@ public sealed class GetAuthorDtoByUserIdQueryHandler(
         }
 
         var authorDto = author.Value.ToAuthorDto();
-        
+
         return Result.Ok(authorDto);
     }
 }
