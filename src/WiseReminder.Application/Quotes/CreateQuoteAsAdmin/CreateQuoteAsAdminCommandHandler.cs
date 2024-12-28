@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.CreateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuoteAsAdmin;
 
 public sealed class CreateQuoteAsAdminCommandHandler(
     IQuoteRepository quoteRepository,
@@ -16,21 +16,21 @@ public sealed class CreateQuoteAsAdminCommandHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         if (author.Value.UserId != null)
         {
             return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
-        
+
         var categoryQuery = new GetCategoryByIdQuery { Id = request.CategoryId };
 
         var category = await sender.Send(categoryQuery, cancellationToken);
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         var text = new Text(request.Text);
@@ -39,20 +39,18 @@ public sealed class CreateQuoteAsAdminCommandHandler(
 
         if (quoteDate.IsFailed)
         {
-            return Result.Fail(quoteDate.Errors);
+            return quoteDate.ToResult();
         }
 
         var quote = Quote.Create(text, author.Value, category.Value, quoteDate.Value);
 
         if (quote.IsFailed)
         {
-            return Result.Fail(quote.Errors);
+            return quote.ToResult();
         }
 
         quoteRepository.CreateQuote(quote.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(quote.Value.Id);
+        return await unitOfWork.SaveChangesAsyncWithResult(() => quote.Value.Id);
     }
 }

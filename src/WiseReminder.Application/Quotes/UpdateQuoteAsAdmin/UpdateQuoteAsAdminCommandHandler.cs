@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
+﻿namespace WiseReminder.Application.Quotes.UpdateQuoteAsAdmin;
 
 public sealed class UpdateQuoteAsAdminCommandHandler(
     IQuoteRepository quoteRepository,
@@ -16,7 +16,7 @@ public sealed class UpdateQuoteAsAdminCommandHandler(
 
         if (quote.IsFailed)
         {
-            return Result.Fail(quote.Errors);
+            return quote.ToResult();
         }
 
         var authorQuery = new GetAuthorByIdQuery { Id = request.AuthorId };
@@ -25,7 +25,7 @@ public sealed class UpdateQuoteAsAdminCommandHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         if (author.Value.UserId != null)
@@ -39,7 +39,7 @@ public sealed class UpdateQuoteAsAdminCommandHandler(
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         var text = new Text(request.Text);
@@ -55,8 +55,6 @@ public sealed class UpdateQuoteAsAdminCommandHandler(
 
         quoteRepository.UpdateQuote(quote.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

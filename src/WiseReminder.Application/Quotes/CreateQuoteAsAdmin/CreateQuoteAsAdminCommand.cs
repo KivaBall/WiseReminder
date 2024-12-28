@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.CreateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuoteAsAdmin;
 
 public sealed record CreateQuoteAsAdminCommand : ICommand<Guid>
 {

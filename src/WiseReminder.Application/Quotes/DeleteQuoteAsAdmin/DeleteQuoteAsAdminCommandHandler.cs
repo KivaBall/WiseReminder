@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.DeleteQuote;
+﻿namespace WiseReminder.Application.Quotes.DeleteQuoteAsAdmin;
 
 public sealed class DeleteQuoteAsAdminCommandHandler(
     IQuoteRepository quoteRepository,
@@ -16,11 +16,11 @@ public sealed class DeleteQuoteAsAdminCommandHandler(
 
         if (quote.IsFailed)
         {
-            return Result.Fail(quote.Errors);
+            return quote.ToResult();
         }
 
-        var authorQuery = new GetAuthorByIdQuery{Id = quote.Value.AuthorId};
-        
+        var authorQuery = new GetAuthorByIdQuery { Id = quote.Value.AuthorId };
+
         var author = await sender.Send(authorQuery, cancellationToken);
 
         if (author.IsFailed)
@@ -35,8 +35,6 @@ public sealed class DeleteQuoteAsAdminCommandHandler(
 
         quoteRepository.DeleteQuote(quote.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

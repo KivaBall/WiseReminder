@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.DeleteQuote;
+﻿namespace WiseReminder.Application.Quotes.DeleteQuoteAsAdmin;
 
 public sealed record DeleteQuoteAsAdminCommand : ICommand
 {

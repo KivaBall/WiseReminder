@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
+﻿namespace WiseReminder.Application.Quotes.UpdateQuoteAsAdmin;
 
 public sealed record UpdateQuoteAsAdminCommand : ICommand
 {
