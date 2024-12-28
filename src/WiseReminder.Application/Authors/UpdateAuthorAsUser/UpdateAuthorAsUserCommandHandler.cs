@@ -12,7 +12,7 @@ public sealed class UpdateAuthorAsUserCommandHandler(
     {
         var userQuery = new GetUserByIdQuery { Id = request.UserId };
 
-        var user = await sender.Send(userQuery);
+        var user = await sender.Send(userQuery, cancellationToken);
 
         if (user.IsFailed)
         {
@@ -23,9 +23,9 @@ public sealed class UpdateAuthorAsUserCommandHandler(
         {
             return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
         }
-        
+
         var authorQuery = new GetAuthorByIdQuery { Id = (Guid)user.Value.AuthorId };
-        
+
         var author = await sender.Send(authorQuery, cancellationToken);
 
         if (author.IsFailed)
@@ -44,14 +44,7 @@ public sealed class UpdateAuthorAsUserCommandHandler(
             return birthDate.ToResult();
         }
 
-        var deathDate = request.DeathDate != null ? Date.Create(request.DeathDate.Value) : null;
-
-        if (deathDate != null && deathDate.IsFailed)
-        {
-            return deathDate.ToResult();
-        }
-
-        author.Value.Update(name, biography, birthDate.Value, deathDate?.Value);
+        author.Value.Update(name, biography, birthDate.Value, null);
 
         authorRepository.UpdateAuthor(author.Value);
 

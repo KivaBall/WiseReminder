@@ -21,13 +21,6 @@ public sealed class CreateAuthorAsUserCommandHandler(
             return birthDate.ToResult();
         }
 
-        var deathDate = request.DeathDate != null ? Date.Create(request.DeathDate.Value) : null;
-
-        if (deathDate != null && deathDate.IsFailed)
-        {
-            return deathDate.ToResult();
-        }
-
         var query = new GetUserByIdQuery { Id = request.UserId };
 
         var user = await sender.Send(query, cancellationToken);
@@ -42,7 +35,7 @@ public sealed class CreateAuthorAsUserCommandHandler(
             return Result.Fail(AuthorErrors.AuthorExistsForUser);
         }
 
-        var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, user.Value);
+        var author = Author.Create(name, biography, birthDate.Value, null, user.Value);
 
         if (author.IsFailed)
         {

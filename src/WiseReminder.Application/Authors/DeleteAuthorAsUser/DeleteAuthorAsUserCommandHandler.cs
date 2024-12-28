@@ -11,7 +11,7 @@ public sealed class DeleteAuthorAsUserCommandHandler(
         CancellationToken cancellationToken)
     {
         var userQuery = new GetUserByIdQuery { Id = request.UserId };
-        
+
         var user = await sender.Send(userQuery, cancellationToken);
 
         if (user.IsFailed)
@@ -23,7 +23,7 @@ public sealed class DeleteAuthorAsUserCommandHandler(
         {
             return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
         }
-        
+
         var authorQuery = new GetAuthorByIdQuery { Id = (Guid)user.Value.AuthorId };
 
         var author = await sender.Send(authorQuery, cancellationToken);
@@ -35,7 +35,7 @@ public sealed class DeleteAuthorAsUserCommandHandler(
 
         authorRepository.DeleteAuthor(author.Value);
 
-        var quotesQuery = new GetQuotesByAuthorIdQuery { AuthorId = author.Value.Id };
+        var quotesQuery = new GetQuoteDtosByAuthorIdQuery { AuthorId = author.Value.Id };
 
         var quotes = await sender.Send(quotesQuery, cancellationToken);
 
