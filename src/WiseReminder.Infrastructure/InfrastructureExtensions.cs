@@ -14,6 +14,7 @@ public static class InfrastructureExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IQuoteRepository, QuoteRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddMemoryCache();
         services.AddStackExchangeRedisCache(options =>
