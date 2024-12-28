@@ -1,12 +1,12 @@
-﻿namespace WiseReminder.Application.Quotes.GetQuotesByCategoryId;
+﻿namespace WiseReminder.Application.Quotes.GetQuoteDtosByCategoryId;
 
-public sealed class GetQuotesByCategoryIdQueryHandler(
+public sealed class GetQuoteDtosByCategoryIdQueryHandler(
     IQuoteRepository quoteRepository,
     ISender sender)
-    : IQueryHandler<GetQuotesByCategoryIdQuery, ICollection<QuoteDto>>
+    : IQueryHandler<GetQuoteDtosByCategoryIdQuery, ICollection<QuoteDto>>
 {
     public async Task<Result<ICollection<QuoteDto>>> Handle(
-        GetQuotesByCategoryIdQuery request,
+        GetQuoteDtosByCategoryIdQuery request,
         CancellationToken cancellationToken)
     {
         var query = new GetCategoryByIdQuery { Id = request.CategoryId };
@@ -15,15 +15,15 @@ public sealed class GetQuotesByCategoryIdQueryHandler(
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         var quotes = await quoteRepository.GetQuotesByCategoryId(request.CategoryId);
 
-        var dtoQuotes = quotes
+        ICollection<QuoteDto> quoteDtos = quotes
             .Select(q => q.ToQuoteDto())
             .ToList();
 
-        return Result.Ok<ICollection<QuoteDto>>(dtoQuotes);
+        return Result.Ok(quoteDtos);
     }
 }

@@ -1,12 +1,12 @@
-﻿namespace WiseReminder.Application.Quotes.GetQuotesByAuthorId;
+﻿namespace WiseReminder.Application.Quotes.GetQuoteDtosByAuthorId;
 
-public sealed class GetQuotesByAuthorIdQueryHandler(
+public sealed class GetQuoteDtosByAuthorIdQueryHandler(
     IQuoteRepository quoteRepository,
     ISender sender)
-    : IQueryHandler<GetQuotesByAuthorIdQuery, ICollection<QuoteDto>>
+    : IQueryHandler<GetQuoteDtosByAuthorIdQuery, ICollection<QuoteDto>>
 {
     public async Task<Result<ICollection<QuoteDto>>> Handle(
-        GetQuotesByAuthorIdQuery request,
+        GetQuoteDtosByAuthorIdQuery request,
         CancellationToken cancellationToken)
     {
         var query = new GetAuthorByIdQuery { Id = request.AuthorId };
@@ -15,15 +15,15 @@ public sealed class GetQuotesByAuthorIdQueryHandler(
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
         var quotes = await quoteRepository.GetQuotesByAuthorId(request.AuthorId);
 
-        var dtoQuotes = quotes
+        ICollection<QuoteDto> quoteDtos = quotes
             .Select(q => q.ToQuoteDto())
             .ToList();
 
-        return Result.Ok<ICollection<QuoteDto>>(dtoQuotes);
+        return Result.Ok(quoteDtos);
     }
 }
