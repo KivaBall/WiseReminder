@@ -6,14 +6,14 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
     {
         var jwtPassword = configuration["JWTPassword"] ??
                           throw new Exception("JWTPassword isn't in appsettings.json");
-        
+
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
         var claims = new Dictionary<string, object>
         {
             { "UserId", userId.ToString() }
         };
-        
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = "WiseReminder.com",
@@ -24,12 +24,12 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
                     SecurityAlgorithms.HmacSha256Signature),
             Claims = claims,
             Subject = new ClaimsIdentity("User")
-            };
+        };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        
+
         return tokenHandler.WriteToken(token);
     }
 
@@ -37,7 +37,7 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
     {
         var jwtPassword = configuration["JWTPassword"] ??
                           throw new Exception("JWTPassword isn't in appsettings.json");
-        
+
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -52,9 +52,9 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        
+
         return tokenHandler.WriteToken(token);
     }
 }

@@ -6,13 +6,13 @@ public static class PresentationExtensions
         IConfiguration configuration)
     {
         services.AddControllers();
-        
+
         services.AddFluentValidationAutoValidation();
-        
+
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        
+
         services.AddOpenApi();
-        
+
         services.AddAuth(configuration);
     }
 
