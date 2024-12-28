@@ -13,12 +13,40 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
 
     public async Task<Result> SaveChangesAsync()
     {
-        if (await base.SaveChangesAsync() <= 0)
+        try
         {
-            return Result.Fail("Database operation failed");
-        }
+            var saveAmount = await base.SaveChangesAsync();
 
-        return Result.Ok();
+            if (saveAmount <= 0)
+            {
+                return Result.Fail("Nothing was saved");
+            }
+
+            return Result.Ok();
+        }
+        catch
+        {
+            return Result.Fail("Something went wrong with database");
+        }
+    }
+
+    public async Task<Result<TResult>> SaveChangesAsyncWithResult<TResult>(Func<TResult> entity)
+    {
+        try
+        {
+            var saveAmount = await base.SaveChangesAsync();
+
+            if (saveAmount <= 0)
+            {
+                return Result.Fail("Nothing was saved");
+            }
+
+            return Result.Ok(entity.Invoke());
+        }
+        catch
+        {
+            return Result.Fail("Something went wrong with database");
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
