@@ -16,7 +16,7 @@ public static class AuthorErrors
 
     public static IError AuthorExistsForUser =>
         new Error("You have already added your author");
-    
+
     public static IError AuthorNotExistsForUser =>
         new Error("Author have not created yet");
 }
