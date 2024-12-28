@@ -14,7 +14,7 @@ public sealed class GetCategoryByIdQueryHandler(
         {
             return Result.Fail(CategoryErrors.CategoryNotFound);
         }
-        
+
         return Result.Ok(category);
     }
 }

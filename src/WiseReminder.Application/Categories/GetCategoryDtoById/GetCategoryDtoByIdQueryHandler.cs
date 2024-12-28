@@ -18,7 +18,7 @@ public sealed class GetCategoryDtoByIdQueryHandler(
         }
 
         var categoryDto = category.Value.ToCategoryDto();
-        
+
         return Result.Ok(categoryDto);
     }
 }

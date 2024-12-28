@@ -21,7 +21,7 @@ public sealed class DeleteCategoryCommandHandler(
 
         categoryRepository.DeleteCategory(category.Value);
 
-        var quotesQuery = new GetQuotesByCategoryIdQuery { CategoryId = request.Id };
+        var quotesQuery = new GetQuoteDtosByCategoryIdQuery { CategoryId = request.Id };
 
         var quotes = await sender.Send(quotesQuery, cancellationToken);
 
