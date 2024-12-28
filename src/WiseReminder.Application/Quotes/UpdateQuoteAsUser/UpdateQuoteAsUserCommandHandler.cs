@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Quotes.UpdateQuote;
+﻿namespace WiseReminder.Application.Quotes.UpdateQuoteAsUser;
 
 public sealed class UpdateQuoteAsUserCommandHandler(
     IQuoteRepository quoteRepository,
@@ -16,35 +16,30 @@ public sealed class UpdateQuoteAsUserCommandHandler(
 
         if (quote.IsFailed)
         {
-            return Result.Fail(quote.Errors);
+            return quote.ToResult();
         }
 
-        var authorQuery = new GetAuthorByIdQuery { Id = request.AuthorId };
+        var authorQuery = new GetAuthorByUserIdQuery { Id = request.UserId };
 
         var author = await sender.Send(authorQuery, cancellationToken);
 
         if (author.IsFailed)
         {
-            return Result.Fail(author.Errors);
+            return author.ToResult();
         }
 
-        if (author.Value.UserId == null)
-        {
-            return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
-        }
-
-        if (author.Value.UserId != request.UserId)
+        if (quote.Value.AuthorId == author.Value.Id)
         {
             return Result.Fail(UserErrors.UserIdNotValid);
         }
-        
+
         var categoryQuery = new GetCategoryByIdQuery { Id = request.CategoryId };
 
         var category = await sender.Send(categoryQuery, cancellationToken);
 
         if (category.IsFailed)
         {
-            return Result.Fail(category.Errors);
+            return category.ToResult();
         }
 
         var text = new Text(request.Text);
@@ -53,15 +48,13 @@ public sealed class UpdateQuoteAsUserCommandHandler(
 
         if (quoteDate.IsFailed)
         {
-            return Result.Fail(quoteDate.Errors);
+            return quoteDate.ToResult();
         }
 
         quote.Value.Update(text, author.Value, category.Value, quoteDate.Value);
 
         quoteRepository.UpdateQuote(quote.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }
