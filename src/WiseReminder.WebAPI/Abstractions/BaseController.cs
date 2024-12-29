@@ -1,15 +1,20 @@
 ﻿namespace WiseReminder.WebAPI.Abstractions;
 
 [ApiController]
-public abstract class GenericController(ISender sender) : ControllerBase
+[Route("api/[controller]")]
+public abstract class BaseController(ISender sender) : ControllerBase
 {
+    protected Guid UserId => Guid.Parse(User.FindFirst("UserId")!.Value);
+
     protected async Task<IActionResult> ExecuteCommand(ICommand command)
     {
         var result = await sender.Send(command);
 
         return result.IsSuccess
             ? Ok()
-            : BadRequest(result.Errors.Select(e => e.Message).ToList());
+            : BadRequest(result.Errors
+                .Select(e => e.Message)
+                .ToList());
     }
 
     protected async Task<IActionResult> ExecuteCommandWithEntity<TResponse>(
@@ -19,7 +24,9 @@ public abstract class GenericController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok(result.Value)
-            : BadRequest(result.Errors.Select(e => e.Message).ToList());
+            : BadRequest(result.Errors
+                .Select(e => e.Message)
+                .ToList());
     }
 
     protected async Task<IActionResult> ExecuteQuery<TResponse>(IQuery<TResponse> query)
@@ -28,6 +35,8 @@ public abstract class GenericController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok(result.Value)
-            : NotFound(result.Errors.Select(e => e.Message).ToList());
+            : NotFound(result.Errors
+                .Select(e => e.Message)
+                .ToList());
     }
 }
