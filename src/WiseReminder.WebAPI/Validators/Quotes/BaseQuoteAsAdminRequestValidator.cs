@@ -1,20 +1,20 @@
-﻿namespace WiseReminder.WebAPI.Validators;
+﻿namespace WiseReminder.WebAPI.Validators.Quotes;
 
-public sealed class BaseQuoteRequestValidator : AbstractValidator<BaseQuoteRequest>
+public sealed class BaseQuoteAsAdminRequestValidator : AbstractValidator<BaseQuoteAsAdminRequest>
 {
-    public BaseQuoteRequestValidator()
+    public BaseQuoteAsAdminRequestValidator()
     {
-        RuleFor(q => q.Text)
+        RuleFor(r => r.Text)
             .NotNull().WithMessage("Text must not be null")
             .NotEmpty().WithMessage("Text must not be empty");
 
-        RuleFor(q => q.AuthorId)
+        RuleFor(r => r.AuthorId)
             .NotNull().WithMessage("Author ID must not be null");
 
-        RuleFor(q => q.CategoryId)
+        RuleFor(r => r.CategoryId)
             .NotNull().WithMessage("Category ID must not be null");
 
-        RuleFor(q => q.QuoteDate)
+        RuleFor(r => r.QuoteDate)
             .NotNull().WithMessage("Quote date must not be null");
     }
 }

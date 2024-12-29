@@ -1,14 +1,14 @@
-﻿namespace WiseReminder.WebAPI.Validators;
+﻿namespace WiseReminder.WebAPI.Validators.Categories;
 
 public sealed class BaseCategoryRequestValidator : AbstractValidator<BaseCategoryRequest>
 {
     public BaseCategoryRequestValidator()
     {
-        RuleFor(c => c.Name)
+        RuleFor(r => r.Name)
             .NotNull().WithMessage("Name must not be null")
             .NotEmpty().WithMessage("Name must not be empty");
 
-        RuleFor(c => c.Description)
+        RuleFor(r => r.Description)
             .NotNull().WithMessage("Description must not be null")
             .NotEmpty().WithMessage("Description must not be empty");
     }

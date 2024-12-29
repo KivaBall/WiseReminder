@@ -1,21 +1,21 @@
-﻿namespace WiseReminder.WebAPI.Validators;
+﻿namespace WiseReminder.WebAPI.Validators.Authors;
 
-public sealed class BaseAuthorRequestValidator : AbstractValidator<BaseAuthorRequest>
+public sealed class BaseAuthorAsAdminRequestValidator : AbstractValidator<BaseAuthorAsAdminRequest>
 {
-    public BaseAuthorRequestValidator()
+    public BaseAuthorAsAdminRequestValidator()
     {
-        RuleFor(a => a.Name)
+        RuleFor(r => r.Name)
             .NotNull().WithMessage("Name must not be null")
             .NotEmpty().WithMessage("Name must not be empty");
 
-        RuleFor(a => a.Biography)
+        RuleFor(r => r.Biography)
             .NotNull().WithMessage("Biography must not be null")
             .NotEmpty().WithMessage("Biography must not be empty");
 
-        RuleFor(a => a.BirthDate)
+        RuleFor(r => r.BirthDate)
             .NotEmpty().WithMessage("Date of birth must not be empty");
 
-        RuleFor(a => a.DeathDate)
+        RuleFor(r => r.DeathDate)
             .NotEmpty().WithMessage("Date of death must not be empty");
     }
 }

@@ -1,14 +1,14 @@
-﻿namespace WiseReminder.WebAPI.Validators;
+﻿namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class SignInRequestValidator : AbstractValidator<SignInRequest>
+public sealed class LoginAsUserRequestValidator : AbstractValidator<LoginAsUserRequest>
 {
-    public SignInRequestValidator()
+    public LoginAsUserRequestValidator()
     {
-        RuleFor(l => l.Login)
+        RuleFor(r => r.Login)
             .NotNull().WithMessage("Login must not be null")
             .NotEmpty().WithMessage("Login must not be empty");
 
-        RuleFor(l => l.Password)
+        RuleFor(r => r.Password)
             .NotNull().WithMessage("Password must not be null")
             .NotEmpty().WithMessage("Password must not be empty");
     }
