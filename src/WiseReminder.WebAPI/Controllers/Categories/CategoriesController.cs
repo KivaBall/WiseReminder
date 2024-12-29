@@ -37,7 +37,7 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
-        var query = new GetAllCategoriesQuery();
+        var query = new GetCategoryDtosQuery();
         return await ExecuteQuery(query);
     }
 }
