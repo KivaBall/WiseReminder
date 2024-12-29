@@ -1,30 +1,16 @@
-namespace WiseReminder.Application.Authors.DeleteAuthorAsUser;
+namespace WiseReminder.Application.Authors.UserDeleteAuthor;
 
-public sealed class DeleteAuthorAsUserCommandHandler(
+public sealed class UserDeleteAuthorHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<DeleteAuthorAsUserCommand>
+    : ICommandHandler<UserDeleteAuthorCommand>
 {
     public async Task<Result> Handle(
-        DeleteAuthorAsUserCommand request,
+        UserDeleteAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var userQuery = new GetUserByIdQuery { Id = request.UserId };
-
-        var user = await sender.Send(userQuery, cancellationToken);
-
-        if (user.IsFailed)
-        {
-            return user.ToResult();
-        }
-
-        if (user.Value.AuthorId == null)
-        {
-            return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
-        }
-
-        var authorQuery = new GetAuthorByIdQuery { Id = (Guid)user.Value.AuthorId };
+        var authorQuery = new GetAuthorByUserIdQuery(request.UserId);
 
         var author = await sender.Send(authorQuery, cancellationToken);
 

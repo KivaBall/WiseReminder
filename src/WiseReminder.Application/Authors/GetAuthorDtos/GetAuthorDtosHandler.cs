@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorDtos;
 
-public sealed class GetAuthorDtosQueryHandler(
+public sealed class GetAuthorDtosHandler(
     IAuthorRepository authorRepository)
     : IQueryHandler<GetAuthorDtosQuery, ICollection<AuthorDto>>
 {

@@ -1,16 +1,16 @@
-﻿namespace WiseReminder.Application.Authors.UpdateAuthorAsAdmin;
+﻿namespace WiseReminder.Application.Authors.AdminUpdateAuthor;
 
-public sealed class UpdateAuthorAsAdminCommandHandler(
+public sealed class AdminUpdateAuthorHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<UpdateAuthorAsAdminCommand>
+    : ICommandHandler<AdminUpdateAuthorCommand>
 {
     public async Task<Result> Handle(
-        UpdateAuthorAsAdminCommand request,
+        AdminUpdateAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetAuthorByIdQuery { Id = request.Id };
+        var query = new GetAuthorByIdQuery(request.Id);
 
         var author = await sender.Send(query, cancellationToken);
 

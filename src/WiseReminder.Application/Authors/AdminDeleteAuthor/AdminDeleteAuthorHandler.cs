@@ -1,16 +1,16 @@
-﻿namespace WiseReminder.Application.Authors.DeleteAuthorAsAdmin;
+﻿namespace WiseReminder.Application.Authors.AdminDeleteAuthor;
 
-public sealed class DeleteAuthorAsAdminCommandHandler(
+public sealed class AdminDeleteAuthorHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<DeleteAuthorAsAdminCommand>
+    : ICommandHandler<AdminDeleteAuthorCommand>
 {
     public async Task<Result> Handle(
-        DeleteAuthorAsAdminCommand request,
+        AdminDeleteAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        var authorQuery = new GetAuthorByIdQuery { Id = request.Id };
+        var authorQuery = new GetAuthorByIdQuery(request.Id);
 
         var author = await sender.Send(authorQuery, cancellationToken);
 

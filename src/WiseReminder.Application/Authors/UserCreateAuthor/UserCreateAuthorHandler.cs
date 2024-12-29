@@ -1,13 +1,13 @@
-﻿namespace WiseReminder.Application.Authors.CreateAuthorAsUser;
+﻿namespace WiseReminder.Application.Authors.UserCreateAuthor;
 
-public sealed class CreateAuthorAsUserCommandHandler(
+public sealed class UserCreateAuthorHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<CreateAuthorAsUserCommand, Guid>
+    : ICommandHandler<UserCreateAuthorCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        CreateAuthorAsUserCommand request,
+        UserCreateAuthorCommand request,
         CancellationToken cancellationToken)
     {
         var name = new AuthorName(request.Name);

@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorById;
 
-public sealed class GetAuthorByIdQueryHandler(
+public sealed class GetAuthorByIdHandler(
     IAuthorRepository authorRepository)
     : IQueryHandler<GetAuthorByIdQuery, Author>
 {

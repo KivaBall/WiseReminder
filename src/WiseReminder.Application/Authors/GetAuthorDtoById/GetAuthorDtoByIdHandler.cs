@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorDtoById;
 
-public sealed class GetAuthorDtoByIdQueryHandler(
+public sealed class GetAuthorDtoByIdHandler(
     ISender sender)
     : IQueryHandler<GetAuthorDtoByIdQuery, AuthorDto>
 {
@@ -8,7 +8,7 @@ public sealed class GetAuthorDtoByIdQueryHandler(
         GetAuthorDtoByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new GetAuthorByIdQuery { Id = request.Id };
+        var query = new GetAuthorByIdQuery(request.Id);
 
         var author = await sender.Send(query, cancellationToken);
 

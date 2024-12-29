@@ -1,12 +1,12 @@
-﻿namespace WiseReminder.Application.Authors.CreateAuthorAsAdmin;
+﻿namespace WiseReminder.Application.Authors.AdminCreateAuthor;
 
-public sealed class CreateAuthorAsAdminCommandHandler(
+public sealed class AdminCreateAuthorHandler(
     IAuthorRepository authorRepository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateAuthorAsAdminCommand, Guid>
+    : ICommandHandler<AdminCreateAuthorCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        CreateAuthorAsAdminCommand request,
+        AdminCreateAuthorCommand request,
         CancellationToken cancellationToken)
     {
         var name = new AuthorName(request.Name);
