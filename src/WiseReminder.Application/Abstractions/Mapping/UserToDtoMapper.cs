@@ -9,7 +9,7 @@ public static class UserToDtoMapper
             Id = user.Id,
             Username = user.Username.Value,
             Login = user.Login.Value,
-            Subscription = user.Subscription,
+            Subscription = user.Subscription.ToString(),
             AuthorId = user.AuthorId
         };
     }
