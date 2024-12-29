@@ -1,7 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
 
-[Route("api/quotes")]
-public sealed class QuotesController(ISender sender) : GenericController(sender)
+public sealed class QuotesController(ISender sender) : BaseController(sender)
 {
     [HttpPost]
     [Authorize(Roles = "Admin")]

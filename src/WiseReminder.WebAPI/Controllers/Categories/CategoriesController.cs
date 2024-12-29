@@ -1,7 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Categories;
 
-[Route("api/categories")]
-public sealed class CategoriesController(ISender sender) : GenericController(sender)
+public sealed class CategoriesController(ISender sender) : BaseController(sender)
 {
     [HttpPost]
     [Authorize(Roles = "Admin")]

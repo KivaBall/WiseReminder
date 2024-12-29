@@ -1,7 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Authors;
 
-[Route("api/authors")]
-public sealed class AuthorsController(ISender sender) : GenericController(sender)
+public sealed class AuthorsController(ISender sender) : BaseController(sender)
 {
     [HttpPost]
     [Authorize(Roles = "Admin")]

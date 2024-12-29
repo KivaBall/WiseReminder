@@ -1,7 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Users;
 
-[Route("api/users")]
-public sealed class UsersController(ISender sender) : GenericController(sender)
+public sealed class UsersController(ISender sender) : BaseController(sender)
 {
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(BaseUserRequest request)
