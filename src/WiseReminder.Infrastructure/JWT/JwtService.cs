@@ -11,14 +11,15 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
 
         var claims = new Dictionary<string, object>
         {
-            { "UserId", userId.ToString() }
+            { "UserId", userId.ToString() },
+            { ClaimTypes.Role, "User" }
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = "WiseReminder.com",
             Audience = "WiseReminder.com",
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(48),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature),
@@ -40,14 +41,20 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
 
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
+        var claims = new Dictionary<string, object>
+        {
+            { "Role", "Admin" }
+        };
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = "WiseReminder.com",
             Audience = "WiseReminder.com",
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(48),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature),
+            Claims = claims,
             Subject = new ClaimsIdentity("Admin")
         };
 
