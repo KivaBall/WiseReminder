@@ -24,5 +24,11 @@ public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
         builder.Property(a => a.DeathDate)
             .HasConversion(date => date == null ? (DateOnly?)null : date.Value,
                 value => value == null ? null : Date.Create((DateOnly)value).ValueOrDefault);
+
+        builder
+            .HasOne(a => a.User)
+            .WithOne(u => u.Author)
+            .HasForeignKey<Author>(a => a.UserId)
+            .IsRequired(false);
     }
 }
