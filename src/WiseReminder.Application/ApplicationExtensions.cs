@@ -5,9 +5,17 @@ public static class ApplicationExtensions
     public static void AddApplicationServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddSerilog(config => config
-            .WriteTo.Console()
-            .WriteTo.Seq(configuration.GetConnectionString("SeqConnection")!));
+        if (configuration.GetConnectionString("SeqConnection") == "Default")
+        {
+            services.AddSerilog(config => config
+                .WriteTo.Console());
+        }
+        else
+        {
+            services.AddSerilog(config => config
+                .WriteTo.Console()
+                .WriteTo.Seq(configuration.GetConnectionString("SeqConnection")!));
+        }
 
         services.AddMediatR(config =>
         {

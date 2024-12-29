@@ -7,7 +7,11 @@ builder.Services.AddPresentationServices(builder.Configuration);
 var app = builder.Build();
 
 app.ApplyMigrations();
-app.ApplySeeding();
+
+if (app.Configuration["InitialSeeding"] == "true")
+{
+    app.ApplySeeding();
+}
 
 if (app.Environment.IsDevelopment())
 {
