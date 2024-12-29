@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.WebAPI.Controllers.Authors;
+namespace WiseReminder.WebAPI.Controllers.Authors;
 
-public record BaseAuthorRequest
+public sealed record BaseAuthorAsAdminRequest
 {
     public required string Name { get; init; }
     public required string Biography { get; init; }
