@@ -20,7 +20,5 @@ global using WiseReminder.IntegrationTests.Abstractions.Data;
 global using WiseReminder.IntegrationTests.Abstractions.Fixtures;
 global using WiseReminder.IntegrationTests.Abstractions.Helpers;
 global using WiseReminder.IntegrationTests.Abstractions.Mocks;
-global using WiseReminder.WebAPI.Controllers.Authorization;
-global using WiseReminder.WebAPI.Controllers.Authors;
 global using WiseReminder.WebAPI.Controllers.Categories;
-global using WiseReminder.WebAPI.Controllers.Quotes;
+global using WiseReminder.WebAPI.Controllers.Users;
