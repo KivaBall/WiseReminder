@@ -11,13 +11,13 @@ using WiseReminder.Infrastructure.Data;
 namespace WiseReminder.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    sealed partial class AppDbContextModelSnapshot : ModelSnapshot
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -36,6 +36,12 @@ namespace WiseReminder.Infrastructure.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("DeathDate")
+                        .HasColumnType("date");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
@@ -46,6 +52,9 @@ namespace WiseReminder.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -103,6 +112,9 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateOnly>("QuoteDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -117,62 +129,52 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.ToTable("Quotes");
                 });
 
-            modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
+            modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
                 {
-                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "BirthDate", b1 =>
-                        {
-                            b1.Property<Guid>("AuthorId")
-                                .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                            b1.Property<byte>("Day")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("BirthDay");
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
 
-                            b1.Property<byte>("Month")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("BirthMonth");
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
 
-                            b1.Property<short>("Year")
-                                .HasColumnType("smallint")
-                                .HasColumnName("BirthYear");
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
 
-                            b1.HasKey("AuthorId");
+                    b.Property<string>("HashedPassword")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
-                            b1.ToTable("Authors");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                            b1.WithOwner()
-                                .HasForeignKey("AuthorId");
-                        });
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
-                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "DeathDate", b1 =>
-                        {
-                            b1.Property<Guid>("AuthorId")
-                                .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Subscription")
+                        .HasColumnType("int");
 
-                            b1.Property<byte>("Day")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("DeathDay");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
-                            b1.Property<byte>("Month")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("DeathMonth");
+                    b.HasKey("Id");
 
-                            b1.Property<short>("Year")
-                                .HasColumnType("smallint")
-                                .HasColumnName("DeathYear");
+                    b.HasIndex("AuthorId")
+                        .IsUnique()
+                        .HasFilter("[AuthorId] IS NOT NULL");
 
-                            b1.HasKey("AuthorId");
+                    b.HasIndex("Login")
+                        .IsUnique();
 
-                            b1.ToTable("Authors");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AuthorId");
-                        });
-
-                    b.Navigation("BirthDate")
-                        .IsRequired();
-
-                    b.Navigation("DeathDate");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Quotes.Quote", b =>
@@ -189,42 +191,25 @@ namespace WiseReminder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("WiseReminder.Domain.Shared.Date", "QuoteDate", b1 =>
-                        {
-                            b1.Property<Guid>("QuoteId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<byte>("Day")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("QuoteDay");
-
-                            b1.Property<byte>("Month")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("QuoteMonth");
-
-                            b1.Property<short>("Year")
-                                .HasColumnType("smallint")
-                                .HasColumnName("QuoteYear");
-
-                            b1.HasKey("QuoteId");
-
-                            b1.ToTable("Quotes");
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuoteId");
-                        });
-
                     b.Navigation("Author");
 
                     b.Navigation("Category");
+                });
 
-                    b.Navigation("QuoteDate")
-                        .IsRequired();
+            modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
+                {
+                    b.HasOne("WiseReminder.Domain.Authors.Author", "Author")
+                        .WithOne("User")
+                        .HasForeignKey("WiseReminder.Domain.Users.User", "AuthorId");
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
                 {
                     b.Navigation("Quotes");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Categories.Category", b =>

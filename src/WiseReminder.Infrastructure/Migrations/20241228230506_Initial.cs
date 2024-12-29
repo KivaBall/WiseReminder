@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WiseReminder.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public sealed partial class Initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,12 +18,9 @@ namespace WiseReminder.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Biography = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
-                    BirthYear = table.Column<short>(type: "smallint", nullable: false),
-                    BirthMonth = table.Column<byte>(type: "tinyint", nullable: false),
-                    BirthDay = table.Column<byte>(type: "tinyint", nullable: false),
-                    DeathYear = table.Column<short>(type: "smallint", nullable: true),
-                    DeathMonth = table.Column<byte>(type: "tinyint", nullable: true),
-                    DeathDay = table.Column<byte>(type: "tinyint", nullable: true),
+                    BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    DeathDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -50,14 +47,36 @@ namespace WiseReminder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    HashedPassword = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Subscription = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Quotes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    QuoteYear = table.Column<short>(type: "smallint", nullable: false),
-                    QuoteMonth = table.Column<byte>(type: "tinyint", nullable: false),
-                    QuoteDay = table.Column<byte>(type: "tinyint", nullable: false),
+                    QuoteDate = table.Column<DateOnly>(type: "date", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -90,6 +109,19 @@ namespace WiseReminder.Infrastructure.Migrations
                 name: "IX_Quotes_CategoryId",
                 table: "Quotes",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AuthorId",
+                table: "Users",
+                column: "AuthorId",
+                unique: true,
+                filter: "[AuthorId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Login",
+                table: "Users",
+                column: "Login",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -99,10 +131,13 @@ namespace WiseReminder.Infrastructure.Migrations
                 name: "Quotes");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Authors");
         }
     }
 }
