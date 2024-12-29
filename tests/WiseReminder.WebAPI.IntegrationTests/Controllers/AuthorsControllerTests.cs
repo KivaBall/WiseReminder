@@ -19,8 +19,8 @@ public sealed class AuthorsControllerTests : GenericControllerTests
         getResponse!.Id.Should().Be(id);
         getResponse.Name.Should().Be(AuthorData.DefaultName);
         getResponse.Biography.Should().Be(AuthorData.DefaultBiography);
-        getResponse.DateOfBirth.Should().Be(AuthorData.DefaultBirthDate);
-        getResponse.DateOfDeath.Should().Be(AuthorData.DefaultDeathDate);
+        getResponse.BirthDate.Should().Be(AuthorData.DefaultBirthDate);
+        getResponse.DeathDate.Should().Be(AuthorData.DefaultDeathDate);
     }
 
     [Fact]
@@ -67,8 +67,8 @@ public sealed class AuthorsControllerTests : GenericControllerTests
         getResponse!.Id.Should().Be(id);
         getResponse.Name.Should().Be(AuthorData.UpdatedName);
         getResponse.Biography.Should().Be(AuthorData.UpdatedBiography);
-        getResponse.DateOfBirth.Should().Be(AuthorData.UpdatedBirthDate);
-        getResponse.DateOfDeath.Should().Be(AuthorData.UpdatedDeathDate);
+        getResponse.BirthDate.Should().Be(AuthorData.UpdatedBirthDate);
+        getResponse.DeathDate.Should().Be(AuthorData.UpdatedDeathDate);
     }
 
     [Fact]
@@ -165,8 +165,8 @@ public sealed class AuthorsControllerTests : GenericControllerTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         author!.Name.Should().Be(AuthorData.DefaultName);
         author.Biography.Should().Be(AuthorData.DefaultBiography);
-        author.DateOfBirth.Should().Be(AuthorData.DefaultBirthDate);
-        author.DateOfDeath.Should().Be(AuthorData.DefaultDeathDate);
+        author.BirthDate.Should().Be(AuthorData.DefaultBirthDate);
+        author.DeathDate.Should().Be(AuthorData.DefaultDeathDate);
     }
 
     [Fact]

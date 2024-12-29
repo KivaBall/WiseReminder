@@ -2,9 +2,10 @@
 
 public static class QuoteRequestToCommandExtensions
 {
-    public static CreateQuoteCommand ToCreateQuoteCommand(this BaseQuoteRequest request)
+    public static CreateQuoteAsAdminCommand ToCreateQuoteAsAdminCommand(
+        this BaseQuoteAsAdminRequest request)
     {
-        return new CreateQuoteCommand
+        return new CreateQuoteAsAdminCommand
         {
             Text = request.Text,
             AuthorId = request.AuthorId,
@@ -13,15 +14,45 @@ public static class QuoteRequestToCommandExtensions
         };
     }
 
-    public static UpdateQuoteCommand ToUpdateQuoteCommand(this UpdateQuoteRequest request)
+    public static CreateQuoteAsUserCommand ToCreateQuoteAsUserCommand(
+        this BaseQuoteAsUserRequest request,
+        Guid userId)
     {
-        return new UpdateQuoteCommand
+        return new CreateQuoteAsUserCommand
         {
-            Id = request.Id,
+            Text = request.Text,
+            CategoryId = request.CategoryId,
+            QuoteDate = request.QuoteDate,
+            UserId = userId
+        };
+    }
+
+    public static UpdateQuoteAsAdminCommand ToUpdateQuoteAsAdminCommand(
+        this BaseQuoteAsAdminRequest request,
+        Guid id)
+    {
+        return new UpdateQuoteAsAdminCommand
+        {
+            Id = id,
             Text = request.Text,
             AuthorId = request.AuthorId,
             CategoryId = request.CategoryId,
             QuoteDate = request.QuoteDate
+        };
+    }
+
+    public static UpdateQuoteAsUserCommand ToUpdateQuoteAsUserCommand(
+        this BaseQuoteAsUserRequest request,
+        Guid id,
+        Guid userId)
+    {
+        return new UpdateQuoteAsUserCommand
+        {
+            Id = id,
+            Text = request.Text,
+            CategoryId = request.CategoryId,
+            QuoteDate = request.QuoteDate,
+            UserId = userId
         };
     }
 }

@@ -10,13 +10,15 @@ public sealed class GetQuoteDtoByIdQueryHandler(
     {
         var query = new GetQuoteByIdQuery { Id = request.Id };
 
-        var result = await sender.Send(query);
+        var quote = await sender.Send(query, cancellationToken);
 
-        if (result.IsFailed)
+        if (quote.IsFailed)
         {
-            return Result.Fail(result.Errors);
+            return quote.ToResult();
         }
 
-        return Result.Ok(result.Value.ToQuoteDto());
+        var quoteDto = quote.Value.ToQuoteDto();
+
+        return Result.Ok(quoteDto);
     }
 }

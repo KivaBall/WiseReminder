@@ -2,7 +2,7 @@
 
 public sealed class Quote : Entity<Quote>
 {
-    private Quote(QuoteText text, Author author, Category category, Date quoteDate)
+    private Quote(Text text, Author author, Category category, Date quoteDate)
     {
         Text = text;
         AuthorId = author.Id;
@@ -17,7 +17,7 @@ public sealed class Quote : Entity<Quote>
     {
     }
 
-    public QuoteText Text { get; private set; }
+    public Text Text { get; private set; }
     public Date QuoteDate { get; private set; }
 
     public Guid AuthorId { get; private set; }
@@ -25,12 +25,11 @@ public sealed class Quote : Entity<Quote>
     public Guid CategoryId { get; private set; }
     public Category Category { get; private set; }
 
-    public static Result<Quote> Create(QuoteText text, Author author, Category category,
-        Date quoteDate)
+    public static Result<Quote> Create(Text text, Author author, Category category, Date quoteDate)
     {
         if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
         {
-            return Result.Fail("Invalid quote date");
+            return Result.Fail(QuoteErrors.QuoteDateOutOfRange);
         }
 
         var quote = new Quote(text, author, category, quoteDate);
@@ -38,11 +37,11 @@ public sealed class Quote : Entity<Quote>
         return Result.Ok(quote);
     }
 
-    public Result<Quote> Update(QuoteText text, Author author, Category category, Date quoteDate)
+    public Result<Quote> Update(Text text, Author author, Category category, Date quoteDate)
     {
         if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
         {
-            return Result.Fail("Invalid quote date");
+            return Result.Fail(QuoteErrors.QuoteDateOutOfRange);
         }
 
         Text = text;
@@ -59,10 +58,11 @@ public sealed class Quote : Entity<Quote>
     {
         if (deathDate == null)
         {
-            return birthDate.Year + 10 <= quoteDate.Year;
+            return birthDate.Value.Year + 10 <= quoteDate.Value.Year;
         }
 
-        if (birthDate.Year + 10 > quoteDate.Year || quoteDate.Year >= deathDate.Year)
+        if (birthDate.Value.Year + 10 > quoteDate.Value.Year ||
+            quoteDate.Value.Year >= deathDate.Value.Year)
         {
             return false;
         }

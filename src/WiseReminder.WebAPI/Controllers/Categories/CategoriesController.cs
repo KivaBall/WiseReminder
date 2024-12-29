@@ -4,11 +4,27 @@
 public sealed class CategoriesController(ISender sender) : GenericController(sender)
 {
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateCategory(BaseCategoryRequest request)
     {
         var command = request.ToCreateCategoryCommand();
         return await ExecuteCommandWithEntity(command);
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateCategory(Guid id, BaseCategoryRequest request)
+    {
+        var command = request.ToUpdateCategoryCommand(id);
+        return await ExecuteCommand(command);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteCategory(Guid id)
+    {
+        var command = new DeleteCategoryCommand { Id = id };
+        return await ExecuteCommand(command);
     }
 
     [HttpGet("{id}")]
@@ -21,23 +37,7 @@ public sealed class CategoriesController(ISender sender) : GenericController(sen
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
-        var query = new GetAllCategoriesQuery();
+        var query = new GetCategoryDtosQuery();
         return await ExecuteQuery(query);
-    }
-
-    [HttpPut]
-    [Authorize]
-    public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
-    {
-        var command = request.ToUpdateCategoryCommand();
-        return await ExecuteCommand(command);
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize]
-    public async Task<IActionResult> DeleteCategory(Guid id)
-    {
-        var command = new DeleteCategoryCommand { Id = id };
-        return await ExecuteCommand(command);
     }
 }

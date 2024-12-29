@@ -1,3 +1,5 @@
+using WiseReminder.WebAPI.Controllers.Quotes;
+
 namespace WiseReminder.IntegrationTests.Abstractions.Data;
 
 public static class QuoteData
@@ -8,9 +10,9 @@ public static class QuoteData
     public static readonly DateOnly DefaultQuoteDate = new(2000, 01, 01);
     public static readonly DateOnly UpdatedQuoteDate = new(2001, 01, 01);
 
-    public static BaseQuoteRequest BaseQuoteRequest(Guid authorId, Guid categoryId)
+    public static BaseQuoteAsAdminRequest BaseQuoteRequest(Guid authorId, Guid categoryId)
     {
-        return new BaseQuoteRequest
+        return new BaseQuoteAsAdminRequest
         {
             Text = DefaultText,
             AuthorId = authorId,
@@ -19,9 +21,9 @@ public static class QuoteData
         };
     }
 
-    public static BaseQuoteRequest NotValidBaseQuoteRequest(Guid authorId, Guid categoryId)
+    public static BaseQuoteAsAdminRequest NotValidBaseQuoteRequest(Guid authorId, Guid categoryId)
     {
-        return new BaseQuoteRequest
+        return new BaseQuoteAsAdminRequest
         {
             Text = null!,
             AuthorId = authorId,
@@ -30,9 +32,9 @@ public static class QuoteData
         };
     }
 
-    public static UpdateQuoteRequest UpdateQuoteRequest(Guid id, Guid authorId, Guid categoryId)
+    public static BaseQuoteAsAdminRequest UpdateQuoteRequest(Guid id, Guid authorId, Guid categoryId)
     {
-        return new UpdateQuoteRequest
+        return new BaseQuoteAsAdminRequest
         {
             Id = id,
             Text = UpdatedText,

@@ -4,7 +4,7 @@ public static class AuthHelper
 {
     public static async Task LoginAsAdminAsync(this HttpClient httpClient)
     {
-        var authRequest = new SignInRequest
+        var authRequest = new LoginRequest
         {
             Login = "wise-reminder-admin-login",
             Password = "wise-reminder-admin-password"

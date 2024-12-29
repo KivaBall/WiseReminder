@@ -12,21 +12,9 @@ public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 
         builder.Property(q => q.Text)
             .HasMaxLength(1024)
-            .HasConversion(text => text.Value, value => new QuoteText(value));
+            .HasConversion(text => text.Value, value => new Text(value));
 
-        builder.OwnsOne(q => q.QuoteDate, dateBuilder =>
-        {
-            dateBuilder.Property(d => d.Year)
-                .HasConversion(year => year, year => year)
-                .HasColumnName("QuoteYear");
-
-            dateBuilder.Property(d => d.Month)
-                .HasConversion(month => month, month => month)
-                .HasColumnName("QuoteMonth");
-
-            dateBuilder.Property(d => d.Day)
-                .HasConversion(day => day, day => day)
-                .HasColumnName("QuoteDay");
-        });
+        builder.Property(q => q.QuoteDate)
+            .HasConversion(date => date.Value, value => Date.Create(value).ValueOrDefault);
     }
 }

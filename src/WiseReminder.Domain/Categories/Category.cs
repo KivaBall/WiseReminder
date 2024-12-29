@@ -2,7 +2,7 @@
 
 public sealed class Category : Entity<Category>
 {
-    public Category(CategoryName name, CategoryDescription description)
+    public Category(CategoryName name, Description description)
     {
         Name = name;
         Description = description;
@@ -14,11 +14,11 @@ public sealed class Category : Entity<Category>
     }
 
     public CategoryName Name { get; private set; }
-    public CategoryDescription Description { get; private set; }
+    public Description Description { get; private set; }
 
     public ICollection<Quote> Quotes { get; } = [];
 
-    public Category Update(CategoryName name, CategoryDescription description)
+    public Category Update(CategoryName name, Description description)
     {
         Name = name;
         Description = description;

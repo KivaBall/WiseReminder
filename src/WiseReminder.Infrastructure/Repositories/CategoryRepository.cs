@@ -2,8 +2,8 @@
 
 public sealed class CategoryRepository(
     AppDbContext context,
-    IQuoteRepository quoteRepository,
-    IMemoryCache memoryCache) : ICategoryRepository
+    IMemoryCache memoryCache)
+    : ICategoryRepository
 {
     public void CreateCategory(Category category)
     {
@@ -15,16 +15,9 @@ public sealed class CategoryRepository(
         context.Categories.Update(category);
     }
 
-    public async Task DeleteCategory(Category category)
+    public void DeleteCategory(Category category)
     {
         category.Delete();
-
-        var quotes = await quoteRepository.GetQuotesByCategoryId(category.Id);
-
-        foreach (var quote in quotes)
-        {
-            quoteRepository.DeleteQuote(quote);
-        }
 
         context.Categories.Update(category);
     }

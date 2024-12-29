@@ -2,7 +2,7 @@ namespace WiseReminder.Infrastructure.Seeding;
 
 public static class QuoteSeed
 {
-    public static string Sql =
+    public const string Sql =
         @"INSERT INTO Quotes (Id, Text, AuthorId, CategoryId, QuoteYear, QuoteMonth, QuoteDay, AddedAt, IsDeleted)
         VALUES ('24c8e0ad-5edc-4967-87e3-649881a5a8fe',
         'Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.',

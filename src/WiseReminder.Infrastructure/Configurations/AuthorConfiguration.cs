@@ -16,36 +16,19 @@ public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
 
         builder.Property(a => a.Biography)
             .HasMaxLength(2048)
-            .HasConversion(biography => biography.Value, value => new AuthorBiography(value));
+            .HasConversion(biography => biography.Value, value => new Biography(value));
 
-        builder.OwnsOne(a => a.BirthDate, dateBuilder =>
-        {
-            dateBuilder.Property(d => d.Year)
-                .HasConversion(year => year, year => year)
-                .HasColumnName("BirthYear");
+        builder.Property(a => a.BirthDate)
+            .HasConversion(date => date.Value, value => Date.Create(value).ValueOrDefault);
 
-            dateBuilder.Property(d => d.Month)
-                .HasConversion(month => month, month => month)
-                .HasColumnName("BirthMonth");
+        builder.Property(a => a.DeathDate)
+            .HasConversion(date => date == null ? (DateOnly?)null : date.Value,
+                value => value == null ? null : Date.Create((DateOnly)value).ValueOrDefault);
 
-            dateBuilder.Property(d => d.Day)
-                .HasConversion(day => day, day => day)
-                .HasColumnName("BirthDay");
-        });
-
-        builder.OwnsOne(a => a.DeathDate, dateBuilder =>
-        {
-            dateBuilder.Property(d => d.Year)
-                .HasConversion(year => year, year => year)
-                .HasColumnName("DeathYear");
-
-            dateBuilder.Property(d => d.Month)
-                .HasConversion(month => month, month => month)
-                .HasColumnName("DeathMonth");
-
-            dateBuilder.Property(d => d.Day)
-                .HasConversion(day => day, day => day)
-                .HasColumnName("DeathDay");
-        });
+        builder
+            .HasOne(a => a.User)
+            .WithOne(u => u.Author)
+            .HasForeignKey<Author>(a => a.UserId)
+            .IsRequired(false);
     }
 }

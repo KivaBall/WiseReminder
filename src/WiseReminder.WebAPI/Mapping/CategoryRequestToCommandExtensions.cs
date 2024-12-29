@@ -2,7 +2,8 @@
 
 public static class CategoryRequestToCommandExtensions
 {
-    public static CreateCategoryCommand ToCreateCategoryCommand(this BaseCategoryRequest request)
+    public static CreateCategoryCommand ToCreateCategoryCommand(
+        this BaseCategoryRequest request)
     {
         return new CreateCategoryCommand
         {
@@ -11,11 +12,13 @@ public static class CategoryRequestToCommandExtensions
         };
     }
 
-    public static UpdateCategoryCommand ToUpdateCategoryCommand(this UpdateCategoryRequest request)
+    public static UpdateCategoryCommand ToUpdateCategoryCommand(
+        this BaseCategoryRequest request,
+        Guid id)
     {
         return new UpdateCategoryCommand
         {
-            Id = request.Id,
+            Id = id,
             Name = request.Name,
             Description = request.Description
         };

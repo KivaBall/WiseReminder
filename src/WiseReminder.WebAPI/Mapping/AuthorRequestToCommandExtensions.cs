@@ -2,9 +2,10 @@
 
 public static class AuthorRequestToCommandExtensions
 {
-    public static CreateAuthorCommand ToCreateAuthorCommand(this BaseAuthorRequest request)
+    public static CreateAuthorAsAdminCommand ToCreateAuthorAsAdminCommand(
+        this BaseAuthorAsAdminRequest request)
     {
-        return new CreateAuthorCommand
+        return new CreateAuthorAsAdminCommand
         {
             Name = request.Name,
             Biography = request.Biography,
@@ -13,15 +14,43 @@ public static class AuthorRequestToCommandExtensions
         };
     }
 
-    public static UpdateAuthorCommand ToUpdateAuthorCommand(this UpdateAuthorRequest request)
+    public static CreateAuthorAsUserCommand ToCreateAuthorAsUserCommand(
+        this BaseAuthorAsUserRequest request,
+        Guid userId)
     {
-        return new UpdateAuthorCommand
+        return new CreateAuthorAsUserCommand
         {
-            Id = request.Id,
+            Name = request.Name,
+            Biography = request.Biography,
+            BirthDate = request.BirthDate,
+            UserId = userId
+        };
+    }
+
+    public static UpdateAuthorAsAdminCommand ToUpdateAuthorAsAdminCommand(
+        this BaseAuthorAsAdminRequest request,
+        Guid id)
+    {
+        return new UpdateAuthorAsAdminCommand
+        {
+            Id = id,
             Name = request.Name,
             Biography = request.Biography,
             BirthDate = request.BirthDate,
             DeathDate = request.DeathDate
+        };
+    }
+
+    public static UpdateAuthorAsUserCommand ToUpdateAuthorAsUserCommand(
+        this BaseAuthorAsUserRequest request,
+        Guid userId)
+    {
+        return new UpdateAuthorAsUserCommand
+        {
+            Name = request.Name,
+            Biography = request.Biography,
+            BirthDate = request.BirthDate,
+            UserId = userId
         };
     }
 }
