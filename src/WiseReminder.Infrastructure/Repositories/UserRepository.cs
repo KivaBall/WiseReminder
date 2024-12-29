@@ -6,19 +6,17 @@ public sealed class UserRepository(
 {
     public void CreateUser(User user)
     {
-        context.Add(user);
+        context.Users.Add(user);
     }
 
     public void UpdateUser(User user)
     {
-        context.Update(user);
+        context.Users.Update(user);
     }
 
     public void DeleteUser(User user)
     {
-        user.Delete();
-
-        context.Update(user);
+        context.Users.Remove(user);
     }
 
     public async Task<User?> GetUserById(Guid id)
