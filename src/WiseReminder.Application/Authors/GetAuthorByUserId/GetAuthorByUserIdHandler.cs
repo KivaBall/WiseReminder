@@ -8,7 +8,7 @@ public sealed class GetAuthorByUserIdHandler(
         GetAuthorByUserIdQuery request,
         CancellationToken cancellationToken)
     {
-        var userQuery = new GetUserByIdQuery { Id = request.Id };
+        var userQuery = new GetUserByIdQuery(request.UserId);
 
         var user = await sender.Send(userQuery, cancellationToken);
 

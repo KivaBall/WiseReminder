@@ -21,7 +21,7 @@ public sealed class UserCreateAuthorHandler(
             return birthDate.ToResult();
         }
 
-        var query = new GetUserByIdQuery { Id = request.UserId };
+        var query = new GetUserByIdQuery(request.UserId); //TODO: Maybe just call GetAuthorByUserId?
 
         var user = await sender.Send(query, cancellationToken);
 

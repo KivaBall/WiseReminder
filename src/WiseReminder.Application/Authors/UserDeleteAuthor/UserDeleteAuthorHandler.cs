@@ -21,13 +21,13 @@ public sealed class UserDeleteAuthorHandler(
 
         authorRepository.DeleteAuthor(author.Value);
 
-        var quotesQuery = new GetQuoteDtosByAuthorIdQuery { AuthorId = author.Value.Id };
+        var quotesQuery = new DeleteQuotesByAuthorIdCommand(author.Value.Id);
 
-        var quotes = await sender.Send(quotesQuery, cancellationToken);
+        var result = await sender.Send(quotesQuery, cancellationToken);
 
-        if (quotes.IsFailed)
+        if (result.IsFailed)
         {
-            return quotes.ToResult();
+            return result;
         }
 
         return await unitOfWork.SaveChangesAsync();
