@@ -1,6 +1,6 @@
 namespace WiseReminder.WebAPI.Validators.Quotes;
 
-public sealed class BaseQuoteAsUserRequestValidator : AbstractValidator<BaseQuoteAsUserRequest>
+public sealed class BaseQuoteAsUserRequestValidator : AbstractValidator<UserQuoteRequest>
 {
     public BaseQuoteAsUserRequestValidator()
     {

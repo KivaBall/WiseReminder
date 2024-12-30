@@ -1,63 +1,59 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Authors;
 
-[Route("api/authors")]
-public sealed class AuthorsController(ISender sender) : GenericController(sender)
+public sealed class AuthorsController(ISender sender) : BaseController(sender)
 {
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> CreateAuthorAsAdmin(BaseAuthorAsAdminRequest request)
+    public async Task<IActionResult> AdminCreateAuthor(AdminAuthorRequest request)
     {
-        var command = request.ToCreateAuthorAsAdminCommand();
+        var command = request.ToAdminCreateAuthorCommand();
         return await ExecuteCommandWithEntity(command);
     }
 
     [HttpPost("own")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> CreateAuthorAsUser(BaseAuthorAsUserRequest request)
+    public async Task<IActionResult> UserCreateAuthor(UserAuthorRequest request)
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = request.ToCreateAuthorAsUserCommand(userId);
+        var command = request.ToUserCreateAuthorCommand(UserId);
         return await ExecuteCommandWithEntity(command);
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateAuthorAsAdmin(Guid id, BaseAuthorAsAdminRequest request)
+    public async Task<IActionResult> AdminUpdateAuthor(Guid id, AdminAuthorRequest request)
     {
-        var command = request.ToUpdateAuthorAsAdminCommand(id);
+        var command = request.ToAdminUpdateAuthorCommand(id);
         return await ExecuteCommand(command);
     }
 
     [HttpPut("own")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> UpdateAuthorAsUser(BaseAuthorAsUserRequest asAdminRequest)
+    public async Task<IActionResult> UserUpdateAuthor(UserAuthorRequest request)
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = asAdminRequest.ToUpdateAuthorAsUserCommand(userId);
+        var command = request.ToUserUpdateAuthorCommand(UserId);
         return await ExecuteCommand(command);
     }
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteAuthorAsAdmin(Guid id)
+    public async Task<IActionResult> AdminDeleteAuthor(Guid id)
     {
-        var command = new DeleteAuthorAsAdminCommand { Id = id };
+        var command = new AdminDeleteAuthorCommand(id);
         return await ExecuteCommand(command);
     }
 
     [HttpDelete("own")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> DeleteAuthorAsUser()
+    public async Task<IActionResult> UserDeleteAuthor()
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = new DeleteAuthorAsUserCommand { UserId = userId };
+        var command = new UserDeleteAuthorCommand(UserId);
         return await ExecuteCommand(command);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAuthorById(Guid id)
     {
-        var query = new GetAuthorDtoByIdQuery { Id = id };
+        var query = new GetAuthorDtoByIdQuery(id);
         return await ExecuteQuery(query);
     }
 
@@ -65,7 +61,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAuthorByUserId(Guid userId)
     {
-        var query = new GetAuthorDtoByUserIdQuery { UserId = userId };
+        var query = new GetAuthorDtoByUserIdQuery(userId);
         return await ExecuteQuery(query);
     }
 
@@ -74,8 +70,7 @@ public sealed class AuthorsController(ISender sender) : GenericController(sender
     [Authorize(Roles = "User")]
     public async Task<IActionResult> GetMyOwnAuthor()
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var query = new GetAuthorDtoByUserIdQuery { UserId = userId };
+        var query = new GetAuthorDtoByUserIdQuery(UserId);
         return await ExecuteQuery(query);
     }
 

@@ -5,6 +5,8 @@ public static class PresentationExtensions
     public static void AddPresentationServices(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddRouting(opt => opt.LowercaseUrls = true);
+
         services.AddControllers();
 
         services.AddFluentValidationAutoValidation();

@@ -99,9 +99,9 @@ public sealed class QuoteRepository(
             .ToListAsync();
     }
 
-    public async Task<Quote> GetQuoteOfTheDay()
+    public async Task<Quote> GetDailyQuote()
     {
-        var quote = await cacheService.GetAsync<Quote>("quote-of-the-day");
+        var quote = await cacheService.GetAsync<Quote>("daily-quote");
 
         if (quote == null)
         {
@@ -109,7 +109,7 @@ public sealed class QuoteRepository(
                 .OrderBy(q => Guid.NewGuid())
                 .FirstAsync();
 
-            await cacheService.CreateAsync("quote-of-the-day", quote, TimeSpan.FromDays(1));
+            await cacheService.CreateAsync("daily-quote", quote, TimeSpan.FromDays(1));
         }
 
         return quote;

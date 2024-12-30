@@ -1,6 +1,3 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorById;
 
-public sealed record GetAuthorByIdQuery : IQuery<Author>
-{
-    public required Guid Id { get; init; }
-}
+public sealed record GetAuthorByIdQuery(Guid Id) : IQuery<Author>;
