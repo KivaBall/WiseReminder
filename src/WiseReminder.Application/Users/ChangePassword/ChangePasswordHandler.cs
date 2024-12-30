@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.ChangePassword;
 
-public sealed class ChangePasswordCommandHandler(
+public sealed class ChangePasswordHandler(
     IUserRepository userRepository,
     ISender sender,
     IEncryptService encryptService,
@@ -11,13 +11,13 @@ public sealed class ChangePasswordCommandHandler(
         ChangePasswordCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetUserByIdQuery { Id = request.Id };
+        var query = new GetUserByIdQuery(request.Id);
 
         var user = await sender.Send(query, cancellationToken);
 
         if (user.IsFailed)
         {
-            return Result.Fail(user.Errors);
+            return user.ToResult();
         }
 
         var isOldPasswordCorrect = encryptService.Check(
@@ -35,8 +35,6 @@ public sealed class ChangePasswordCommandHandler(
 
         userRepository.UpdateUser(user.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

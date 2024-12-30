@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.LoginAsAdmin;
 
-public sealed class LoginAsAdminCommandHandler(
+public sealed class LoginAsAdminHandler(
     IJwtService jwtService)
     : ICommandHandler<LoginAsAdminCommand, string>
 {

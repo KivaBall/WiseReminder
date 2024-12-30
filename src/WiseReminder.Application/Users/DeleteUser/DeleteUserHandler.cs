@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.DeleteUser;
 
-public sealed class DeleteUserCommandHandler(
+public sealed class DeleteUserHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
@@ -10,7 +10,7 @@ public sealed class DeleteUserCommandHandler(
         DeleteUserCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetUserByIdQuery { Id = request.Id };
+        var query = new GetUserByIdQuery(request.Id);
 
         var user = await sender.Send(query, cancellationToken);
 
@@ -21,15 +21,13 @@ public sealed class DeleteUserCommandHandler(
 
         if (user.Value.AuthorId != null)
         {
-            var authorQuery = new DeleteAuthorAsAdminCommand { Id = user.Value.AuthorId.Value };
+            var authorQuery = new AdminDeleteAuthorCommand(user.Value.AuthorId.Value); //TODO: Is it necessary for db? Checking is needed
 
             await sender.Send(authorQuery, cancellationToken);
         }
 
         userRepository.DeleteUser(user.Value);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok();
+        return await unitOfWork.SaveChangesAsync();
     }
 }

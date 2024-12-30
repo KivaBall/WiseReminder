@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.GetUserById;
 
-public sealed class GetUserByIdQueryHandler(
+public sealed class GetUserByIdHandler(
     IUserRepository userRepository)
     : IQueryHandler<GetUserByIdQuery, User>
 {
@@ -10,6 +10,11 @@ public sealed class GetUserByIdQueryHandler(
     {
         var user = await userRepository.GetUserById(request.Id);
 
-        return user == null ? Result.Fail(UserErrors.UserNotFound) : Result.Ok(user);
+        if (user == null)
+        {
+            return Result.Fail(UserErrors.UserNotFound);
+        }
+
+        return Result.Ok(user);
     }
 }

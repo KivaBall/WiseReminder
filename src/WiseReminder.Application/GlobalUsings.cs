@@ -19,6 +19,8 @@ global using WiseReminder.Application.Authors.GetAuthorByUserId;
 global using WiseReminder.Application.Categories;
 global using WiseReminder.Application.Categories.GetCategoryById;
 global using WiseReminder.Application.Quotes;
+global using WiseReminder.Application.Quotes.DeleteQuotesByAuthorId;
+global using WiseReminder.Application.Quotes.DeleteQuotesByCategoryId;
 global using WiseReminder.Application.Quotes.GetQuoteById;
 global using WiseReminder.Application.Quotes.GetQuoteDtosByAuthorId;
 global using WiseReminder.Application.Quotes.GetQuotesByAuthorId;

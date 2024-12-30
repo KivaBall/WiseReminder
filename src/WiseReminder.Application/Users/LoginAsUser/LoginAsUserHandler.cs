@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.LoginAsUser;
 
-public sealed class LoginAsUserCommandHandler(
+public sealed class LoginAsUserHandler(
     IUserRepository repository,
     IEncryptService encryptService,
     IJwtService jwtService)

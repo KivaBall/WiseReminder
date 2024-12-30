@@ -1,6 +1,6 @@
 namespace WiseReminder.Application.Users.GetUserDtoById;
 
-public sealed class GetUserDtoByIdQueryHandler(
+public sealed class GetUserDtoByIdHandler(
     ISender sender)
     : IQueryHandler<GetUserDtoByIdQuery, UserDto>
 {
@@ -8,10 +8,17 @@ public sealed class GetUserDtoByIdQueryHandler(
         GetUserDtoByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new GetUserByIdQuery { Id = request.Id };
+        var query = new GetUserByIdQuery(request.Id);
 
         var user = await sender.Send(query, cancellationToken);
 
-        return user.IsFailed ? Result.Fail(user.Errors) : Result.Ok(user.Value.ToUserDto());
+        if (user.IsFailed)
+        {
+            return user.ToResult();
+        }
+
+        var userDto = user.Value.ToUserDto();
+        
+        return Result.Ok(userDto);
     }
 }

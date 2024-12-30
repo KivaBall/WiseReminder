@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Users.CreateUser;
 
-public sealed class CreateUserCommandHandler(
+public sealed class CreateUserHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IEncryptService encryptService)
@@ -20,8 +20,6 @@ public sealed class CreateUserCommandHandler(
 
         userRepository.CreateUser(user);
 
-        var isSaved = await unitOfWork.SaveChangesAsync();
-
-        return isSaved.IsFailed ? Result.Fail(isSaved.Errors) : Result.Ok(user.Id);
+        return await unitOfWork.SaveChangesAsyncWithResult(() => user.Id);
     }
 }
