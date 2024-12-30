@@ -1,11 +1,11 @@
-﻿namespace WiseReminder.WebAPI.Mapping;
+namespace WiseReminder.WebAPI.Mapping;
 
-public static class AuthorRequestToCommandExtensions
+public static class AuthorRequestsToCommandExtensions
 {
-    public static CreateAuthorAsAdminCommand ToCreateAuthorAsAdminCommand(
-        this BaseAuthorAsAdminRequest request)
+    public static AdminCreateAuthorCommand ToAdminCreateAuthorCommand(
+        this AdminAuthorRequest request)
     {
-        return new CreateAuthorAsAdminCommand
+        return new AdminCreateAuthorCommand
         {
             Name = request.Name,
             Biography = request.Biography,
@@ -14,11 +14,11 @@ public static class AuthorRequestToCommandExtensions
         };
     }
 
-    public static CreateAuthorAsUserCommand ToCreateAuthorAsUserCommand(
-        this BaseAuthorAsUserRequest request,
+    public static UserCreateAuthorCommand ToUserCreateAuthorCommand(
+        this UserAuthorRequest request,
         Guid userId)
     {
-        return new CreateAuthorAsUserCommand
+        return new UserCreateAuthorCommand
         {
             Name = request.Name,
             Biography = request.Biography,
@@ -27,11 +27,11 @@ public static class AuthorRequestToCommandExtensions
         };
     }
 
-    public static UpdateAuthorAsAdminCommand ToUpdateAuthorAsAdminCommand(
-        this BaseAuthorAsAdminRequest request,
+    public static AdminUpdateAuthorCommand ToAdminUpdateAuthorCommand(
+        this AdminAuthorRequest request,
         Guid id)
     {
-        return new UpdateAuthorAsAdminCommand
+        return new AdminUpdateAuthorCommand
         {
             Id = id,
             Name = request.Name,
@@ -41,11 +41,11 @@ public static class AuthorRequestToCommandExtensions
         };
     }
 
-    public static UpdateAuthorAsUserCommand ToUpdateAuthorAsUserCommand(
-        this BaseAuthorAsUserRequest request,
+    public static UserUpdateAuthorCommand ToUserUpdateAuthorCommand(
+        this UserAuthorRequest request,
         Guid userId)
     {
-        return new UpdateAuthorAsUserCommand
+        return new UserUpdateAuthorCommand
         {
             Name = request.Name,
             Biography = request.Biography,

@@ -1,11 +1,11 @@
 ﻿namespace WiseReminder.WebAPI.Mapping;
 
-public static class QuoteRequestToCommandExtensions
+public static class QuoteRequestsToCommandExtensions
 {
-    public static CreateQuoteAsAdminCommand ToCreateQuoteAsAdminCommand(
-        this BaseQuoteAsAdminRequest request)
+    public static AdminCreateQuoteCommand ToAdminCreateQuoteCommand(
+        this AdminQuoteRequest request)
     {
-        return new CreateQuoteAsAdminCommand
+        return new AdminCreateQuoteCommand
         {
             Text = request.Text,
             AuthorId = request.AuthorId,
@@ -14,11 +14,11 @@ public static class QuoteRequestToCommandExtensions
         };
     }
 
-    public static CreateQuoteAsUserCommand ToCreateQuoteAsUserCommand(
-        this BaseQuoteAsUserRequest request,
+    public static UserCreateQuoteCommand ToUserCreateQuoteCommand(
+        this UserQuoteRequest request,
         Guid userId)
     {
-        return new CreateQuoteAsUserCommand
+        return new UserCreateQuoteCommand
         {
             Text = request.Text,
             CategoryId = request.CategoryId,
@@ -27,11 +27,11 @@ public static class QuoteRequestToCommandExtensions
         };
     }
 
-    public static UpdateQuoteAsAdminCommand ToUpdateQuoteAsAdminCommand(
-        this BaseQuoteAsAdminRequest request,
+    public static AdminUpdateQuoteCommand ToAdminUpdateQuoteCommand(
+        this AdminQuoteRequest request,
         Guid id)
     {
-        return new UpdateQuoteAsAdminCommand
+        return new AdminUpdateQuoteCommand
         {
             Id = id,
             Text = request.Text,
@@ -41,12 +41,12 @@ public static class QuoteRequestToCommandExtensions
         };
     }
 
-    public static UpdateQuoteAsUserCommand ToUpdateQuoteAsUserCommand(
-        this BaseQuoteAsUserRequest request,
+    public static UserUpdateQuoteCommand ToUserUpdateQuoteCommand(
+        this UserQuoteRequest request,
         Guid id,
         Guid userId)
     {
-        return new UpdateQuoteAsUserCommand
+        return new UserUpdateQuoteCommand
         {
             Id = id,
             Text = request.Text,

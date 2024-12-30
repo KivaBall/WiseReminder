@@ -1,9 +1,9 @@
 ﻿namespace WiseReminder.WebAPI.Mapping;
 
-public static class CategoryRequestToCommandExtensions
+public static class CategoryRequestsToCommandExtensions
 {
     public static CreateCategoryCommand ToCreateCategoryCommand(
-        this BaseCategoryRequest request)
+        this CategoryRequest request)
     {
         return new CreateCategoryCommand
         {
@@ -13,7 +13,7 @@ public static class CategoryRequestToCommandExtensions
     }
 
     public static UpdateCategoryCommand ToUpdateCategoryCommand(
-        this BaseCategoryRequest request,
+        this CategoryRequest request,
         Guid id)
     {
         return new UpdateCategoryCommand

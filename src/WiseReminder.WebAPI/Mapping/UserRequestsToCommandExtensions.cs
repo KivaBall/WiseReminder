@@ -1,15 +1,36 @@
 namespace WiseReminder.WebAPI.Mapping;
 
-public static class UserRequestToCommandExtensions
+public static class UserRequestsToCommandExtensions
 {
     public static CreateUserCommand ToCreateUserCommand(
-        this BaseUserRequest request)
+        this UserRequest request)
     {
         return new CreateUserCommand
         {
             Username = request.Username,
             Login = request.Login,
             Password = request.Password
+        };
+    }
+
+    public static LoginAsUserCommand ToUserLoginCommand(
+        this UserLoginRequest request)
+    {
+        return new LoginAsUserCommand
+        {
+            Login = request.Login,
+            Password = request.Password
+        };
+    }
+
+    public static LoginAsAdminCommand ToAdminLoginCommand(
+        this AdminLoginRequest request)
+    {
+        return new LoginAsAdminCommand
+        {
+            FirstPassword = request.FirstPassword,
+            SecondPassword = request.SecondPassword,
+            ThirdPassword = request.ThirdPassword
         };
     }
 
