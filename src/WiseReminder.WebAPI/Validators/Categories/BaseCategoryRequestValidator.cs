@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Validators.Categories;
 
-public sealed class BaseCategoryRequestValidator : AbstractValidator<BaseCategoryRequest>
+public sealed class BaseCategoryRequestValidator : AbstractValidator<CategoryRequest>
 {
     public BaseCategoryRequestValidator()
     {

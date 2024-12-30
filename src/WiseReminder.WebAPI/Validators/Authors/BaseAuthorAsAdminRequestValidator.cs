@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Validators.Authors;
 
-public sealed class BaseAuthorAsAdminRequestValidator : AbstractValidator<BaseAuthorAsAdminRequest>
+public sealed class BaseAuthorAsAdminRequestValidator : AbstractValidator<AdminAuthorRequest>
 {
     public BaseAuthorAsAdminRequestValidator()
     {
