@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.UpdateCategory;
 
-public sealed class UpdateCategoryCommandHandler(
+public sealed class UpdateCategoryHandler(
     ICategoryRepository categoryRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
@@ -10,7 +10,7 @@ public sealed class UpdateCategoryCommandHandler(
         UpdateCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetCategoryByIdQuery { Id = request.Id };
+        var query = new GetCategoryByIdQuery(request.Id);
 
         var category = await sender.Send(query, cancellationToken);
 

@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.GetCategoryDtos;
 
-public sealed class GetCategoryDtosQueryHandler(
+public sealed class GetCategoryDtosHandler(
     ICategoryRepository categoryRepository)
     : IQueryHandler<GetCategoryDtosQuery, ICollection<CategoryDto>>
 {

@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.GetCategoryById;
 
-public sealed class GetCategoryByIdQueryHandler(
+public sealed class GetCategoryByIdHandler(
     ICategoryRepository categoryRepository)
     : IQueryHandler<GetCategoryByIdQuery, Category>
 {

@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.CreateCategory;
 
-public sealed class CreateCategoryCommandHandler(
+public sealed class CreateCategoryHandler(
     ICategoryRepository categoryRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCategoryCommand, Guid>

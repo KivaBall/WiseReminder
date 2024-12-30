@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.Application.Categories.DeleteCategory;
 
-public sealed class DeleteCategoryCommandHandler(
+public sealed class DeleteCategoryHandler(
     ICategoryRepository categoryRepository,
     IUnitOfWork unitOfWork,
     ISender sender)
@@ -10,7 +10,7 @@ public sealed class DeleteCategoryCommandHandler(
         DeleteCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var categoryQuery = new GetCategoryByIdQuery { Id = request.Id };
+        var categoryQuery = new GetCategoryByIdQuery(request.Id);
 
         var category = await sender.Send(categoryQuery, cancellationToken);
 
@@ -21,13 +21,13 @@ public sealed class DeleteCategoryCommandHandler(
 
         categoryRepository.DeleteCategory(category.Value);
 
-        var quotesQuery = new GetQuoteDtosByCategoryIdQuery { CategoryId = request.Id };
+        var quotesQuery = new DeleteQuotesByCategoryIdCommand(request.Id); //TODO: Bonetrip xD
 
-        var quotes = await sender.Send(quotesQuery, cancellationToken);
+        var result = await sender.Send(quotesQuery, cancellationToken);
 
-        if (quotes.IsFailed)
+        if (result.IsFailed)
         {
-            return quotes.ToResult();
+            return result;
         }
 
         return await unitOfWork.SaveChangesAsync();
