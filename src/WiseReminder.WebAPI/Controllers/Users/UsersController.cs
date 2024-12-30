@@ -3,29 +3,23 @@
 public sealed class UsersController(ISender sender) : BaseController(sender)
 {
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUser(BaseUserRequest request)
+    public async Task<IActionResult> RegisterUser(UserRequest request)
     {
         var command = request.ToCreateUserCommand();
         return await ExecuteCommandWithEntity(command);
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginAsUserRequest request)
+    public async Task<IActionResult> UserLogin(UserLoginRequest request)
     {
-        var command = new LoginAsUserCommand { Login = request.Login, Password = request.Password };
+        var command = request.ToUserLoginCommand();
         return await ExecuteCommandWithEntity(command);
     }
 
     [HttpPost("admin-login")]
-    public async Task<IActionResult> Login(LoginAsAdminRequest request)
+    public async Task<IActionResult> AdminLogin(AdminLoginRequest request)
     {
-        var command = new LoginAsAdminCommand
-        {
-            FirstPassword = request.FirstPassword,
-            SecondPassword = request.SecondPassword,
-            ThirdPassword = request.ThirdPassword
-        };
-
+        var command = request.ToAdminLoginCommand();
         return await ExecuteCommandWithEntity(command);
     }
 
@@ -33,8 +27,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UpdateUsername(UpdateUsernameRequest request)
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = request.ToChangeUsernameCommand(userId);
+        var command = request.ToChangeUsernameCommand(UserId);
         return await ExecuteCommand(command);
     }
 
@@ -42,16 +35,15 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = request.ToChangePasswordCommand(userId);
+        var command = request.ToChangePasswordCommand(UserId);
         return await ExecuteCommand(command);
     }
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteUserAsAdmin(Guid id)
+    public async Task<IActionResult> DeleteUser(Guid id)
     {
-        var command = new DeleteUserCommand { Id = id };
+        var command = new DeleteUserCommand(id);
         return await ExecuteCommand(command);
     }
 
@@ -59,8 +51,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteMyOwnUser()
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var command = new DeleteUserCommand { Id = userId };
+        var command = new DeleteUserCommand(UserId);
         return await ExecuteCommand(command);
     }
 
@@ -68,8 +59,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> GetMyOwnUser()
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")!.Value);
-        var query = new GetUserDtoByIdQuery { Id = userId };
+        var query = new GetUserDtoByIdQuery(UserId);
         return await ExecuteQuery(query);
     }
 }
