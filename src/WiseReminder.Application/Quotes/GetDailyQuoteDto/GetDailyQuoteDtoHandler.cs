@@ -2,13 +2,13 @@
 
 public sealed class GetDailyQuoteDtoHandler(
     IQuoteRepository quoteRepository)
-    : IQueryHandler<GetDailyQuoteDto, QuoteDto>
+    : IQueryHandler<GetDailyQuoteDtoQuery, QuoteDto>
 {
     public async Task<Result<QuoteDto>> Handle(
-        GetDailyQuoteDto request,
+        GetDailyQuoteDtoQuery request,
         CancellationToken cancellationToken)
     {
-        var quote = await quoteRepository.GetQuoteOfTheDay(); //TODO: Maybe create service for this?
+        var quote = await quoteRepository.GetDailyQuote(); //TODO: Maybe create service for this?
 
         var quoteDto = quote.ToQuoteDto();
 

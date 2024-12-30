@@ -2,10 +2,10 @@
 
 public sealed class GetRecentAddedQuoteDtosHandler(
     IQuoteRepository quoteRepository)
-    : IQueryHandler<GetRecentAddedQuoteDtos, ICollection<QuoteDto>>
+    : IQueryHandler<GetRecentAddedQuoteDtosQuery, ICollection<QuoteDto>>
 {
     public async Task<Result<ICollection<QuoteDto>>> Handle(
-        GetRecentAddedQuoteDtos request,
+        GetRecentAddedQuoteDtosQuery request,
         CancellationToken cancellationToken)
     {
         var quotes = await quoteRepository.GetRecentAddedQuotes(request.Amount);

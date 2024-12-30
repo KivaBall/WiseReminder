@@ -1,6 +1,3 @@
 ﻿namespace WiseReminder.Application.Quotes.GetQuoteById;
 
-public sealed record GetQuoteByIdQuery : IQuery<Quote>
-{
-    public required Guid Id { get; init; }
-}
+public sealed record GetQuoteByIdQuery(Guid Id) : IQuery<Quote>;
