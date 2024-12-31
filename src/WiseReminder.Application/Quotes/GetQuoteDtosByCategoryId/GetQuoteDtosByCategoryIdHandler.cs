@@ -1,7 +1,6 @@
 ﻿namespace WiseReminder.Application.Quotes.GetQuoteDtosByCategoryId;
 
 public sealed class GetQuoteDtosByCategoryIdHandler(
-    IQuoteRepository quoteRepository,
     ISender sender)
     : IQueryHandler<GetQuoteDtosByCategoryIdQuery, ICollection<QuoteDto>>
 {

@@ -21,7 +21,9 @@ public sealed class DeleteUserHandler(
 
         if (user.Value.AuthorId != null)
         {
-            var authorQuery = new AdminDeleteAuthorCommand(user.Value.AuthorId.Value); //TODO: Is it necessary for db? Checking is needed
+            var authorQuery =
+                new AdminDeleteAuthorCommand(user.Value.AuthorId
+                    .Value); //TODO: Is it necessary for db? Checking is needed
 
             await sender.Send(authorQuery, cancellationToken);
         }

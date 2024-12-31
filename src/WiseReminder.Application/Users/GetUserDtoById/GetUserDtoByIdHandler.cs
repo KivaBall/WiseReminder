@@ -18,7 +18,7 @@ public sealed class GetUserDtoByIdHandler(
         }
 
         var userDto = user.Value.ToUserDto();
-        
+
         return Result.Ok(userDto);
     }
 }

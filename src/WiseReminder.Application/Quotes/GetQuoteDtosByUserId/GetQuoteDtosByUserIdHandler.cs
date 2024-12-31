@@ -17,7 +17,8 @@ public sealed class GetQuoteDtosByUserIdHandler(
             return author.ToResult();
         }
 
-        var quotesQuery = new GetQuoteDtosByAuthorIdQuery(author.Value.Id); //TODO: Below just return directly?
+        var quotesQuery =
+            new GetQuoteDtosByAuthorIdQuery(author.Value.Id); //TODO: Below just return directly?
 
         var quotes = await sender.Send(quotesQuery, cancellationToken);
 
