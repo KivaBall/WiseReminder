@@ -35,7 +35,7 @@ public static class UserRequestsToCommandExtensions
     }
 
     public static ChangeUsernameCommand ToChangeUsernameCommand(
-        this UpdateUsernameRequest request,
+        this ChangeUsernameRequest request,
         Guid userId)
     {
         return new ChangeUsernameCommand
@@ -47,7 +47,7 @@ public static class UserRequestsToCommandExtensions
     }
 
     public static ChangePasswordCommand ToChangePasswordCommand(
-        this UpdatePasswordRequest request,
+        this ChangePasswordRequest request,
         Guid userId)
     {
         return new ChangePasswordCommand

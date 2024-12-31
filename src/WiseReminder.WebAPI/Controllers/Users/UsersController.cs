@@ -25,7 +25,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
 
     [HttpPut("own/username")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> UpdateUsername(UpdateUsernameRequest request)
+    public async Task<IActionResult> ChangeUsername(ChangeUsernameRequest request)
     {
         var command = request.ToChangeUsernameCommand(UserId);
         return await ExecuteCommand(command);
@@ -33,7 +33,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
 
     [HttpPut("own/password")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
     {
         var command = request.ToChangePasswordCommand(UserId);
         return await ExecuteCommand(command);

@@ -1,6 +1,6 @@
 namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class UpdateUsernameRequestValidator : AbstractValidator<UpdateUsernameRequest>
+public sealed class UpdateUsernameRequestValidator : AbstractValidator<ChangeUsernameRequest>
 {
     public UpdateUsernameRequestValidator()
     {
