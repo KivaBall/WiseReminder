@@ -3,20 +3,33 @@ namespace WiseReminder.ArchitectureTests;
 public class SealedModificatorTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void AllClassesShouldBeSealedOrAbstract()
+    public void PresentationClassesShouldBeSealedOrAbstract()
     {
-        var referenceTypes = new[]
-        {
-            typeof(Date),
-            typeof(ICacheService),
-            typeof(CacheService),
-            typeof(BaseCategoryRequest)
-        };
+        ValidateClasses(typeof(PresentationExtensions));
+    }
 
-        var types = referenceTypes
-            .Select(t => t.Assembly)
-            .Distinct()
-            .SelectMany(a => a.GetTypes())
+    [Fact]
+    public void ApplicationClassesShouldBeSealedOrAbstract()
+    {
+        ValidateClasses(typeof(ApplicationExtensions));
+    }
+
+    [Fact]
+    public void EntityClassesShouldBeSealedOrAbstract()
+    {
+        ValidateClasses(typeof(Entity<>));
+    }
+
+    [Fact]
+    public void InfrastructureClassesShouldBeSealedOrAbstract()
+    {
+        ValidateClasses(typeof(InfrastructureExtensions));
+    }
+
+    private void ValidateClasses(Type referenceType)
+    {
+        var types = referenceType.Assembly
+            .GetTypes()
             .Where(t => t.IsClass)
             .ToList();
 
