@@ -2,32 +2,43 @@ namespace WiseReminder.IntegrationTests.Abstractions.Helpers;
 
 public static class SeedHelper
 {
-    public static async Task<InitialIdsFixture> SeedDataAsync(this HttpClient httpClient)
+    public static async Task<IdsFixture> SeedDataAsync(this HttpClient client)
     {
-        var baseCategoryRequest = CategoryData.BaseCategoryRequest();
+        await client.AdminLoginAsync();
+
+        var categoryRequest = CategoryData.CreateCategoryRequest;
 
         var categoryId =
-            await (await httpClient.PostAsJsonAsync("api/categories", baseCategoryRequest))
+            await (await client.PostAsJsonAsync("api/categories", categoryRequest))
                 .Content.ReadFromJsonAsync<Guid>();
 
-        var baseAuthorRequest = AuthorData.BaseAuthorRequest();
+        var authorRequest = AuthorData.CreateAdminAuthorRequest;
 
         var authorId =
-            await (await httpClient.PostAsJsonAsync("api/authors", baseAuthorRequest)).Content
+            await (await client.PostAsJsonAsync("api/authors", authorRequest)).Content
                 .ReadFromJsonAsync<Guid>();
 
-        var baseQuoteRequest = QuoteData.BaseQuoteRequest(authorId, categoryId);
+        var quoteRequest = QuoteData.CreateAdminQuoteRequest(authorId, categoryId);
 
         var quoteId =
-            await (await httpClient.PostAsJsonAsync("api/quotes", baseQuoteRequest)).Content
+            await (await client.PostAsJsonAsync("api/quotes", quoteRequest)).Content
                 .ReadFromJsonAsync<Guid>();
 
-        var initialIds = new InitialIdsFixture
+        var userRequest = UserData.CreateUserRequest;
+
+        var userId =
+            await (await client.PostAsJsonAsync("api/users/register", userRequest)).Content
+                .ReadFromJsonAsync<Guid>();
+
+        var initialIds = new IdsFixture
         {
             CategoryId = categoryId,
             AuthorId = authorId,
-            QuoteId = quoteId
+            QuoteId = quoteId,
+            UserId = userId
         };
+
+        client.Logout();
 
         return initialIds;
     }
