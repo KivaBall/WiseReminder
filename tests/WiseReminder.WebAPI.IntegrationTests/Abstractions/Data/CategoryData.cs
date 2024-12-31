@@ -2,47 +2,27 @@ namespace WiseReminder.IntegrationTests.Abstractions.Data;
 
 public static class CategoryData
 {
-    public const string DefaultName = "DefaultName";
-    public const string DefaultDescription = "DefaultDescription";
+    public static string DefaultName = "DefaultName";
+    public static string DefaultDescription = "DefaultDescription";
 
-    public const string UpdatedName = "UpdatedName";
-    public const string UpdatedDescription = "UpdatedDescription";
+    public static string UpdatedName = "UpdatedName";
+    public static string UpdatedDescription = "UpdatedDescription";
 
-    public static BaseCategoryRequest BaseCategoryRequest()
+    public static CategoryRequest CreateCategoryRequest =>
+        CategoryRequest(DefaultName, DefaultDescription);
+
+    public static CategoryRequest UpdateCategoryRequest =>
+        CategoryRequest(UpdatedName, UpdatedDescription);
+
+    public static CategoryRequest NotValidCategoryRequest =>
+        CategoryRequest(null!, null!);
+
+    private static CategoryRequest CategoryRequest(string name, string description)
     {
-        return new BaseCategoryRequest
+        return new CategoryRequest
         {
-            Name = DefaultName,
-            Description = DefaultDescription
-        };
-    }
-
-    public static BaseCategoryRequest NotValidBaseCategoryRequest()
-    {
-        return new BaseCategoryRequest
-        {
-            Name = null!,
-            Description = null!
-        };
-    }
-
-    public static UpdateCategoryRequest UpdateCategoryRequest(Guid id)
-    {
-        return new UpdateCategoryRequest
-        {
-            Id = id,
-            Name = UpdatedName,
-            Description = UpdatedDescription
-        };
-    }
-
-    public static UpdateCategoryRequest NotValidUpdateCategoryRequest(Guid id)
-    {
-        return new UpdateCategoryRequest
-        {
-            Id = id,
-            Name = null!,
-            Description = null!
+            Name = name,
+            Description = description
         };
     }
 }

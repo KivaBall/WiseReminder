@@ -2,59 +2,54 @@ namespace WiseReminder.IntegrationTests.Abstractions.Data;
 
 public static class AuthorData
 {
-    public const string DefaultName = "DefaultName";
-    public const string DefaultBiography = "DefaultBiography";
-    public const string UpdatedName = "UpdatedName";
-    public const string UpdatedBiography = "UpdatedBiography";
-
+    public static string DefaultName = "DefaultName";
+    public static string DefaultBiography = "DefaultBiography";
     public static readonly DateOnly DefaultBirthDate = new(1980, 1, 1);
     public static readonly DateOnly DefaultDeathDate = new(2010, 01, 01);
+
+    public static string UpdatedName = "UpdatedName";
+    public static string UpdatedBiography = "UpdatedBiography";
     public static readonly DateOnly UpdatedBirthDate = new(1981, 1, 1);
     public static readonly DateOnly UpdatedDeathDate = new(2011, 01, 01);
 
-    public static BaseAuthorRequest BaseAuthorRequest()
+    public static AdminAuthorRequest CreateAdminAuthorRequest =>
+        AdminAuthorRequest(DefaultName, DefaultBiography, DefaultBirthDate, DefaultDeathDate);
+
+    public static AdminAuthorRequest UpdateAdminAuthorRequest =>
+        AdminAuthorRequest(UpdatedName, UpdatedBiography, UpdatedBirthDate, UpdatedDeathDate);
+
+    public static AdminAuthorRequest NotValidAdminAuthorRequest =>
+        AdminAuthorRequest(null!, null!, default, null!);
+
+    public static UserAuthorRequest CreateUserAuthorRequest =>
+        UserAuthorRequest(DefaultName, DefaultBiography, DefaultBirthDate);
+
+    public static UserAuthorRequest UpdateUserAuthorRequest =>
+        UserAuthorRequest(UpdatedName, UpdatedBiography, UpdatedBirthDate);
+
+    public static UserAuthorRequest NotValidUserAuthorRequest =>
+        UserAuthorRequest(null!, null!, default);
+
+    private static AdminAuthorRequest AdminAuthorRequest(string name, string biography,
+        DateOnly birthDate, DateOnly? deathDate)
     {
-        return new BaseAuthorRequest
+        return new AdminAuthorRequest
         {
-            Name = DefaultName,
-            Biography = DefaultBiography,
-            BirthDate = DefaultBirthDate,
-            DeathDate = DefaultDeathDate
+            Name = name,
+            Biography = biography,
+            BirthDate = birthDate,
+            DeathDate = deathDate
         };
     }
 
-    public static BaseAuthorRequest NotValidBaseAuthorRequest()
+    private static UserAuthorRequest UserAuthorRequest(string name, string biography,
+        DateOnly birthDate)
     {
-        return new BaseAuthorRequest
+        return new UserAuthorRequest
         {
-            Name = null!,
-            Biography = null!,
-            BirthDate = default,
-            DeathDate = null
-        };
-    }
-
-    public static UpdateAuthorRequest UpdateAuthorRequest(Guid id)
-    {
-        return new UpdateAuthorRequest
-        {
-            Id = id,
-            Name = UpdatedName,
-            Biography = UpdatedBiography,
-            BirthDate = UpdatedBirthDate,
-            DeathDate = UpdatedDeathDate
-        };
-    }
-
-    public static UpdateAuthorRequest NotValidUpdateAuthorRequest(Guid id)
-    {
-        return new UpdateAuthorRequest
-        {
-            Id = id,
-            Name = null!,
-            Biography = null!,
-            BirthDate = default,
-            DeathDate = null
+            Name = name,
+            Biography = biography,
+            BirthDate = birthDate
         };
     }
 }
