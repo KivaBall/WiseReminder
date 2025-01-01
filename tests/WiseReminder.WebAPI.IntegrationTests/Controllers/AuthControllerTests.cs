@@ -1,6 +1,6 @@
 namespace WiseReminder.IntegrationTests.Controllers;
 
-public sealed class AuthControllerTests : GenericControllerTests
+public sealed class AuthControllerTests : BaseControllerTests
 {
     [Fact]
     public async Task Login_WhenAllOk_ReturnsOk()

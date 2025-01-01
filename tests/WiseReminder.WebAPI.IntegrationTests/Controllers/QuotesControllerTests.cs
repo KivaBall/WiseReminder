@@ -1,12 +1,12 @@
 namespace WiseReminder.IntegrationTests.Controllers;
 
-public sealed class QuotesControllerTests : GenericControllerTests
+public sealed class QuotesControllerTests : BaseControllerTests
 {
     [Fact]
     public async Task CreateQuote_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var initialIds = await Client.SeedDataAsync();
         var request = QuoteData.BaseQuoteRequest(initialIds.AuthorId, initialIds.CategoryId);
 
@@ -41,7 +41,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task CreateQuote_WhenDataNotValid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var initialIds = await Client.SeedDataAsync();
         var request =
             QuoteData.NotValidBaseQuoteRequest(initialIds.AuthorId, initialIds.CategoryId);
@@ -57,7 +57,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task UpdateQuote_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var initialIds = await Client.SeedDataAsync();
         var request = QuoteData.UpdateQuoteRequest(initialIds.QuoteId, initialIds.AuthorId,
             initialIds.CategoryId);
@@ -93,7 +93,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task UpdateQuote_WhenQuoteNotExisting_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var request = QuoteData.UpdateQuoteRequest(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
         //Act
@@ -107,7 +107,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task UpdateQuote_WhenDataNotValid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var initialIds = await Client.SeedDataAsync();
         var request = QuoteData.NotValidUpdateQuoteRequest(initialIds.QuoteId, initialIds.AuthorId,
             initialIds.CategoryId);
@@ -123,7 +123,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task DeleteQuote_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var id = (await Client.SeedDataAsync()).QuoteId;
 
         //Act
@@ -154,7 +154,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task DeleteQuote_WhenQuoteNotExisting_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var id = Guid.NewGuid();
 
         //Act
@@ -168,7 +168,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task GetQuoteById_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var initialIds = await Client.SeedDataAsync();
 
         //Act
@@ -201,7 +201,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task GetQuotesByAuthorId_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var authorId = (await Client.SeedDataAsync()).AuthorId;
 
         //Act
@@ -230,7 +230,7 @@ public sealed class QuotesControllerTests : GenericControllerTests
     public async Task GetQuotesByCategoryId_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
+        await Client.AdminLoginAsync();
         var categoryId = (await Client.SeedDataAsync()).CategoryId;
 
         //Act
