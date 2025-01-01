@@ -14,7 +14,7 @@ public static class CategoryData
     public static CategoryRequest UpdateCategoryRequest =>
         CategoryRequest(UpdatedName, UpdatedDescription);
 
-    public static CategoryRequest NotValidCategoryRequest =>
+    public static CategoryRequest InvalidCategoryRequest =>
         CategoryRequest(null!, null!);
 
     private static CategoryRequest CategoryRequest(string name, string description)

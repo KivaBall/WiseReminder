@@ -12,19 +12,19 @@ public static class UserData
     public static UserRequest CreateUserRequest =>
         UserRequest(DefaultUsername, DefaultLogin, DefaultPassword);
 
-    public static UserRequest NotValidUserRequest =>
+    public static UserRequest InvalidUserRequest =>
         UserRequest(null!, null!, null!);
 
     public static ChangeUsernameRequest DefaultChangeUsernameRequest =>
         ChangeUsernameRequest(UpdatedUsername, DefaultPassword);
 
-    public static ChangeUsernameRequest NotValidChangeUsernameRequest =>
+    public static ChangeUsernameRequest InvalidChangeUsernameRequest =>
         ChangeUsernameRequest(null!, null!);
 
     public static ChangePasswordRequest DefaultChangePasswordRequest =>
         ChangePasswordRequest(DefaultPassword, UpdatedPassword);
 
-    public static ChangePasswordRequest NotValidChangePasswordRequest =>
+    public static ChangePasswordRequest InvalidChangePasswordRequest =>
         ChangePasswordRequest(null!, null!);
 
     public static UserLoginRequest DefaultUserLoginRequest =>
@@ -33,14 +33,14 @@ public static class UserData
     public static UserLoginRequest UpdatedUserLoginRequest =>
         UserLoginRequest(DefaultLogin, UpdatedPassword);
 
-    public static UserLoginRequest NotValidUserLoginRequest =>
+    public static UserLoginRequest InvalidUserLoginRequest =>
         UserLoginRequest(null!, null!);
 
     public static AdminLoginRequest DefaultAdminLoginRequest =>
         AdminLoginRequest("first_secret_admin_password", "second_secret_admin_password",
             "third_secret_admin_password");
 
-    public static AdminLoginRequest NotValidAdminLoginRequest =>
+    public static AdminLoginRequest InvalidAdminLoginRequest =>
         AdminLoginRequest(null!, null!, null!);
 
     private static UserRequest UserRequest(string username, string login, string password)

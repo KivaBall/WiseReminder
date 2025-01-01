@@ -18,7 +18,7 @@ public static class AuthorData
     public static AdminAuthorRequest UpdateAdminAuthorRequest =>
         AdminAuthorRequest(UpdatedName, UpdatedBiography, UpdatedBirthDate, UpdatedDeathDate);
 
-    public static AdminAuthorRequest NotValidAdminAuthorRequest =>
+    public static AdminAuthorRequest InvalidAdminAuthorRequest =>
         AdminAuthorRequest(null!, null!, default, null!);
 
     public static UserAuthorRequest CreateUserAuthorRequest =>
@@ -27,7 +27,7 @@ public static class AuthorData
     public static UserAuthorRequest UpdateUserAuthorRequest =>
         UserAuthorRequest(UpdatedName, UpdatedBiography, UpdatedBirthDate);
 
-    public static UserAuthorRequest NotValidUserAuthorRequest =>
+    public static UserAuthorRequest InvalidUserAuthorRequest =>
         UserAuthorRequest(null!, null!, default);
 
     private static AdminAuthorRequest AdminAuthorRequest(string name, string biography,

@@ -8,10 +8,10 @@ public static class QuoteData
     public static string UpdatedText = "UpdatedText";
     public static readonly DateOnly UpdatedQuoteDate = new(2001, 01, 01);
 
-    public static AdminQuoteRequest NotValidAdminQuoteRequest =>
+    public static AdminQuoteRequest InvalidAdminQuoteRequest =>
         AdminQuoteRequest(null!, Guid.Empty, Guid.Empty, default);
 
-    public static UserQuoteRequest NotValidUserQuoteRequest =>
+    public static UserQuoteRequest InvalidUserQuoteRequest =>
         UserQuoteRequest(null!, Guid.Empty, default);
 
     private static AdminQuoteRequest AdminQuoteRequest(string text, Guid authorId, Guid categoryId,
