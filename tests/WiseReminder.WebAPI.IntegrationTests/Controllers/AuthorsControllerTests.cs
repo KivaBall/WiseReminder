@@ -1,21 +1,25 @@
 namespace WiseReminder.IntegrationTests.Controllers;
 
-public sealed class AuthorsControllerTests : GenericControllerTests
+public sealed class AuthorsControllerTests : BaseControllerTests
 {
     [Fact]
-    public async Task CreateAuthor_WhenAllOk_ReturnsOk()
+    public async Task AdminCreateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var request = AuthorData.BaseAuthorRequest();
+        var request = AuthorData.CreateAdminAuthorRequest;
 
         //Act
+        await Client.AdminLoginAsync();
+
         var createResponse = await Client.PostAsJsonAsync("api/authors", request);
+
         var id = await createResponse.Content.ReadFromJsonAsync<Guid>();
+
         var getResponse = await Client.GetFromJsonAsync<AuthorDto>($"api/authors/{id}");
 
         //Assert
         createResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
         getResponse!.Id.Should().Be(id);
         getResponse.Name.Should().Be(AuthorData.DefaultName);
         getResponse.Biography.Should().Be(AuthorData.DefaultBiography);
@@ -24,10 +28,23 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task CreateAuthor_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task AdminCreateAuthor_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.BaseAuthorRequest();
+        var request = AuthorData.CreateAdminAuthorRequest;
+
+        //Act
+        var response = await Client.PostAsJsonAsync("api/authors", request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task AdminCreateAuthor_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Arrange
+        var request = AuthorData.CreateAdminAuthorRequest;
 
         //Act
         var response = await Client.PostAsJsonAsync("api/authors", request);
@@ -37,13 +54,14 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task CreateAuthor_WhenDataNotValid_ReturnsBadRequest()
+    public async Task AdminCreateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var request = AuthorData.NotValidBaseAuthorRequest();
+        var request = AuthorData.InvalidAdminAuthorRequest;
 
         //Act
+        await Client.AdminLoginAsync();
+
         var response = await Client.PostAsJsonAsync("api/authors", request);
 
         //Assert
@@ -51,20 +69,22 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task UpdateAuthor_WhenAllOk_ReturnsOk()
+    public async Task AdminUpdateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).AuthorId;
-        var request = AuthorData.UpdateAuthorRequest(id);
+        var request = AuthorData.UpdateAdminAuthorRequest;
 
         //Act
-        var updateResponse = await Client.PutAsJsonAsync("api/authors", request);
-        var getResponse = await Client.GetFromJsonAsync<AuthorDto>($"api/authors/{id}");
+        await Client.AdminLoginAsync();
+
+        var updateResponse = await Client.PutAsJsonAsync($"api/authors/{Ids.AuthorId}", request);
+
+        var getResponse = await Client.GetFromJsonAsync<AuthorDto>($"api/authors/{Ids.AuthorId}");
 
         //Assert
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        getResponse!.Id.Should().Be(id);
+
+        getResponse!.Id.Should().Be(Ids.AuthorId);
         getResponse.Name.Should().Be(AuthorData.UpdatedName);
         getResponse.Biography.Should().Be(AuthorData.UpdatedBiography);
         getResponse.BirthDate.Should().Be(AuthorData.UpdatedBirthDate);
@@ -72,69 +92,98 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task UpdateAuthor_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task AdminUpdateAuthor_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorRequest(Guid.NewGuid());
+        var request = AuthorData.UpdateAdminAuthorRequest;
 
         //Act
-        var response = await Client.PutAsJsonAsync("api/authors", request);
+        var response = await Client.PutAsJsonAsync($"api/authors/{Ids.AuthorId}", request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task AdminUpdateAuthor_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Arrange
+        var request = AuthorData.UpdateAdminAuthorRequest;
+
+        //Act
+        var response = await Client.PutAsJsonAsync($"api/authors/{Ids.AuthorId}", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task UpdateAuthor_WhenDataNotValid_ReturnsBadRequest()
+    public async Task AdminUpdateAuthor_WhenAuthorNotExists_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).AuthorId;
-        var request = AuthorData.NotValidUpdateAuthorRequest(id);
+        var request = AuthorData.UpdateAdminAuthorRequest;
 
         //Act
-        var response = await Client.PutAsJsonAsync("api/authors", request);
+        var response = await Client.PutAsJsonAsync($"api/authors/{Guid.NewGuid()}", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public async Task DeleteAuthor_WhenAllOk_ReturnsOk()
+    public async Task AdminUpdateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).AuthorId;
+        var request = AuthorData.InvalidAdminAuthorRequest;
 
         //Act
-        var response = await Client.DeleteAsync($"api/authors/{id}");
+        await Client.AdminLoginAsync();
+
+        var response = await Client.PutAsJsonAsync($"api/authors/{Ids.AuthorId}", request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AdminDeleteAuthor_WhenAllOk_ReturnsOk()
+    {
+        //Act
+        await Client.AdminLoginAsync();
+
+        var response = await Client.DeleteAsync($"api/authors/{Ids.AuthorId}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task DeleteAuthor_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task AdminDeleteAuthor_WhenUser_ReturnsForbidden()
     {
-        //Arrange
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.DeleteAsync($"api/authors/{id}");
+        var response = await Client.DeleteAsync($"api/authors/{Ids.AuthorId}");
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task AdminDeleteAuthor_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Act
+        var response = await Client.DeleteAsync($"api/authors/{Ids.AuthorId}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task DeleteAuthor_WhenAuthorNotExisting_ReturnsBadRequest()
+    public async Task AdminDeleteAuthor_WhenAuthorNotExists_ReturnsBadRequest()
     {
-        //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.DeleteAsync($"api/authors/{id}");
+        await Client.AdminLoginAsync();
+        
+        var response = await Client.DeleteAsync($"api/authors/{Guid.NewGuid()}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -153,16 +202,14 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     [Fact]
     public async Task GetAuthorById_WhenAllOk_ReturnsOk()
     {
-        //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).AuthorId;
-
         //Act
-        var response = await Client.GetAsync($"api/authors/{id}");
+        var response = await Client.GetAsync($"api/authors/{Ids.AuthorId}");
+        
         var author = await response.Content.ReadFromJsonAsync<AuthorDto>();
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
         author!.Name.Should().Be(AuthorData.DefaultName);
         author.Biography.Should().Be(AuthorData.DefaultBiography);
         author.BirthDate.Should().Be(AuthorData.DefaultBirthDate);
@@ -170,13 +217,10 @@ public sealed class AuthorsControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task GetAuthorById_WhenAuthorNotExisting_ReturnsNotFound()
+    public async Task GetAuthorById_WhenAuthorNotExists_ReturnsNotFound()
     {
-        //Arrange
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.GetAsync($"api/authors/{id}");
+        var response = await Client.GetAsync($"api/authors/{Guid.NewGuid()}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
