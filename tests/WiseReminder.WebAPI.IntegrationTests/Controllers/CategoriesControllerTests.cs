@@ -1,32 +1,50 @@
 namespace WiseReminder.IntegrationTests.Controllers;
 
-public sealed class CategoriesControllerTests : GenericControllerTests
+public sealed class CategoriesControllerTests : BaseControllerTests
 {
     [Fact]
     public async Task CreateCategory_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var request = CategoryData.BaseCategoryRequest();
+        var request = CategoryData.CreateCategoryRequest;
 
         //Act
+        await Client.AdminLoginAsync();
+
         var createResponse = await Client.PostAsJsonAsync("api/categories", request);
-        var categoryId = await createResponse.Content.ReadFromJsonAsync<Guid>();
-        var getResponse =
-            await Client.GetFromJsonAsync<CategoryDto>($"api/categories/{categoryId}");
+
+        var id = await createResponse.Content.ReadFromJsonAsync<Guid>();
+
+        var getResponse = await Client.GetFromJsonAsync<CategoryDto>($"api/categories/{id}");
 
         //Assert
         createResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        getResponse!.Id.Should().Be(categoryId);
+
+        getResponse!.Id.Should().Be(id);
         getResponse.Name.Should().Be(CategoryData.DefaultName);
         getResponse.Description.Should().Be(CategoryData.DefaultDescription);
     }
 
     [Fact]
-    public async Task CreateCategory_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task CreateCategory_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = CategoryData.BaseCategoryRequest();
+        var request = CategoryData.CreateCategoryRequest;
+
+        //Act
+        await Client.UserLoginAsync();
+
+        var response = await Client.PostAsJsonAsync("api/categories", request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task CreateCategory_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Arrange
+        var request = CategoryData.CreateCategoryRequest;
 
         //Act
         var response = await Client.PostAsJsonAsync("api/categories", request);
@@ -36,13 +54,14 @@ public sealed class CategoriesControllerTests : GenericControllerTests
     }
 
     [Fact]
-    public async Task CreateCategory_WhenDataNotValid_ReturnsBadRequest()
+    public async Task CreateCategory_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var request = CategoryData.NotValidBaseCategoryRequest();
+        var request = CategoryData.InvalidCategoryRequest;
 
         //Act
+        await Client.AdminLoginAsync();
+
         var response = await Client.PostAsJsonAsync("api/categories", request);
 
         //Assert
@@ -53,59 +72,78 @@ public sealed class CategoriesControllerTests : GenericControllerTests
     public async Task UpdateCategory_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).CategoryId;
-        var request = CategoryData.UpdateCategoryRequest(id);
+        var request = CategoryData.UpdateCategoryRequest;
 
         //Act
-        var updateResponse = await Client.PutAsJsonAsync("api/categories", request);
+        await Client.AdminLoginAsync();
+
+        var updateResponse =
+            await Client.PutAsJsonAsync($"api/categories/{Ids.CategoryId}", request);
+
         var getResponse =
-            await Client.GetFromJsonAsync<CategoryDto>($"api/categories/{id}");
+            await Client.GetFromJsonAsync<CategoryDto>($"api/categories/{Ids.CategoryId}");
 
         //Assert
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        getResponse!.Id.Should().Be(id);
+
+        getResponse!.Id.Should().Be(Ids.CategoryId);
         getResponse.Name.Should().Be(CategoryData.UpdatedName);
         getResponse.Description.Should().Be(CategoryData.UpdatedDescription);
     }
 
     [Fact]
-    public async Task UpdateCategory_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task UpdateCategory_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = CategoryData.UpdateCategoryRequest(Guid.NewGuid());
+        var request = CategoryData.UpdateCategoryRequest;
 
         //Act
-        var response = await Client.PutAsJsonAsync("api/categories", request);
+        await Client.UserLoginAsync();
+
+        var response = await Client.PutAsJsonAsync($"api/categories/{Ids.CategoryId}", request);
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task UpdateCategory_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Arrange
+        var request = CategoryData.UpdateCategoryRequest;
+
+        //Act
+        var response = await Client.PutAsJsonAsync($"api/categories/{Ids.CategoryId}", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task UpdateCategory_WhenCategoryNotExisting_ReturnsBadRequest()
+    public async Task UpdateCategory_WhenCategoryNotExists_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var request = CategoryData.UpdateCategoryRequest(Guid.NewGuid());
+        var request = CategoryData.UpdateCategoryRequest;
 
         //Act
-        var response = await Client.PutAsJsonAsync("api/categories", request);
+        await Client.AdminLoginAsync();
+
+        var response = await Client.PutAsJsonAsync($"api/categories/{Guid.NewGuid()}", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public async Task UpdateCategory_WhenDataNotValid_ReturnsBadRequest()
+    public async Task UpdateCategory_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).CategoryId;
-        var request = CategoryData.NotValidUpdateCategoryRequest(id);
+        var request = CategoryData.InvalidCategoryRequest;
 
         //Act
-        var response = await Client.PutAsJsonAsync("api/categories", request);
+        await Client.AdminLoginAsync();
+
+        var response = await Client.PutAsJsonAsync($"api/categories/{Ids.CategoryId}", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -114,43 +152,50 @@ public sealed class CategoriesControllerTests : GenericControllerTests
     [Fact]
     public async Task DeleteCategory_WhenAllOk_ReturnsOk()
     {
-        //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).CategoryId;
-
         //Act
+        await Client.AdminLoginAsync();
+
         var deleteResponse = await Client
-            .DeleteAsync($"api/categories/{id}");
+            .DeleteAsync($"api/categories/{Ids.CategoryId}");
+
         var getResponse = await Client
-            .GetAsync($"api/categories/{id}");
+            .GetAsync($"api/categories/{Ids.CategoryId}");
 
         //Assert
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
         getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async Task DeleteCategory_WhenUserNotAuthorized_ReturnsUnauthorized()
+    public async Task DeleteCategory_WhenUser_ReturnsForbidden()
     {
-        //Arrange
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.DeleteAsync($"api/categories/{id}");
+        await Client.UserLoginAsync();
+
+        var response = await Client.DeleteAsync($"api/categories/{Ids.CategoryId}");
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task DeleteCategory_WhenUnauthorized_ReturnsUnauthorized()
+    {
+        //Act
+        var response = await Client.DeleteAsync($"api/categories/{Ids.CategoryId}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task DeleteCategory_WhenCategoryNotExisting_ReturnsBadRequest()
+    public async Task DeleteCategory_WhenCategoryNotExists_ReturnsBadRequest()
     {
-        //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.DeleteAsync($"api/categories/{id}");
+        await Client.AdminLoginAsync();
+
+        var response = await Client.DeleteAsync($"api/categories/{Guid.NewGuid()}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -169,28 +214,23 @@ public sealed class CategoriesControllerTests : GenericControllerTests
     [Fact]
     public async Task GetCategoryById_WhenAllOk_ReturnsOk()
     {
-        //Arrange
-        await Client.LoginAsAdminAsync();
-        var id = (await Client.SeedDataAsync()).CategoryId;
-
         //Act
-        var response = await Client.GetAsync($"api/categories/{id}");
+        var response = await Client.GetAsync($"api/categories/{Ids.CategoryId}");
+
         var category = await response.Content.ReadFromJsonAsync<CategoryDto>();
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
         category!.Name.Should().Be(CategoryData.DefaultName);
         category.Description.Should().Be(CategoryData.DefaultDescription);
     }
 
     [Fact]
-    public async Task GetCategoryById_WhenCategoryNotExisting_ReturnsNotFound()
+    public async Task GetCategoryById_WhenCategoryNotExists_ReturnsNotFound()
     {
-        //Arrange
-        var id = Guid.NewGuid();
-
         //Act
-        var response = await Client.GetAsync($"api/categories/{id}");
+        var response = await Client.GetAsync($"api/categories/{Guid.NewGuid()}");
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
