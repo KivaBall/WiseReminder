@@ -5,17 +5,8 @@ public static class InfrastructureExtensions
     public static void AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        if (configuration.GetConnectionString("DatabaseConnection") == "Default")
-        {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
-                    "Server=localhost,1433;Database=WiseReminder;User Id=sa;Password=312_SQL_Password_312;TrustServerCertificate=True;"));
-        }
-        else
-        {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
-        }
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DbConnection")));
 
         services.AddScoped<IUnitOfWork>(provider =>
             provider.GetRequiredService<AppDbContext>());
