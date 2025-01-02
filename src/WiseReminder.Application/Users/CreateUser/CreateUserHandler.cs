@@ -13,6 +13,7 @@ public sealed class CreateUserHandler(
         var username = new Username(request.Username);
 
         var login = new Login(request.Login);
+        //TODO: Create check for whether login has been already created
 
         var password = new HashedPassword(encryptService.Encrypt(request.Password));
 
