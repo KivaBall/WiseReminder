@@ -13,7 +13,7 @@ if (app.Configuration["InitialSeeding"] == "true")
     app.ApplySeeding();
 }
 
-if (app.Environment.IsDevelopment())
+if (app.Configuration["AllowScalar"] == "true")
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
