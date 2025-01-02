@@ -3,36 +3,38 @@ version: '3.8'
 services:
   wisereminder.webapi:
     image: wisereminder.webapi
+    container_name: webapi
     build:
       context: .
       dockerfile: src/WiseReminder.WebAPI/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DatabaseConnection=Server=sqlserver;Database=WiseReminder;User Id=sa;Password=312_SQL_Password_312;TrustServerCertificate=True;
       - ConnectionStrings__RedisConnection=redis:6379
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=wisereminder;Username=postgres;Password=123456
       - ConnectionStrings__SeqConnection=http://seq:5341/
       - JWTPassword=ThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKey
     ports:
       - "8080:8080"
     depends_on:
       - redis
-      - sqlserver
+      - postgres
       - seq
 
   redis:
-    image: redis:7
+    image: redis:latest
     container_name: redis
     ports:
       - "6379:6379"
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+  postgres:
+    image: postgres:latest
+    container_name: postgres
     environment:
-      SA_PASSWORD: "312_SQL_Password_312"
-      ACCEPT_EULA: "Y"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: wise_reminder
     ports:
-      - "1433:1433"
+      - "5432:5432"
 
   seq:
     image: datalust/seq:latest
