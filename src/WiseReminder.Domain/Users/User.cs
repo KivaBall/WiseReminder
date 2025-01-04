@@ -21,9 +21,6 @@ public sealed class User : Entity<User>
     public Subscription Subscription { get; private set; }
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Local
-    public Guid? AuthorId { get; private set; }
-
-    // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public Author? Author { get; private set; }
 
     public Result<User> ApplySubscription(Subscription subscription)

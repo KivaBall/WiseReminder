@@ -3,14 +3,13 @@
 public sealed class Author : Entity<Author>
 {
     private Author(AuthorName name, Biography biography, Date birthDate, Date? deathDate,
-        User? user)
+        Guid? userId)
     {
         Name = name;
         Biography = biography;
         BirthDate = birthDate;
         DeathDate = deathDate;
-        UserId = user?.Id;
-        User = user;
+        UserId = userId;
     }
 
     // ReSharper disable once UnusedMember.Local
@@ -24,13 +23,13 @@ public sealed class Author : Entity<Author>
     public Date? DeathDate { get; private set; }
 
     public Guid? UserId { get; private set; }
-    public User? User { get; private set; }
+    public User? User { get; }
     public ICollection<Quote> Quotes { get; } = [];
 
     public static Result<Author> Create(AuthorName name, Biography biography, Date birthDate,
-        Date? deathDate, User? user)
+        Date? deathDate, Guid? userId)
     {
-        if (!IsEitherUserOrDeathDate(deathDate, user))
+        if (!IsEitherUserOrDeathDate(deathDate, userId))
         {
             return Result.Fail(AuthorErrors.EitherDeathDateOrUserRelation);
         }
@@ -40,7 +39,7 @@ public sealed class Author : Entity<Author>
             return Result.Fail(AuthorErrors.InvalidDateDiapason);
         }
 
-        var author = new Author(name, biography, birthDate, deathDate, user);
+        var author = new Author(name, biography, birthDate, deathDate, userId);
 
         return Result.Ok(author);
     }
@@ -61,9 +60,9 @@ public sealed class Author : Entity<Author>
         return Result.Ok(this);
     }
 
-    private static bool IsEitherUserOrDeathDate(Date? deathDate, User? user)
+    private static bool IsEitherUserOrDeathDate(Date? deathDate, Guid? userId)
     {
-        if (user != null && deathDate != null)
+        if (userId != null && deathDate != null)
         {
             return false;
         }
