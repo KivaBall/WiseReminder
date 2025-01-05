@@ -1,6 +1,6 @@
 namespace WiseReminder.IntegrationTests.Abstractions.Fixtures;
 
-public sealed record IdsFixture
+public sealed record AdminIdsFixture
 {
     public required Guid CategoryId { get; init; }
     public required Guid AuthorId { get; init; }
