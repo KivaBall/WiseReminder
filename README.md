@@ -1,73 +1,33 @@
-# 🔔 WiseReminder 📜
+# 🦉 WiseReminder 🧙🏻‍♂️
 
-**WiseReminder** is a Web API designed to generate philosophical quotes stored in a database. Users can browse for quotes, their categories, and authors. There is also an additional part developed from the administrator's point of view, which can add, update or delete all entities
+![image](assets/brand/banner/banner.png)
 
-## Structure of the subject area
+**WiseReminder** is a web-based API designed to manage quotes, their categories, and authors. The project provides a functional backend system for creating and managing quotes, with features such as user subscriptions and localization for international accessibility
 
-The subject area includes three classes that are used in the form of Entity:
+---
 
-1. Category is a certain abstraction for categorizing quotes by a certain topic
+## Overview 📝
 
-![image](https://github.com/user-attachments/assets/b8a88047-627d-4938-a907-2725384b0d43)
+WiseReminder enables administrators and users to:
 
-2. Author is a person who wrote certain quotes, i.e. is their author
+- Create and manage quotes, authors, and categories
+- Use a subscription system to control access for users
+- Automatically translate quotes into multiple languages using AI-powered localization tools, making the service accessible to a global audience
 
-![image](https://github.com/user-attachments/assets/fb03bda3-f578-4ba8-b7bf-e29101626c0e)
+---
 
-3. Quote is a quote that contains a category and an author
+## Quick Start 🚀
 
-![image](https://github.com/user-attachments/assets/c714cb30-61f8-4417-9121-2b74547776ba)
+To quickly start the application, follow these steps:
+1. Clone repository
+2. Install Docker (if not installed follow [the instructions](https://docs.docker.com/engine/install/))
+3. Run the application using Docker Compose file
+4. That's it! Then just go to the localhost:8080
 
-## Subject area diagram
+---
 
-![image](https://github.com/user-attachments/assets/e1946acd-b901-4590-8f66-7d1ef6a1efdf)
+## Documentation 📚
 
-## API methods
-
-![image](https://github.com/user-attachments/assets/75c062b2-bb4e-421b-bbf6-228a383fd964)
-
-
-### Authorization
-
-- **POST** `/api/auth/login-as-admin` - login as admin (for CUD HTTP methods)
-
-### Authors
-
-- **POST** `/api/authors` - create new author
-- **GET** `/api/authors/{id}` - get author by his id
-- **GET** `/api/authors` - get all authors
-- **PUT** `/api/authors` - update author
-- **DELETE** `/api/authors/{id}` - delete author
-
-### Categories
-
-- **POST** `/api/categories` - create new category
-- **GET** `/api/categories/{id}` - get category by its id
-- **GET** `/api/categories` - get all categories
-- **PUT** `/api/categories` - update category
-- **DELETE** `/api/categories/{id}` - delete category
-
-### Quotes
-
-- **POST** `/api/quotes` - create new quote
-- **GET** `/api/quotes/{id}` - get quote by its id
-- **GET** `/api/quotes/by-author/{authorId}` - get all quotes by author id
-- **GET** `/api/quotes/by-category/{categoryId}` - get all quotes by category id
-- **GET** `/api/quotes/random` - get random quote
-- **PUT** `/api/quotes` - update quote
-- **DELETE** `/api/quotes/{id}` - delete quote
-
-## Authorization
-
-The `POST`, `PUT`, `DELETE` methods require authorization through a JWT token. Authorization is carried out through the **login** method. After successful login, the user receives a JWT token that must be added to requests to perform secure operations. But it should be noted that the system was implemented from the point of view that we can have only one admin. Therefore, no separate entities were created in the database for this purpose. Other methods, such as **getting lists of quotes, categories, authors**, as well as **getting a random quote** are available without authorization for all users.
-
-## Technologies
-
-The project uses the following technologies and architectural approaches:
-- Clean Architecture
-- Domain-Driven Design (DDD)
-- MediatR
-- FluentValidation
-- JWT Bearer
-- Entity Framework Core
-- Microsoft SQL Server
+- [API Methods](docs/api-methods.md): contains detailed information about all available API endpoints
+- [Used Technologies](docs/technologies.md): provides an overview of the technical part of the project
+- [Subject Area](docs/subject-area.md): outlines the subject area of the project
