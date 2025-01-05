@@ -5,12 +5,12 @@ public static class AuthorData
     public static string DefaultName = "DefaultName";
     public static string DefaultBiography = "DefaultBiography";
     public static readonly DateOnly DefaultBirthDate = new(1980, 1, 1);
-    public static readonly DateOnly DefaultDeathDate = new(2010, 01, 01);
+    public static readonly DateOnly DefaultDeathDate = new(2010, 1, 1);
 
     public static string UpdatedName = "UpdatedName";
     public static string UpdatedBiography = "UpdatedBiography";
     public static readonly DateOnly UpdatedBirthDate = new(1981, 1, 1);
-    public static readonly DateOnly UpdatedDeathDate = new(2011, 01, 01);
+    public static readonly DateOnly UpdatedDeathDate = new(2011, 1, 1);
 
     public static AdminAuthorRequest CreateAdminAuthorRequest =>
         AdminAuthorRequest(DefaultName, DefaultBiography, DefaultBirthDate, DefaultDeathDate);
