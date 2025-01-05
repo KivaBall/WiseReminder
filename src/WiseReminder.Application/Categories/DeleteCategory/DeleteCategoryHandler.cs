@@ -19,9 +19,7 @@ public sealed class DeleteCategoryHandler(
             return category.ToResult();
         }
 
-        categoryRepository.DeleteCategory(category.Value);
-
-        var quotesQuery = new DeleteQuotesByCategoryIdCommand(request.Id); //TODO: Bonetrip xD
+        var quotesQuery = new DeleteQuotesByCategoryIdCommand(request.Id);
 
         var result = await sender.Send(quotesQuery, cancellationToken);
 
@@ -29,6 +27,8 @@ public sealed class DeleteCategoryHandler(
         {
             return result;
         }
+
+        categoryRepository.DeleteCategory(category.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

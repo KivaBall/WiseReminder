@@ -19,8 +19,6 @@ public sealed class UserDeleteAuthorHandler(
             return author.ToResult();
         }
 
-        authorRepository.DeleteAuthor(author.Value);
-
         var quotesQuery = new DeleteQuotesByAuthorIdCommand(author.Value.Id);
 
         var result = await sender.Send(quotesQuery, cancellationToken);
@@ -29,6 +27,8 @@ public sealed class UserDeleteAuthorHandler(
         {
             return result;
         }
+
+        authorRepository.DeleteAuthor(author.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }
