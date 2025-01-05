@@ -20,7 +20,6 @@ public sealed class User : Entity<User>
     public HashedPassword HashedPassword { get; private set; }
     public Subscription Subscription { get; private set; }
 
-    // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public Author? Author { get; private set; }
 
     public Result<User> ApplySubscription(Subscription subscription)
