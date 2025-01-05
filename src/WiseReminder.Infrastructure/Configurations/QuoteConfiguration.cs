@@ -4,17 +4,35 @@ public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 {
     public void Configure(EntityTypeBuilder<Quote> builder)
     {
-        builder.HasKey(q => q.Id);
-        builder.Property(a => a.AddedAt);
+        builder.ToTable("quotes");
 
-        builder.HasQueryFilter(q => q.DeletedAt == null);
+        builder.Property(q => q.Id)
+            .HasColumnName("id");
+        builder.HasKey(q => q.Id);
+
+        builder.Property(q => q.AddedAt)
+            .HasColumnName("added_at");
+
+        builder.Property(q => q.IsDeleted)
+            .HasColumnName("is_deleted");
         builder.HasQueryFilter(q => q.IsDeleted == false);
+
+        builder.Property(q => q.DeletedAt)
+            .HasColumnName("deleted_at");
 
         builder.Property(q => q.Text)
             .HasMaxLength(1024)
-            .HasConversion(text => text.Value, value => new Text(value));
+            .HasConversion(text => text.Value, value => new Text(value))
+            .HasColumnName("text");
 
         builder.Property(q => q.QuoteDate)
-            .HasConversion(date => date.Value, value => Date.Create(value).ValueOrDefault);
+            .HasConversion(date => date.Value, value => Date.Create(value).ValueOrDefault)
+            .HasColumnName("quote_date");
+
+        builder.Property(q => q.AuthorId)
+            .HasColumnName("author_id");
+
+        builder.Property(q => q.CategoryId)
+            .HasColumnName("category_id");
     }
 }
