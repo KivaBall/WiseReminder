@@ -21,7 +21,7 @@ public sealed class DeleteQuotesByAuthorIdHandler(
 
         foreach (var quote in quotes.Value)
         {
-            repository.DeleteQuote(quote);
+            await repository.DeleteQuote(quote);
         }
 
         return await unitOfWork.SaveChangesAsync();

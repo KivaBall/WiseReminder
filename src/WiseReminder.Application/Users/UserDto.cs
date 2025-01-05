@@ -6,5 +6,4 @@ public sealed record UserDto
     public required string Username { get; init; }
     public required string Login { get; init; }
     public required string Subscription { get; init; }
-    public required Guid? AuthorId { get; init; }
 }

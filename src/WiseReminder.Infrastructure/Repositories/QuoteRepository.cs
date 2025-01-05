@@ -1,8 +1,7 @@
 ﻿namespace WiseReminder.Infrastructure.Repositories;
 
 public sealed class QuoteRepository(
-    AppDbContext context,
-    ICacheService cacheService)
+    AppDbContext context)
     : IQuoteRepository
 {
     public void CreateQuote(Quote quote)
@@ -10,77 +9,40 @@ public sealed class QuoteRepository(
         context.Quotes.Add(quote);
     }
 
-    public void UpdateQuote(Quote quote)
+    public Task UpdateQuote(Quote quote)
     {
         context.Quotes.Update(quote);
+
+        return Task.CompletedTask;
     }
 
-    public void DeleteQuote(Quote quote)
+    public Task DeleteQuote(Quote quote)
     {
         quote.Delete();
 
         context.Quotes.Update(quote);
+
+        return Task.CompletedTask;
     }
 
     public async Task<Quote?> GetQuoteById(Guid id)
     {
-        var key = $"quote-{id}";
-
-        var quote = await cacheService.GetAsync<Quote>(key);
-
-        if (quote != null)
-        {
-            return quote;
-        }
-
-        var dbQuote = await context.Quotes.FirstOrDefaultAsync(q => q.Id == id);
-
-        if (dbQuote != null)
-        {
-            await cacheService.CreateAsync(key, dbQuote);
-        }
-
-        return dbQuote;
+        return await context.Quotes
+            .FirstOrDefaultAsync(q => q.Id == id);
     }
 
     public async Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId)
     {
-        var key = $"quote-category-{categoryId}";
-
-        var quotes = await cacheService.GetAsync<ICollection<Quote>>(key);
-
-        if (quotes != null)
-        {
-            return quotes;
-        }
-
-        var dbQuotes = await context.Quotes
+        return await context.Quotes
             .Where(q => q.CategoryId == categoryId)
             .ToListAsync();
-
-        await cacheService.CreateAsync(key, dbQuotes);
-
-        return dbQuotes;
     }
 
     public async Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId)
     {
-        var key = $"quote-author-{authorId}";
-
-        var quotes = await cacheService.GetAsync<ICollection<Quote>>(key);
-
-        if (quotes != null)
-        {
-            return quotes;
-        }
-
-        var dbQuotes = await context.Quotes
+        return await context.Quotes
             .Where(q => q.AuthorId == authorId)
             .ToListAsync();
-
-        await cacheService.CreateAsync(key, dbQuotes);
-
-        return dbQuotes;
     }
 
     public async Task<ICollection<Quote>> GetRandomQuotes(int amount)
@@ -101,17 +63,8 @@ public sealed class QuoteRepository(
 
     public async Task<Quote> GetDailyQuote()
     {
-        var quote = await cacheService.GetAsync<Quote>("daily-quote");
-
-        if (quote == null)
-        {
-            quote = await context.Quotes
-                .OrderBy(q => Guid.NewGuid())
-                .FirstAsync();
-
-            await cacheService.CreateAsync("daily-quote", quote, TimeSpan.FromDays(1));
-        }
-
-        return quote;
+        return await context.Quotes
+            .OrderBy(q => Guid.NewGuid())
+            .FirstAsync();
     }
 }

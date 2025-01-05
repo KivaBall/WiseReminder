@@ -1,59 +1,59 @@
-using WiseReminder.WebAPI.Controllers.Quotes;
-
 namespace WiseReminder.IntegrationTests.Abstractions.Data;
 
 public static class QuoteData
 {
-    public const string DefaultText = "DefaultText";
-    public const string UpdatedText = "UpdatedText";
-
+    public static string DefaultText = "DefaultText";
     public static readonly DateOnly DefaultQuoteDate = new(2000, 01, 01);
+
+    public static string UpdatedText = "UpdatedText";
     public static readonly DateOnly UpdatedQuoteDate = new(2001, 01, 01);
 
-    public static BaseQuoteAsAdminRequest BaseQuoteRequest(Guid authorId, Guid categoryId)
+    public static AdminQuoteRequest InvalidAdminQuoteRequest =>
+        AdminQuoteRequest(null!, Guid.Empty, Guid.Empty, default);
+
+    public static UserQuoteRequest InvalidUserQuoteRequest =>
+        UserQuoteRequest(null!, Guid.Empty, default);
+
+    private static AdminQuoteRequest AdminQuoteRequest(string text, Guid authorId, Guid categoryId,
+        DateOnly quoteDate)
     {
-        return new BaseQuoteAsAdminRequest
+        return new AdminQuoteRequest
         {
-            Text = DefaultText,
+            Text = text,
             AuthorId = authorId,
             CategoryId = categoryId,
-            QuoteDate = DefaultQuoteDate
+            QuoteDate = quoteDate
         };
     }
 
-    public static BaseQuoteAsAdminRequest NotValidBaseQuoteRequest(Guid authorId, Guid categoryId)
+    public static AdminQuoteRequest CreateAdminQuoteRequest(Guid authorId, Guid categoryId)
     {
-        return new BaseQuoteAsAdminRequest
+        return AdminQuoteRequest(DefaultText, authorId, categoryId, DefaultQuoteDate);
+    }
+
+    public static AdminQuoteRequest UpdateAdminQuoteRequest(Guid authorId, Guid categoryId)
+    {
+        return AdminQuoteRequest(UpdatedText, authorId, categoryId, UpdatedQuoteDate);
+    }
+
+    private static UserQuoteRequest UserQuoteRequest(string text, Guid categoryId,
+        DateOnly quoteDate)
+    {
+        return new UserQuoteRequest
         {
-            Text = null!,
-            AuthorId = authorId,
+            Text = text,
             CategoryId = categoryId,
-            QuoteDate = default
+            QuoteDate = quoteDate
         };
     }
 
-    public static BaseQuoteAsAdminRequest UpdateQuoteRequest(Guid id, Guid authorId, Guid categoryId)
+    public static UserQuoteRequest CreateUserQuoteRequest(Guid categoryId)
     {
-        return new BaseQuoteAsAdminRequest
-        {
-            Id = id,
-            Text = UpdatedText,
-            AuthorId = authorId,
-            CategoryId = categoryId,
-            QuoteDate = UpdatedQuoteDate
-        };
+        return UserQuoteRequest(DefaultText, categoryId, DefaultQuoteDate);
     }
 
-    public static UpdateQuoteRequest NotValidUpdateQuoteRequest(Guid id, Guid authorId,
-        Guid categoryId)
+    public static UserQuoteRequest UpdateUserQuoteRequest(Guid categoryId)
     {
-        return new UpdateQuoteRequest
-        {
-            Id = id,
-            Text = null!,
-            AuthorId = authorId,
-            CategoryId = categoryId,
-            QuoteDate = default
-        };
+        return UserQuoteRequest(UpdatedText, categoryId, UpdatedQuoteDate);
     }
 }

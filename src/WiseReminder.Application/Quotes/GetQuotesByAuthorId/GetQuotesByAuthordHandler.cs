@@ -17,9 +17,9 @@ public sealed class GetQuotesByAuthorIdHandler(
         {
             return author.ToResult();
         }
-        
+
         var quotes = await repository.GetQuotesByAuthorId(request.AuthorId);
-        
+
         return Result.Ok(quotes);
     }
 }

@@ -19,11 +19,15 @@ public sealed class DeleteUserHandler(
             return Result.Fail(UserErrors.UserNotFound);
         }
 
-        if (user.Value.AuthorId != null)
-        {
-            var authorQuery = new AdminDeleteAuthorCommand(user.Value.AuthorId.Value); //TODO: Is it necessary for db? Checking is needed
+        var authorQuery = new GetAuthorByUserIdQuery(request.Id);
 
-            await sender.Send(authorQuery, cancellationToken);
+        var author = await sender.Send(authorQuery, cancellationToken);
+
+        if (author.IsSuccess)
+        {
+            var authorCommand = new AdminDeleteAuthorCommand(author.Value.Id);
+
+            await sender.Send(authorCommand, cancellationToken);
         }
 
         userRepository.DeleteUser(user.Value);

@@ -27,7 +27,7 @@ public class QuoteTests
         var quote = Quote.Create(
             new Text("TestText"),
             author.Value,
-            category,
+            category.Id,
             Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
 
         // Assert
@@ -59,7 +59,7 @@ public class QuoteTests
         var quote = Quote.Create(
             new Text("TestText"),
             author.Value,
-            category,
+            category.Id,
             Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
 
         // Assert

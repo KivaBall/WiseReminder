@@ -4,8 +4,7 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
 {
     public string GenerateJwtTokenForUser(Guid userId)
     {
-        var jwtPassword = configuration["JWTPassword"] ??
-                          throw new Exception("JWTPassword isn't in appsettings.json");
+        var jwtPassword = configuration["JWTPassword"]!;
 
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
@@ -20,11 +19,9 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
             Issuer = "WiseReminder.com",
             Audience = "WiseReminder.com",
             Expires = DateTime.UtcNow.AddHours(48),
-            SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature),
-            Claims = claims,
-            Subject = new ClaimsIdentity("User")
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature),
+            Claims = claims
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -36,14 +33,13 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
 
     public string GenerateJwtTokenForAdmin()
     {
-        var jwtPassword = configuration["JWTPassword"] ??
-                          throw new Exception("JWTPassword isn't in appsettings.json");
+        var jwtPassword = configuration["JWTPassword"]!;
 
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
         var claims = new Dictionary<string, object>
         {
-            { "Role", "Admin" }
+            { ClaimTypes.Role, "Admin" }
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -51,11 +47,9 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
             Issuer = "WiseReminder.com",
             Audience = "WiseReminder.com",
             Expires = DateTime.UtcNow.AddHours(48),
-            SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature),
-            Claims = claims,
-            Subject = new ClaimsIdentity("Admin")
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature),
+            Claims = claims
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

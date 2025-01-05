@@ -10,4 +10,7 @@ public static class UserErrors
 
     public static IError UserIdNotValid =>
         new Error("UserId is not valid");
+
+    public static IError LoginAlreadyExists =>
+        new Error("Login is already exists");
 }

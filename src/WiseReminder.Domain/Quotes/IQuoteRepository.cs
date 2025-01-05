@@ -3,8 +3,8 @@
 public interface IQuoteRepository
 {
     void CreateQuote(Quote quote);
-    void UpdateQuote(Quote quote);
-    void DeleteQuote(Quote quote);
+    Task UpdateQuote(Quote quote);
+    Task DeleteQuote(Quote quote);
     Task<Quote?> GetQuoteById(Guid id);
     Task<Quote> GetDailyQuote();
     Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId);

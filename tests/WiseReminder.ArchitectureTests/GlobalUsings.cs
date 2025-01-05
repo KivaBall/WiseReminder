@@ -1,4 +1,5 @@
-global using WiseReminder.Domain.Shared;
-global using WiseReminder.Infrastructure.Caching;
-global using WiseReminder.WebAPI.Controllers.Categories;
+global using WiseReminder.Application;
+global using WiseReminder.Domain.Abstractions;
+global using WiseReminder.Infrastructure;
+global using WiseReminder.WebAPI;
 global using Xunit.Abstractions;

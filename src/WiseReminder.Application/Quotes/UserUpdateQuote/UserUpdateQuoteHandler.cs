@@ -28,7 +28,7 @@ public sealed class UserUpdateQuoteHandler(
             return author.ToResult();
         }
 
-        if (quote.Value.AuthorId == author.Value.Id)
+        if (quote.Value.AuthorId != author.Value.Id)
         {
             return Result.Fail(UserErrors.UserIdNotValid);
         }
@@ -51,9 +51,9 @@ public sealed class UserUpdateQuoteHandler(
             return quoteDate.ToResult();
         }
 
-        quote.Value.Update(text, author.Value, category.Value, quoteDate.Value);
+        quote.Value.Update(text, author.Value, category.Value.Id, quoteDate.Value);
 
-        quoteRepository.UpdateQuote(quote.Value);
+        await quoteRepository.UpdateQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

@@ -33,7 +33,7 @@ public sealed class UserDeleteQuoteHandler(
             return Result.Fail(UserErrors.UserIdNotValid);
         }
 
-        quoteRepository.DeleteQuote(quote.Value);
+        await quoteRepository.DeleteQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

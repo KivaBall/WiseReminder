@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WiseReminder.Infrastructure.Data;
 
 #nullable disable
@@ -11,114 +11,140 @@ using WiseReminder.Infrastructure.Data;
 namespace WiseReminder.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    sealed partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_at");
 
                     b.Property<string>("Biography")
                         .IsRequired()
                         .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasColumnType("character varying(2048)")
+                        .HasColumnName("biography");
 
                     b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("birth_date");
 
                     b.Property<DateOnly?>("DeathDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("death_date");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("authors", (string)null);
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Categories.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("description");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories", (string)null);
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Quotes.Quote", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_at");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<DateOnly>("QuoteDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("quote_date");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("text");
 
                     b.HasKey("Id");
 
@@ -126,55 +152,65 @@ namespace WiseReminder.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Quotes");
+                    b.ToTable("quotes", (string)null);
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("hashed_password");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("login");
 
                     b.Property<int>("Subscription")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("subscription");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("username");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId")
-                        .IsUnique()
-                        .HasFilter("[AuthorId] IS NOT NULL");
 
                     b.HasIndex("Login")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
+                {
+                    b.HasOne("WiseReminder.Domain.Users.User", "User")
+                        .WithOne("Author")
+                        .HasForeignKey("WiseReminder.Domain.Authors.Author", "UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Quotes.Quote", b =>
@@ -196,25 +232,19 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
-                {
-                    b.HasOne("WiseReminder.Domain.Authors.Author", "Author")
-                        .WithOne("User")
-                        .HasForeignKey("WiseReminder.Domain.Users.User", "AuthorId");
-
-                    b.Navigation("Author");
-                });
-
             modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
                 {
                     b.Navigation("Quotes");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Categories.Category", b =>
                 {
                     b.Navigation("Quotes");
+                });
+
+            modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
+                {
+                    b.Navigation("Author");
                 });
 #pragma warning restore 612, 618
         }

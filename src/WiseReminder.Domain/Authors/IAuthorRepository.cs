@@ -6,5 +6,6 @@ public interface IAuthorRepository
     void UpdateAuthor(Author author);
     void DeleteAuthor(Author author);
     Task<Author?> GetAuthorById(Guid id);
+    Task<Author?> GetAuthorByUserId(Guid userId);
     Task<ICollection<Author>> GetAllAuthors();
 }

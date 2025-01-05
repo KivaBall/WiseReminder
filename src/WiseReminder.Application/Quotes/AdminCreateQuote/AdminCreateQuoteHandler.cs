@@ -42,7 +42,7 @@ public sealed class AdminCreateQuoteHandler(
             return quoteDate.ToResult();
         }
 
-        var quote = Quote.Create(text, author.Value, category.Value, quoteDate.Value);
+        var quote = Quote.Create(text, author.Value, category.Value.Id, quoteDate.Value);
 
         if (quote.IsFailed)
         {

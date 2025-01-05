@@ -24,8 +24,6 @@ public sealed class AdminDeleteAuthorHandler(
             return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
 
-        authorRepository.DeleteAuthor(author.Value);
-
         var quotesQuery = new DeleteQuotesByAuthorIdCommand(request.Id);
 
         var result = await sender.Send(quotesQuery, cancellationToken);
@@ -34,6 +32,8 @@ public sealed class AdminDeleteAuthorHandler(
         {
             return result;
         }
+
+        authorRepository.DeleteAuthor(author.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

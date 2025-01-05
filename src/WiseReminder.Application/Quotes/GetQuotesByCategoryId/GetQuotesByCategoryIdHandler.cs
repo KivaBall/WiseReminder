@@ -17,9 +17,9 @@ public sealed class GetQuotesByCategoryIdHandler(
         {
             return category.ToResult();
         }
-        
+
         var quotes = await repository.GetQuotesByCategoryId(request.CategoryId);
-        
+
         return Result.Ok(quotes);
     }
 }

@@ -2,6 +2,7 @@
 
 public interface ICacheService
 {
-    Task CreateAsync<T>(string key, T entity, TimeSpan? time = null) where T : notnull;
-    Task<T?> GetAsync<T>(string key) where T : class;
+    Task<T> GetOrCreateAsync<T>(string key, Func<Task<T?>> entityFunc, TimeSpan? expiration = null);
+    Task SetAsync<T>(string key, T entity);
+    Task RemoveAsync(string key);
 }
