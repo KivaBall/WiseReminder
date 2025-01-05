@@ -4,31 +4,38 @@ public static class AuthHelper
 {
     public static async Task AdminLoginAsync(this HttpClient httpClient)
     {
-        var authRequest = new AdminLoginRequest
-        {
-            FirstPassword = "first_secret_admin_password",
-            SecondPassword = "second_secret_admin_password",
-            ThirdPassword = "third_secret_admin_password"
-        };
+        var request = UserData.DefaultAdminLoginRequest;
 
-        var authResponse = await httpClient.PostAsJsonAsync("api/users/admin-login", authRequest);
+        var response = await httpClient.PostAsync("api/users/admin-login", request);
+
+        var token = await response.Content.ReadAsStringAsync();
 
         httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", await authResponse.Content.ReadAsStringAsync());
+            new AuthenticationHeaderValue("Bearer", token);
     }
 
-    public static async Task UserLoginAsync(this HttpClient httpClient)
+    public static async Task EmptyUserLoginAsync(this HttpClient httpClient)
     {
-        var authRequest = new UserLoginRequest
-        {
-            Login = "DefaultLogin",
-            Password = "DefaultPassword"
-        };
+        var request = UserData.EmptyUserLoginRequest;
 
-        var authResponse = await httpClient.PostAsJsonAsync("api/users/login", authRequest);
+        var response = await httpClient.PostAsync("api/users/login", request);
+
+        var token = await response.Content.ReadAsStringAsync();
 
         httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", await authResponse.Content.ReadAsStringAsync());
+            new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    public static async Task UserWithDataLoginAsync(this HttpClient httpClient)
+    {
+        var request = UserData.UserWithDataLoginRequest;
+
+        var response = await httpClient.PostAsync("api/users/login", request);
+
+        var token = await response.Content.ReadAsStringAsync();
+
+        httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
     }
 
     public static void Logout(this HttpClient httpClient)
