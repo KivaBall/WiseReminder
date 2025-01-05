@@ -1,6 +1,6 @@
 namespace WiseReminder.IntegrationTests.Abstractions;
 
-public sealed class WebAppFactory : WebApplicationFactory<Program>, IDisposable
+public sealed class WebAppFactory : WebApplicationFactory<Program>
 {
     private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
         .WithImage("postgres:alpine")
@@ -49,7 +49,7 @@ public sealed class WebAppFactory : WebApplicationFactory<Program>, IDisposable
 
                 return;
             }
-            catch (Exception ex)
+            catch
             {
                 Thread.Sleep(250);
             }
