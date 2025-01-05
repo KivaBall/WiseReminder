@@ -20,7 +20,6 @@ public static class InfrastructureExtensions
         services.AddSingleton<ICacheService, CacheService>();
         services.AddStackExchangeRedisCache(options =>
             options.Configuration = configuration.GetConnectionString("RedisConnection"));
-        services.AddSingleton<ICacheService, CacheService>();
 
         services.AddSingleton<IJwtService, JwtService>();
 
