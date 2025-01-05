@@ -28,7 +28,7 @@ public sealed class UserUpdateQuoteHandler(
             return author.ToResult();
         }
 
-        if (quote.Value.AuthorId == author.Value.Id)
+        if (quote.Value.AuthorId != author.Value.Id)
         {
             return Result.Fail(UserErrors.UserIdNotValid);
         }

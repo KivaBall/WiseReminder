@@ -21,21 +21,16 @@ public sealed class UserCreateAuthorHandler(
             return birthDate.ToResult();
         }
 
-        var query = new GetUserByIdQuery(request.UserId); //TODO: Maybe just call GetAuthorByUserId?
+        var authorQuery = new GetAuthorByUserIdQuery(request.UserId);
 
-        var user = await sender.Send(query, cancellationToken);
+        var result = await sender.Send(authorQuery, cancellationToken);
 
-        if (user.IsFailed)
-        {
-            return user.ToResult();
-        }
-
-        if (user.Value.AuthorId != null)
+        if (result.IsSuccess)
         {
             return Result.Fail(AuthorErrors.AuthorExistsForUser);
         }
 
-        var author = Author.Create(name, biography, birthDate.Value, null, user.Value);
+        var author = Author.Create(name, biography, birthDate.Value, null, request.UserId);
 
         if (author.IsFailed)
         {
