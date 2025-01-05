@@ -13,11 +13,17 @@ public sealed class CreateUserHandler(
         var username = new Username(request.Username);
 
         var login = new Login(request.Login);
-        //TODO: Create check for whether login has been already created
+
+        var user = await userRepository.GetUserByLogin(login);
+
+        if (user != null)
+        {
+            return Result.Fail(UserErrors.LoginAlreadyExists);
+        }
 
         var password = new HashedPassword(encryptService.Encrypt(request.Password));
 
-        var user = new User(username, login, password);
+        user = new User(username, login, password);
 
         userRepository.CreateUser(user);
 
