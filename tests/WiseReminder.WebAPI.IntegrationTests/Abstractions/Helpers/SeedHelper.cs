@@ -2,35 +2,49 @@ namespace WiseReminder.IntegrationTests.Abstractions.Helpers;
 
 public static class SeedHelper
 {
-    public static async Task<IdsFixture> SeedDataAsync(this HttpClient client)
+    public static async Task<AdminIdsFixture> SeedAdminDataAsync(this HttpClient client)
     {
         await client.AdminLoginAsync();
 
+
         var categoryRequest = CategoryData.CreateCategoryRequest;
 
-        var categoryId =
-            await (await client.PostAsJsonAsync("api/categories", categoryRequest))
-                .Content.ReadFromJsonAsync<Guid>();
+        var categoryResponse = await client.PostAsync("api/categories", categoryRequest);
+        await client.PostAsync("api/categories", categoryRequest);
+        await client.PostAsync("api/categories", categoryRequest);
+
+        var categoryId = await categoryResponse.ReadJson<Guid>();
+
 
         var authorRequest = AuthorData.CreateAdminAuthorRequest;
 
-        var authorId =
-            await (await client.PostAsJsonAsync("api/authors", authorRequest)).Content
-                .ReadFromJsonAsync<Guid>();
+        var authorResponse = await client.PostAsync("api/authors", authorRequest);
+        await client.PostAsync("api/authors", authorRequest);
+        await client.PostAsync("api/authors", authorRequest);
+
+        var authorId = await authorResponse.ReadJson<Guid>();
+
 
         var quoteRequest = QuoteData.CreateAdminQuoteRequest(authorId, categoryId);
 
-        var quoteId =
-            await (await client.PostAsJsonAsync("api/quotes", quoteRequest)).Content
-                .ReadFromJsonAsync<Guid>();
+        var quoteResponse = await client.PostAsync("api/quotes", quoteRequest);
+        await client.PostAsync("api/quotes", quoteRequest);
+        await client.PostAsync("api/quotes", quoteRequest);
 
-        var userRequest = UserData.CreateUserRequest;
+        var quoteId = await quoteResponse.ReadJson<Guid>();
 
-        var userId =
-            await (await client.PostAsJsonAsync("api/users/register", userRequest)).Content
-                .ReadFromJsonAsync<Guid>();
 
-        var initialIds = new IdsFixture
+        var userRequest = UserData.CreateEmptyUserRequest;
+
+        var userResponse = await client.PostAsync("api/users/register", userRequest);
+
+        var userId = await userResponse.ReadJson<Guid>();
+
+
+        client.Logout();
+
+
+        var ids = new AdminIdsFixture
         {
             CategoryId = categoryId,
             AuthorId = authorId,
@@ -38,8 +52,47 @@ public static class SeedHelper
             UserId = userId
         };
 
+        return ids;
+    }
+
+    public static async Task<UserIdsFixture> SeedUserWithDataAsync(
+        this HttpClient client,
+        Guid categoryId)
+    {
+        var userRequest = UserData.CreateUserWithDataRequest;
+
+        var userResponse = await client.PostAsync("api/users/register", userRequest);
+
+        var userId = await userResponse.ReadJson<Guid>();
+
+
+        await client.UserWithDataLoginAsync();
+
+
+        var authorRequest = AuthorData.CreateUserAuthorRequest;
+
+        var authorResponse = await client.PostAsync("api/authors/own", authorRequest);
+
+        var authorId = await authorResponse.ReadJson<Guid>();
+
+
+        var quoteRequest = QuoteData.CreateUserQuoteRequest(categoryId);
+
+        var quoteResponse = await client.PostAsync("api/quotes/own", quoteRequest);
+
+        var quoteId = await quoteResponse.ReadJson<Guid>();
+
+
         client.Logout();
 
-        return initialIds;
+
+        var ids = new UserIdsFixture
+        {
+            UserId = userId,
+            AuthorId = authorId,
+            QuoteId = quoteId
+        };
+
+        return ids;
     }
 }

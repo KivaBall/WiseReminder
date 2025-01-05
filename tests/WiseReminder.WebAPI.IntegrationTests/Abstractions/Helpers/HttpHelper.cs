@@ -3,7 +3,7 @@ namespace WiseReminder.IntegrationTests.Abstractions.Helpers;
 public static class HttpHelper
 {
     public static async Task<HttpResponseMessage> PostAsync<T>(
-        this HttpClient client, 
+        this HttpClient client,
         string url,
         T request)
     {
