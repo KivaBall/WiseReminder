@@ -33,7 +33,7 @@ public sealed class AdminDeleteQuoteHandler(
             return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
         }
 
-        quoteRepository.DeleteQuote(quote.Value);
+        await quoteRepository.DeleteQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

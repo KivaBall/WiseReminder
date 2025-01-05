@@ -51,9 +51,9 @@ public sealed class UserUpdateQuoteHandler(
             return quoteDate.ToResult();
         }
 
-        quote.Value.Update(text, author.Value, category.Value, quoteDate.Value);
+        quote.Value.Update(text, author.Value, category.Value.Id, quoteDate.Value);
 
-        quoteRepository.UpdateQuote(quote.Value);
+        await quoteRepository.UpdateQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }
