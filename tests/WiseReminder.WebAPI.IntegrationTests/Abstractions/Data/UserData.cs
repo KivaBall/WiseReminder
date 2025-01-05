@@ -3,14 +3,18 @@ namespace WiseReminder.IntegrationTests.Abstractions.Data;
 public static class UserData
 {
     public static string DefaultUsername = "DefaultUsername";
-    public static string DefaultLogin = "DefaultLogin";
+    public static string DefaultLoginForEmptyUser = "DefaultLoginForEmptyUser";
+    public static string DefaultLoginForUserWithData = "DefaultLoginForUserWithData";
     public static string DefaultPassword = "DefaultPassword";
 
     public static string UpdatedUsername = "UpdatedUsername";
     public static string UpdatedPassword = "UpdatedPassword";
 
-    public static UserRequest CreateUserRequest =>
-        UserRequest(DefaultUsername, DefaultLogin, DefaultPassword);
+    public static UserRequest CreateEmptyUserRequest =>
+        UserRequest(DefaultUsername, DefaultLoginForEmptyUser, DefaultPassword);
+
+    public static UserRequest CreateUserWithDataRequest =>
+        UserRequest(DefaultUsername, DefaultLoginForUserWithData, DefaultPassword);
 
     public static UserRequest InvalidUserRequest =>
         UserRequest(null!, null!, null!);
@@ -27,11 +31,11 @@ public static class UserData
     public static ChangePasswordRequest InvalidChangePasswordRequest =>
         ChangePasswordRequest(null!, null!);
 
-    public static UserLoginRequest DefaultUserLoginRequest =>
-        UserLoginRequest(DefaultLogin, DefaultPassword);
+    public static UserLoginRequest EmptyUserLoginRequest =>
+        UserLoginRequest(DefaultLoginForEmptyUser, DefaultPassword);
 
-    public static UserLoginRequest UpdatedUserLoginRequest =>
-        UserLoginRequest(DefaultLogin, UpdatedPassword);
+    public static UserLoginRequest UserWithDataLoginRequest =>
+        UserLoginRequest(DefaultLoginForUserWithData, DefaultPassword);
 
     public static UserLoginRequest InvalidUserLoginRequest =>
         UserLoginRequest(null!, null!);
@@ -72,15 +76,6 @@ public static class UserData
         };
     }
 
-    private static UserLoginRequest UserLoginRequest(string login, string password)
-    {
-        return new UserLoginRequest
-        {
-            Login = login,
-            Password = password
-        };
-    }
-
     private static AdminLoginRequest AdminLoginRequest(string firstPassword, string secondPassword,
         string thirdPassword)
     {
@@ -89,6 +84,15 @@ public static class UserData
             FirstPassword = firstPassword,
             SecondPassword = secondPassword,
             ThirdPassword = thirdPassword
+        };
+    }
+
+    private static UserLoginRequest UserLoginRequest(string login, string password)
+    {
+        return new UserLoginRequest
+        {
+            Login = login,
+            Password = password
         };
     }
 }
