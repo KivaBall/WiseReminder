@@ -1,6 +1,6 @@
 # 🦉 WiseReminder 🧙🏻‍♂️
 
-![image](https://github.com/KivaBall/WiseReminder/blob/docs-assets-integration/assets/banner.png)
+![image](https://github.com/KivaBall/WiseReminder/blob/docs-assets-integration/assets/brand/banner/banner.png)
 
 **WiseReminder** is a web-based API designed to manage quotes, their categories, and authors. The project provides a functional backend system for creating and managing quotes, with features such as user subscriptions and localization for international accessibility.
 
