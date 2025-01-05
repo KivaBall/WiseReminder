@@ -12,11 +12,12 @@ public static class InfrastructureExtensions
             provider.GetRequiredService<AppDbContext>());
 
         services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IQuoteRepository, QuoteRepository>();
+        services.AddKeyedScoped<IQuoteRepository, QuoteRepository>("original-quote-repository");
+        services.AddScoped<IQuoteRepository, CachedQuoteRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
-        services.AddMemoryCache();
+        services.AddSingleton<ICacheService, CacheService>();
         services.AddStackExchangeRedisCache(options =>
             options.Configuration = configuration.GetConnectionString("RedisConnection"));
         services.AddSingleton<ICacheService, CacheService>();
