@@ -1,6 +1,7 @@
 namespace WiseReminder.Application.Authors.GetAuthorByUserId;
 
 public sealed class GetAuthorByUserIdHandler(
+    IAuthorRepository repository,
     ISender sender)
     : IQueryHandler<GetAuthorByUserIdQuery, Author>
 {
@@ -17,20 +18,13 @@ public sealed class GetAuthorByUserIdHandler(
             return user.ToResult();
         }
 
-        if (user.Value.AuthorId == null)
+        var author = await repository.GetAuthorByUserId(request.UserId);
+
+        if (author == null)
         {
             return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
         }
 
-        var authorQuery = new GetAuthorByIdQuery(user.Value.AuthorId.Value);
-
-        var author = await sender.Send(authorQuery, cancellationToken);
-
-        if (author.IsFailed)
-        {
-            return author.ToResult();
-        }
-
-        return Result.Ok(author.Value);
+        return Result.Ok(author);
     }
 }
