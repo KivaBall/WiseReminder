@@ -1,8 +1,7 @@
 ﻿namespace WiseReminder.Infrastructure.Repositories;
 
 public sealed class AuthorRepository(
-    AppDbContext context,
-    IMemoryCache memoryCache)
+    AppDbContext context)
     : IAuthorRepository
 {
     public void CreateAuthor(Author author)
@@ -24,25 +23,19 @@ public sealed class AuthorRepository(
 
     public async Task<Author?> GetAuthorById(Guid id)
     {
-        var key = $"author-{id}";
+        return await context.Authors
+            .FirstOrDefaultAsync(author => author.Id == id);
+    }
 
-        return await memoryCache.GetOrCreateAsync(key, async factory =>
-        {
-            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-
-            return await context.Authors.FirstOrDefaultAsync(author => author.Id == id);
-        });
+    public async Task<Author?> GetAuthorByUserId(Guid userId)
+    {
+        return await context.Authors
+            .FirstOrDefaultAsync(author => author.UserId == userId);
     }
 
     public async Task<ICollection<Author>> GetAllAuthors()
     {
-        var key = "author-all";
-
-        return await memoryCache.GetOrCreateAsync(key, async factory =>
-        {
-            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-
-            return await context.Authors.ToListAsync();
-        }) ?? [];
+        return await context.Authors
+            .ToListAsync();
     }
 }

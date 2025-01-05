@@ -1,8 +1,7 @@
 ﻿namespace WiseReminder.Infrastructure.Repositories;
 
 public sealed class CategoryRepository(
-    AppDbContext context,
-    IMemoryCache memoryCache)
+    AppDbContext context)
     : ICategoryRepository
 {
     public void CreateCategory(Category category)
@@ -24,25 +23,13 @@ public sealed class CategoryRepository(
 
     public async Task<Category?> GetCategoryById(Guid id)
     {
-        var key = $"category-{id}";
-
-        return await memoryCache.GetOrCreateAsync(key, async factory =>
-        {
-            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-
-            return await context.Categories.FirstOrDefaultAsync(category => category.Id == id);
-        });
+        return await context.Categories
+            .FirstOrDefaultAsync(category => category.Id == id);
     }
 
     public async Task<ICollection<Category>> GetAllCategories()
     {
-        var key = "category-all";
-
-        return await memoryCache.GetOrCreateAsync(key, async factory =>
-        {
-            factory.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-
-            return await context.Categories.ToListAsync();
-        }) ?? [];
+        return await context.Categories
+            .ToListAsync();
     }
 }
