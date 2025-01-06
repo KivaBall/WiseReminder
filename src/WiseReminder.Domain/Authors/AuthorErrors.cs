@@ -2,21 +2,24 @@
 
 public static class AuthorErrors
 {
-    public static IError AuthorNotFound =>
-        new Error("Author by Id was not found");
+    public static Result AuthorNotFound =>
+        new Error("Author with the specified ID was not found");
 
-    public static IError InvalidDateDiapason =>
-        new Error("Invalid date diapason between birth and death");
+    public static Result UserAuthorNotFound =>
+        new Error("The author has not been created for the user yet");
 
-    public static IError EitherDeathDateOrUserRelation =>
-        new Error("Must be either death date or user relation");
+    public static Result InvalidBirthAndDeathDateRange =>
+        new Error("The specified date range between birth and death is invalid");
 
-    public static IError AdminCannotChangeAuthorOfUser =>
-        new Error("As admin you cannot change author data if it belongs to user");
+    public static Result InvalidBirthAndMinQuoteDateRange =>
+        new Error("The specified date range between birth and minimal quote date is invalid");
 
-    public static IError AuthorExistsForUser =>
-        new Error("You have already added your author");
+    public static Result InvalidDeathAndMaxQuoteDateRange =>
+        new Error("The specified date range between death and maximal quote date is invalid");
 
-    public static IError AuthorNotExistsForUser =>
-        new Error("Author have not created yet");
+    public static Result AdminCannotModifyUserAuthor =>
+        new Error("Administrators are not allowed to modify author data belonging to a user");
+
+    public static Result DuplicateAuthorForUser =>
+        new Error("An author already exists for the user");
 }

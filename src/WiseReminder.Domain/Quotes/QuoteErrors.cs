@@ -2,9 +2,13 @@
 
 public static class QuoteErrors
 {
-    public static IError QuoteNotFound =>
-        new Error("Quote by Id was not found");
+    public static Result QuoteNotFound =>
+        new Error("The quote with the specified ID was not found");
 
-    public static IError QuoteDateOutOfRange =>
-        new Error("The date of quote is under bound of needed birth and death dates");
+    public static Result QuoteDateOutOfRange =>
+        new Error("The quote date is outside the" +
+                  " allowed range based on the author's birth and death dates");
+
+    public static Result QuoteLimitExceeded =>
+        new Error("The author has exceeded the allowed number of quotes for their subscription");
 }
