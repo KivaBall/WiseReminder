@@ -1,11 +1,3 @@
 ﻿namespace WiseReminder.Domain.Categories;
 
-public sealed record Description
-{
-    public Description(string value)
-    {
-        Value = value;
-    }
-
-    public string Value { get; }
-}
+public sealed record Description(string Value);
