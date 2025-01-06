@@ -11,4 +11,5 @@ public interface IQuoteRepository
     Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId);
     Task<ICollection<Quote>> GetRandomQuotes(int amount);
     Task<ICollection<Quote>> GetRecentAddedQuotes(int amount);
+    Task<int> GetNumberOfQuotesByAuthorId(Guid authorId);
 }

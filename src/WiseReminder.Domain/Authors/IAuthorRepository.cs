@@ -8,4 +8,5 @@ public interface IAuthorRepository
     Task<Author?> GetAuthorById(Guid id);
     Task<Author?> GetAuthorByUserId(Guid userId);
     Task<ICollection<Author>> GetAllAuthors();
+    Task<(Date minQuoteDate, Date maxQuoteDate)> GetMinimalAndMaxQuoteDatesById(Guid id);
 }
