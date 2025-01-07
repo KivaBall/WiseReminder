@@ -29,5 +29,8 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasMaxLength(1024)
             .HasConversion(description => description.Value, value => new Description(value))
             .HasColumnName("description");
+
+        builder.HasMany<Quote>().WithOne()
+            .HasForeignKey(c => c.CategoryId);
     }
 }

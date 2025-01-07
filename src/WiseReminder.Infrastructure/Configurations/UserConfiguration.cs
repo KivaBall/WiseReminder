@@ -40,11 +40,5 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Subscription)
             .HasColumnName("subscription");
-
-        builder
-            .HasOne(u => u.Author)
-            .WithOne(a => a.User)
-            .HasForeignKey<Author>(a => a.UserId)
-            .IsRequired(false);
     }
 }
