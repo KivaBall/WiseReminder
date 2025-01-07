@@ -1,8 +1,8 @@
 namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class UpdatePasswordRequestValidator : AbstractValidator<ChangePasswordRequest>
+public sealed class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordRequest>
 {
-    public UpdatePasswordRequestValidator()
+    public ChangePasswordRequestValidator()
     {
         RuleFor(r => r.OldPassword)
             .NotNull().WithMessage("Old password must not be null")

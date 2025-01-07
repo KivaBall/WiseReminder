@@ -1,8 +1,8 @@
 namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class UpdateUsernameRequestValidator : AbstractValidator<ChangeUsernameRequest>
+public sealed class ChangeUsernameRequestValidator : AbstractValidator<ChangeUsernameRequest>
 {
-    public UpdateUsernameRequestValidator()
+    public ChangeUsernameRequestValidator()
     {
         RuleFor(r => r.NewUsername)
             .NotNull().WithMessage("New username must not be null")

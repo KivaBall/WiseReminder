@@ -1,8 +1,8 @@
 ﻿namespace WiseReminder.WebAPI.Validators.Authors;
 
-public sealed class BaseAuthorAsAdminRequestValidator : AbstractValidator<AdminAuthorRequest>
+public sealed class AuthorByAdminRequestValidator : AbstractValidator<AdminAuthorRequest>
 {
-    public BaseAuthorAsAdminRequestValidator()
+    public AuthorByAdminRequestValidator()
     {
         RuleFor(r => r.Name)
             .NotNull().WithMessage("Name must not be null")

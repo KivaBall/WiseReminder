@@ -1,8 +1,8 @@
 namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class BaseUserRequestValidator : AbstractValidator<UserRequest>
+public sealed class UserRequestValidator : AbstractValidator<UserRequest>
 {
-    public BaseUserRequestValidator()
+    public UserRequestValidator()
     {
         RuleFor(r => r.Username)
             .NotNull().WithMessage("Username must not be null")

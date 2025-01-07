@@ -1,17 +1,17 @@
 namespace WiseReminder.WebAPI.Validators.Quotes;
 
-public sealed class BaseQuoteAsUserRequestValidator : AbstractValidator<UserQuoteRequest>
+public sealed class QuoteByUserRequestValidator : AbstractValidator<UserQuoteRequest>
 {
-    public BaseQuoteAsUserRequestValidator()
+    public QuoteByUserRequestValidator()
     {
         RuleFor(r => r.Text)
             .NotNull().WithMessage("Text must not be null")
             .NotEmpty().WithMessage("Text must not be empty");
 
         RuleFor(r => r.CategoryId)
-            .NotNull().WithMessage("Category ID must not be null");
+            .NotEmpty().WithMessage("Category ID must not be empty");
 
         RuleFor(r => r.QuoteDate)
-            .NotNull().WithMessage("Quote date must not be null");
+            .NotEmpty().WithMessage("Quote date must not be empty");
     }
 }

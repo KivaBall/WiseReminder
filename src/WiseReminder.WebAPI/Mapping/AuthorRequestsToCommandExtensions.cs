@@ -2,10 +2,10 @@ namespace WiseReminder.WebAPI.Mapping;
 
 public static class AuthorRequestsToCommandExtensions
 {
-    public static AdminCreateAuthorCommand ToAdminCreateAuthorCommand(
+    public static CreateAuthorByAdminCommand ToAdminCreateAuthorCommand(
         this AdminAuthorRequest request)
     {
-        return new AdminCreateAuthorCommand
+        return new CreateAuthorByAdminCommand
         {
             Name = request.Name,
             Biography = request.Biography,
@@ -14,11 +14,11 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static UserCreateAuthorCommand ToUserCreateAuthorCommand(
+    public static CreateAuthorByUserCommand ToUserCreateAuthorCommand(
         this UserAuthorRequest request,
         Guid userId)
     {
-        return new UserCreateAuthorCommand
+        return new CreateAuthorByUserCommand
         {
             Name = request.Name,
             Biography = request.Biography,
@@ -27,11 +27,11 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static AdminUpdateAuthorCommand ToAdminUpdateAuthorCommand(
+    public static UpdateAuthorByAdminCommand ToAdminUpdateAuthorCommand(
         this AdminAuthorRequest request,
         Guid id)
     {
-        return new AdminUpdateAuthorCommand
+        return new UpdateAuthorByAdminCommand
         {
             Id = id,
             Name = request.Name,
@@ -41,11 +41,11 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static UserUpdateAuthorCommand ToUserUpdateAuthorCommand(
+    public static UpdateAuthorByUserCommand ToUserUpdateAuthorCommand(
         this UserAuthorRequest request,
         Guid userId)
     {
-        return new UserUpdateAuthorCommand
+        return new UpdateAuthorByUserCommand
         {
             Name = request.Name,
             Biography = request.Biography,
