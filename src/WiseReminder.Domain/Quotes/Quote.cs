@@ -10,11 +10,6 @@ public sealed class Quote : Entity<Quote>
         QuoteDate = quoteDate;
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private Quote()
-    {
-    }
-
     public Text Text { get; private set; }
     public Date QuoteDate { get; private set; }
 

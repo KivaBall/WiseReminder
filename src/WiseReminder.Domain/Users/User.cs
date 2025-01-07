@@ -10,11 +10,6 @@ public sealed class User : Entity<User>
         Subscription = Subscription.Free;
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private User()
-    {
-    }
-
     public Username Username { get; private set; }
     public Login Login { get; private set; }
     public HashedPassword HashedPassword { get; private set; }

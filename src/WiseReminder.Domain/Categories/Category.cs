@@ -8,11 +8,6 @@ public sealed class Category : Entity<Category>
         Description = description;
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private Category()
-    {
-    }
-
     public CategoryName Name { get; private set; }
     public Description Description { get; private set; }
 

@@ -12,11 +12,6 @@ public sealed class Author : Entity<Author>
         UserId = userId;
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private Author()
-    {
-    }
-
     public AuthorName Name { get; private set; }
     public Biography Biography { get; private set; }
     public Date BirthDate { get; private set; }
