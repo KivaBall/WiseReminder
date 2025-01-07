@@ -1,8 +1,7 @@
-﻿namespace WiseReminder.Application.Quotes.AdminUpdateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuoteByAdmin;
 
-public sealed record AdminUpdateQuoteCommand : ICommand
+public sealed record CreateQuoteByAdminCommand : ICommand<Guid>
 {
-    public required Guid Id { get; init; }
     public required string Text { get; init; }
     public required Guid AuthorId { get; init; }
     public required Guid CategoryId { get; init; }

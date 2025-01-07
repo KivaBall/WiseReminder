@@ -1,13 +1,13 @@
-﻿namespace WiseReminder.Application.Quotes.UserDeleteQuote;
+﻿namespace WiseReminder.Application.Quotes.DeleteQuoteByUser;
 
-public sealed class UserDeleteQuoteHandler(
-    IQuoteRepository quoteRepository,
+public sealed class DeleteQuoteByUserHandler(
+    IQuoteRepository repository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<UserDeleteQuoteCommand>
+    : ICommandHandler<DeleteQuoteByUserCommand>
 {
     public async Task<Result> Handle(
-        UserDeleteQuoteCommand request,
+        DeleteQuoteByUserCommand request,
         CancellationToken cancellationToken)
     {
         var query = new GetQuoteByIdQuery(request.Id);
@@ -30,10 +30,10 @@ public sealed class UserDeleteQuoteHandler(
 
         if (quote.Value.AuthorId != author.Value.Id)
         {
-            return Result.Fail(UserErrors.UserIdNotValid);
+            return UserErrors.UserIdNotValid;
         }
 
-        await quoteRepository.DeleteQuote(quote.Value);
+        await repository.DeleteQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Quotes.UserCreateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuoteByUser;
 
-public sealed record UserCreateQuoteCommand : ICommand<Guid>
+public sealed record CreateQuoteByUserCommand : ICommand<Guid>
 {
     public required string Text { get; init; }
     public required Guid CategoryId { get; init; }

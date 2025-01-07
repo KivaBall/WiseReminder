@@ -1,18 +1,18 @@
 ﻿namespace WiseReminder.Application.Quotes.GetQuoteById;
 
 public sealed class GetQuoteByIdHandler(
-    IQuoteRepository quoteRepository)
+    IQuoteRepository repository)
     : IQueryHandler<GetQuoteByIdQuery, Quote>
 {
     public async Task<Result<Quote>> Handle(
         GetQuoteByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var quote = await quoteRepository.GetQuoteById(request.Id);
+        var quote = await repository.GetQuoteById(request.Id);
 
         if (quote == null)
         {
-            return Result.Fail(QuoteErrors.QuoteNotFound);
+            return QuoteErrors.QuoteNotFound;
         }
 
         return Result.Ok(quote);

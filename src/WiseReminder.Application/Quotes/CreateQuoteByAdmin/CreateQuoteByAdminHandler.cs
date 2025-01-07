@@ -1,22 +1,27 @@
-﻿namespace WiseReminder.Application.Quotes.UserCreateQuote;
+﻿namespace WiseReminder.Application.Quotes.CreateQuoteByAdmin;
 
-public sealed class UserCreateQuoteHandler(
-    IQuoteRepository quoteRepository,
+public sealed class CreateQuoteByAdminHandler(
+    IQuoteRepository repository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<UserCreateQuoteCommand, Guid>
+    : ICommandHandler<CreateQuoteByAdminCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        UserCreateQuoteCommand request,
+        CreateQuoteByAdminCommand request,
         CancellationToken cancellationToken)
     {
-        var authorQuery = new GetAuthorByUserIdQuery(request.UserId);
+        var authorQuery = new GetAuthorByIdQuery(request.AuthorId);
 
         var author = await sender.Send(authorQuery, cancellationToken);
 
         if (author.IsFailed)
         {
             return author.ToResult();
+        }
+
+        if (author.Value.UserId != null)
+        {
+            return AuthorErrors.AdminCannotModifyUserAuthor;
         }
 
         var categoryQuery = new GetCategoryByIdQuery(request.CategoryId);
@@ -37,14 +42,14 @@ public sealed class UserCreateQuoteHandler(
             return quoteDate.ToResult();
         }
 
-        var quote = Quote.Create(text, author.Value, category.Value.Id, quoteDate.Value);
+        var quote = Quote.CreateByAdmin(text, quoteDate.Value, author.Value, category.Value.Id);
 
         if (quote.IsFailed)
         {
             return quote.ToResult();
         }
 
-        quoteRepository.CreateQuote(quote.Value);
+        repository.CreateQuote(quote.Value);
 
         return await unitOfWork.SaveChangesAsyncWithResult(() => quote.Value.Id);
     }
