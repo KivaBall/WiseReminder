@@ -1,18 +1,18 @@
 ﻿namespace WiseReminder.Application.Authors.GetAuthorById;
 
 public sealed class GetAuthorByIdHandler(
-    IAuthorRepository authorRepository)
+    IAuthorRepository repository)
     : IQueryHandler<GetAuthorByIdQuery, Author>
 {
     public async Task<Result<Author>> Handle(
         GetAuthorByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var author = await authorRepository.GetAuthorById(request.Id);
+        var author = await repository.GetAuthorById(request.Id);
 
         if (author == null)
         {
-            return Result.Fail(AuthorErrors.AuthorNotFound);
+            return AuthorErrors.AuthorNotFound;
         }
 
         return Result.Ok(author);

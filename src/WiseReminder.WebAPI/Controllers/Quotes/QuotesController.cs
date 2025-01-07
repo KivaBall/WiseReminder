@@ -38,7 +38,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AdminDeleteQuote(Guid id)
     {
-        var command = new AdminDeleteQuoteCommand(id);
+        var command = new DeleteQuoteByAdminCommand(id);
         return await ExecuteCommand(command);
     }
 
@@ -46,7 +46,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UserDeleteQuote(Guid id)
     {
-        var command = new UserDeleteQuoteCommand(id, UserId);
+        var command = new DeleteQuoteByUserCommand(id, UserId);
         return await ExecuteCommand(command);
     }
 

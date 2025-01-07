@@ -2,10 +2,10 @@ namespace WiseReminder.WebAPI.Mapping;
 
 public static class UserRequestsToCommandExtensions
 {
-    public static CreateUserCommand ToCreateUserCommand(
+    public static RegisterUserCommand ToCreateUserCommand(
         this UserRequest request)
     {
-        return new CreateUserCommand
+        return new RegisterUserCommand
         {
             Username = request.Username,
             Login = request.Login,
@@ -31,6 +31,16 @@ public static class UserRequestsToCommandExtensions
             FirstPassword = request.FirstPassword,
             SecondPassword = request.SecondPassword,
             ThirdPassword = request.ThirdPassword
+        };
+    }
+
+    public static ApplySubscriptionCommand ToApplySubscriptionCommand(
+        this ApplySubscriptionRequest request, Guid userId)
+    {
+        return new ApplySubscriptionCommand
+        {
+            UserId = userId,
+            Subscription = request.Subscription
         };
     }
 

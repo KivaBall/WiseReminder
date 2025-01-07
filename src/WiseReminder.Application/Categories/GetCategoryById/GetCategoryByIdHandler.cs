@@ -1,18 +1,18 @@
 ﻿namespace WiseReminder.Application.Categories.GetCategoryById;
 
 public sealed class GetCategoryByIdHandler(
-    ICategoryRepository categoryRepository)
+    ICategoryRepository repository)
     : IQueryHandler<GetCategoryByIdQuery, Category>
 {
     public async Task<Result<Category>> Handle(
         GetCategoryByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var category = await categoryRepository.GetCategoryById(request.Id);
+        var category = await repository.GetCategoryById(request.Id);
 
         if (category == null)
         {
-            return Result.Fail(CategoryErrors.CategoryNotFound);
+            return CategoryErrors.CategoryNotFound;
         }
 
         return Result.Ok(category);

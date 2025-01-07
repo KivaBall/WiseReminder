@@ -1,9 +1,9 @@
 namespace WiseReminder.Application.Users.DeleteUser;
 
 public sealed class DeleteUserHandler(
-    IUserRepository userRepository,
+    IUserRepository repository,
     IUnitOfWork unitOfWork,
-    ISender sender)
+    IMediator mediator)
     : ICommandHandler<DeleteUserCommand>
 {
     public async Task<Result> Handle(
@@ -12,25 +12,18 @@ public sealed class DeleteUserHandler(
     {
         var query = new GetUserByIdQuery(request.Id);
 
-        var user = await sender.Send(query, cancellationToken);
+        var user = await mediator.Send(query, cancellationToken);
 
         if (user.IsFailed)
         {
-            return Result.Fail(UserErrors.UserNotFound);
+            return UserErrors.UserNotFound;
         }
 
-        var authorQuery = new GetAuthorByUserIdQuery(request.Id);
+        var userDeletedEvent = new UserDeletedEvent(request.Id);
 
-        var author = await sender.Send(authorQuery, cancellationToken);
+        await mediator.Publish(userDeletedEvent, cancellationToken);
 
-        if (author.IsSuccess)
-        {
-            var authorCommand = new AdminDeleteAuthorCommand(author.Value.Id);
-
-            await sender.Send(authorCommand, cancellationToken);
-        }
-
-        userRepository.DeleteUser(user.Value);
+        repository.DeleteUser(user.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

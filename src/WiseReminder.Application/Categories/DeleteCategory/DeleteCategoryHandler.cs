@@ -1,9 +1,9 @@
 ﻿namespace WiseReminder.Application.Categories.DeleteCategory;
 
 public sealed class DeleteCategoryHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     IUnitOfWork unitOfWork,
-    ISender sender)
+    IMediator mediator)
     : ICommandHandler<DeleteCategoryCommand>
 {
     public async Task<Result> Handle(
@@ -12,23 +12,18 @@ public sealed class DeleteCategoryHandler(
     {
         var categoryQuery = new GetCategoryByIdQuery(request.Id);
 
-        var category = await sender.Send(categoryQuery, cancellationToken);
+        var category = await mediator.Send(categoryQuery, cancellationToken);
 
         if (category.IsFailed)
         {
             return category.ToResult();
         }
 
-        var quotesQuery = new DeleteQuotesByCategoryIdCommand(request.Id);
+        var categoryDeletedEvent = new CategoryDeletedEvent(request.Id);
 
-        var result = await sender.Send(quotesQuery, cancellationToken);
+        await mediator.Publish(categoryDeletedEvent, cancellationToken);
 
-        if (result.IsFailed)
-        {
-            return result;
-        }
-
-        categoryRepository.DeleteCategory(category.Value);
+        repository.DeleteCategory(category.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

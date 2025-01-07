@@ -2,6 +2,6 @@
 
 public static class CategoryErrors
 {
-    public static IError CategoryNotFound =>
-        new Error("Category by Id was not found");
+    public static Result CategoryNotFound =>
+        new Error("The category with the specified ID was not found");
 }

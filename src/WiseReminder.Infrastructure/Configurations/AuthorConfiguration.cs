@@ -41,5 +41,11 @@ public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
 
         builder.Property(a => a.UserId)
             .HasColumnName("user_id");
+
+        builder.HasMany<Quote>().WithOne()
+            .HasForeignKey(q => q.AuthorId);
+
+        builder.HasOne<User>().WithOne()
+            .HasForeignKey<Author>(a => a.UserId);
     }
 }

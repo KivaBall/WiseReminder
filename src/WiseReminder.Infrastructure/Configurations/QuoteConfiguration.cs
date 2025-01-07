@@ -34,5 +34,11 @@ public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 
         builder.Property(q => q.CategoryId)
             .HasColumnName("category_id");
+
+        builder.HasOne<Category>().WithMany()
+            .HasForeignKey(q => q.CategoryId);
+
+        builder.HasOne<Author>().WithMany()
+            .HasForeignKey(q => q.AuthorId);
     }
 }

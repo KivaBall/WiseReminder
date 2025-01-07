@@ -2,7 +2,7 @@
 
 public sealed class Quote : Entity<Quote>
 {
-    private Quote(Text text, Guid authorId, Guid categoryId, Date quoteDate)
+    private Quote(Text text, Date quoteDate, Guid authorId, Guid categoryId)
     {
         Text = text;
         AuthorId = authorId;
@@ -10,36 +10,47 @@ public sealed class Quote : Entity<Quote>
         QuoteDate = quoteDate;
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private Quote()
-    {
-    }
-
     public Text Text { get; private set; }
     public Date QuoteDate { get; private set; }
-
     public Guid AuthorId { get; private set; }
-    public Author Author { get; private set; }
     public Guid CategoryId { get; private set; }
-    public Category Category { get; private set; }
 
-    public static Result<Quote> Create(Text text, Author author, Guid categoryId, Date quoteDate)
+    public static Result<Quote> CreateByAdmin(Text text, Date quoteDate, Author author,
+        Guid categoryId)
     {
         if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
         {
-            return Result.Fail(QuoteErrors.QuoteDateOutOfRange);
+            return QuoteErrors.QuoteDateOutOfRange;
         }
 
-        var quote = new Quote(text, author.Id, categoryId, quoteDate);
+        var quote = new Quote(text, quoteDate, author.Id, categoryId);
 
         return Result.Ok(quote);
     }
 
-    public Result<Quote> Update(Text text, Author author, Guid categoryId, Date quoteDate)
+    public static Result<Quote> CreateByUser(Text text, Author author, Guid categoryId,
+        Date quoteDate, Subscription subscription, int authorQuotesAmount)
+    {
+        if (!AuthorMayHaveAdditionalQuote(subscription, authorQuotesAmount))
+        {
+            return QuoteErrors.QuoteLimitExceeded;
+        }
+
+        if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
+        {
+            return QuoteErrors.QuoteDateOutOfRange;
+        }
+
+        var quote = new Quote(text, quoteDate, author.Id, categoryId);
+
+        return Result.Ok(quote);
+    }
+
+    public Result Update(Text text, Author author, Guid categoryId, Date quoteDate)
     {
         if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
         {
-            return Result.Fail(QuoteErrors.QuoteDateOutOfRange);
+            return QuoteErrors.QuoteDateOutOfRange;
         }
 
         Text = text;
@@ -47,7 +58,7 @@ public sealed class Quote : Entity<Quote>
         CategoryId = categoryId;
         QuoteDate = quoteDate;
 
-        return Result.Ok(this);
+        return Result.Ok();
     }
 
     private static bool IsValidQuoteDate(Date birthDate, Date? deathDate, Date quoteDate)
@@ -64,5 +75,17 @@ public sealed class Quote : Entity<Quote>
         }
 
         return true;
+    }
+
+    private static bool AuthorMayHaveAdditionalQuote(Subscription subscription,
+        int authorQuotesAmount)
+    {
+        return subscription switch
+        {
+            Subscription.Free => authorQuotesAmount < 5,
+            Subscription.Iron => authorQuotesAmount < 50,
+            Subscription.Diamond => authorQuotesAmount < 1000,
+            _ => throw new ArgumentOutOfRangeException(nameof(subscription), subscription, null)
+        };
     }
 }

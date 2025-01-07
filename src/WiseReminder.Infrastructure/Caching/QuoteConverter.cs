@@ -86,7 +86,7 @@ public sealed class QuoteConverter : JsonConverter<Quote>
             typeof(Quote),
             BindingFlags.Instance | BindingFlags.NonPublic,
             null,
-            [text, authorId, categoryId, date],
+            [text, date, authorId, categoryId],
             null
         )!;
 

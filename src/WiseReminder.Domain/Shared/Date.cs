@@ -15,7 +15,7 @@ public sealed record Date
 
         if (dateStruct.Year > maxYear)
         {
-            return Result.Fail(DateErrors.YearOutOfRange);
+            return DateErrors.YearOutOfRange;
         }
 
         var date = new Date(dateStruct);

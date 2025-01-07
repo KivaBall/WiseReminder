@@ -9,9 +9,9 @@ public sealed class GetAuthorByUserIdHandler(
         GetAuthorByUserIdQuery request,
         CancellationToken cancellationToken)
     {
-        var userQuery = new GetUserByIdQuery(request.UserId);
+        var query = new GetUserByIdQuery(request.UserId);
 
-        var user = await sender.Send(userQuery, cancellationToken);
+        var user = await sender.Send(query, cancellationToken);
 
         if (user.IsFailed)
         {
@@ -22,7 +22,7 @@ public sealed class GetAuthorByUserIdHandler(
 
         if (author == null)
         {
-            return Result.Fail(AuthorErrors.AuthorNotExistsForUser);
+            return AuthorErrors.UserAuthorNotFound;
         }
 
         return Result.Ok(author);
