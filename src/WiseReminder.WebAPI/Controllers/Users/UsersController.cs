@@ -23,6 +23,14 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
         return await ExecuteCommandWithEntity(command);
     }
 
+    [HttpPut("{id}/apply-subscription")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ApplySubscription(Guid id, ApplySubscriptionRequest request)
+    {
+        var command = request.ToApplySubscriptionCommand(id);
+        return await ExecuteCommand(command);
+    }
+
     [HttpPut("own/username")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> ChangeUsername(ChangeUsernameRequest request)
