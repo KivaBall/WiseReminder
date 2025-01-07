@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Authors.UserCreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthorByUser;
 
-public sealed record UserCreateAuthorCommand : ICommand<Guid>
+public sealed record CreateAuthorByUserCommand : ICommand<Guid>
 {
     public required string Name { get; init; }
     public required string Biography { get; init; }

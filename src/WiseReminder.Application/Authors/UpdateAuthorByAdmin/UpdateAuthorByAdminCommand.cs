@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Authors.AdminUpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthorByAdmin;
 
-public sealed record AdminUpdateAuthorCommand : ICommand
+public sealed record UpdateAuthorByAdminCommand : ICommand
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }

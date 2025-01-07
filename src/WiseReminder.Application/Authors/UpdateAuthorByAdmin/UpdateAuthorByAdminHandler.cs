@@ -1,18 +1,18 @@
-﻿namespace WiseReminder.Application.Authors.AdminUpdateAuthor;
+﻿namespace WiseReminder.Application.Authors.UpdateAuthorByAdmin;
 
-public sealed class AdminUpdateAuthorHandler(
-    IAuthorRepository authorRepository,
+public sealed class UpdateAuthorByAdminHandler(
+    IAuthorRepository repository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<AdminUpdateAuthorCommand>
+    : ICommandHandler<UpdateAuthorByAdminCommand>
 {
     public async Task<Result> Handle(
-        AdminUpdateAuthorCommand request,
+        UpdateAuthorByAdminCommand request,
         CancellationToken cancellationToken)
     {
-        var query = new GetAuthorByIdQuery(request.Id);
+        var authorQuery = new GetAuthorByIdQuery(request.Id);
 
-        var author = await sender.Send(query, cancellationToken);
+        var author = await sender.Send(authorQuery, cancellationToken);
 
         if (author.IsFailed)
         {
@@ -21,7 +21,7 @@ public sealed class AdminUpdateAuthorHandler(
 
         if (author.Value.UserId != null)
         {
-            return Result.Fail(AuthorErrors.AdminCannotChangeAuthorOfUser);
+            return AuthorErrors.AdminCannotModifyUserAuthor;
         }
 
         var name = new AuthorName(request.Name);
@@ -42,9 +42,18 @@ public sealed class AdminUpdateAuthorHandler(
             return deathDate.ToResult();
         }
 
-        author.Value.Update(name, biography, birthDate.Value, deathDate?.Value);
+        var (minQuoteDate, maxQuoteDate) =
+            await repository.GetMinimalAndMaxQuoteDatesById(request.Id);
 
-        authorRepository.UpdateAuthor(author.Value);
+        var result = author.Value.UpdateByAdmin(name, biography, birthDate.Value, deathDate?.Value,
+            minQuoteDate, maxQuoteDate);
+
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
+        repository.UpdateAuthor(author.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

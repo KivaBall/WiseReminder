@@ -1,13 +1,13 @@
-namespace WiseReminder.Application.Authors.UserUpdateAuthor;
+namespace WiseReminder.Application.Authors.UpdateAuthorByUser;
 
-public sealed class UserUpdateAuthorHandler(
-    IAuthorRepository authorRepository,
+public sealed class UpdateAuthorByUserHandler(
+    IAuthorRepository repository,
     IUnitOfWork unitOfWork,
     ISender sender)
-    : ICommandHandler<UserUpdateAuthorCommand>
+    : ICommandHandler<UpdateAuthorByUserCommand>
 {
     public async Task<Result> Handle(
-        UserUpdateAuthorCommand request,
+        UpdateAuthorByUserCommand request,
         CancellationToken cancellationToken)
     {
         var query = new GetAuthorByUserIdQuery(request.UserId);
@@ -30,9 +30,16 @@ public sealed class UserUpdateAuthorHandler(
             return birthDate.ToResult();
         }
 
-        author.Value.Update(name, biography, birthDate.Value, null);
+        var (minQuoteDate, _) = await repository.GetMinimalAndMaxQuoteDatesById(author.Value.Id);
 
-        authorRepository.UpdateAuthor(author.Value);
+        var result = author.Value.UpdateByUser(name, biography, birthDate.Value, minQuoteDate);
+
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
+        repository.UpdateAuthor(author.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

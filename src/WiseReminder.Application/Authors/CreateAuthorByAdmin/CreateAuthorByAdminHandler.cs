@@ -1,12 +1,12 @@
-﻿namespace WiseReminder.Application.Authors.AdminCreateAuthor;
+﻿namespace WiseReminder.Application.Authors.CreateAuthorByAdmin;
 
-public sealed class AdminCreateAuthorHandler(
-    IAuthorRepository authorRepository,
+public sealed class CreateAuthorByAdminHandler(
+    IAuthorRepository repository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<AdminCreateAuthorCommand, Guid>
+    : ICommandHandler<CreateAuthorByAdminCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        AdminCreateAuthorCommand request,
+        CreateAuthorByAdminCommand request,
         CancellationToken cancellationToken)
     {
         var name = new AuthorName(request.Name);
@@ -27,14 +27,14 @@ public sealed class AdminCreateAuthorHandler(
             return deathDate.ToResult();
         }
 
-        var author = Author.Create(name, biography, birthDate.Value, deathDate?.Value, null);
+        var author = Author.CreateByAdmin(name, biography, birthDate.Value, deathDate?.Value);
 
         if (author.IsFailed)
         {
             return author.ToResult();
         }
 
-        authorRepository.CreateAuthor(author.Value);
+        repository.CreateAuthor(author.Value);
 
         return await unitOfWork.SaveChangesAsyncWithResult(() => author.Value.Id);
     }
