@@ -38,7 +38,7 @@ public sealed class AuthorsController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AdminDeleteAuthor(Guid id)
     {
-        var command = new AdminDeleteAuthorCommand(id);
+        var command = new DeleteAuthorByAdminCommand(id);
         return await ExecuteCommand(command);
     }
 
@@ -46,7 +46,7 @@ public sealed class AuthorsController(ISender sender) : BaseController(sender)
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UserDeleteAuthor()
     {
-        var command = new UserDeleteAuthorCommand(UserId);
+        var command = new DeleteAuthorByUserCommand(UserId);
         return await ExecuteCommand(command);
     }
 
