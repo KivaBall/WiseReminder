@@ -11,13 +11,9 @@ public sealed class Category : Entity<Category>
     public CategoryName Name { get; private set; }
     public Description Description { get; private set; }
 
-    public ICollection<Quote> Quotes { get; } = [];
-
-    public Category Update(CategoryName name, Description description)
+    public void Update(CategoryName name, Description description)
     {
         Name = name;
         Description = description;
-
-        return this;
     }
 }
