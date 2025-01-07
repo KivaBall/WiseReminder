@@ -15,31 +15,18 @@ public sealed class User : Entity<User>
     public HashedPassword HashedPassword { get; private set; }
     public Subscription Subscription { get; private set; }
 
-    public Author? Author { get; private set; }
-
-    public Result<User> ApplySubscription(Subscription subscription)
+    public void ApplySubscription(Subscription subscription)
     {
-        if (Subscription != Subscription.Free)
-        {
-            return Result.Fail("Subscription has been already applied");
-        }
-
         Subscription = subscription;
-
-        return Result.Ok(this);
     }
 
-    public User ChangeUsername(Username username)
+    public void ChangeUsername(Username username)
     {
         Username = username;
-
-        return this;
     }
 
-    public User ChangePassword(HashedPassword hashedPassword)
+    public void ChangePassword(HashedPassword hashedPassword)
     {
         HashedPassword = hashedPassword;
-
-        return this;
     }
 }
