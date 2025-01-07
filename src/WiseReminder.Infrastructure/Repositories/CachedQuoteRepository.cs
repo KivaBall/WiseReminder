@@ -59,4 +59,9 @@ public sealed class CachedQuoteRepository(
     {
         return await repository.GetRecentAddedQuotes(amount);
     }
+
+    public async Task<int> GetNumberOfQuotesByAuthorId(Guid authorId)
+    {
+        return await repository.GetNumberOfQuotesByAuthorId(authorId);
+    }
 }

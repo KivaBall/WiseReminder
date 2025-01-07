@@ -61,6 +61,11 @@ public sealed class QuoteRepository(
             .ToListAsync();
     }
 
+    public async Task<int> GetNumberOfQuotesByAuthorId(Guid authorId)
+    {
+        return await context.Quotes.CountAsync(q => q.AuthorId == authorId);
+    }
+
     public async Task<Quote> GetDailyQuote()
     {
         return await context.Quotes
