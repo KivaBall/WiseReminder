@@ -12,11 +12,8 @@ public sealed class Quote : Entity<Quote>
 
     public Text Text { get; private set; }
     public Date QuoteDate { get; private set; }
-
     public Guid AuthorId { get; private set; }
-    public Author Author { get; private set; }
     public Guid CategoryId { get; private set; }
-    public Category Category { get; private set; }
 
     public static Result<Quote> Create(Text text, Author author, Guid categoryId, Date quoteDate)
     {

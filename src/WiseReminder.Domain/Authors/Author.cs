@@ -16,10 +16,7 @@ public sealed class Author : Entity<Author>
     public Biography Biography { get; private set; }
     public Date BirthDate { get; private set; }
     public Date? DeathDate { get; private set; }
-
     public Guid? UserId { get; private set; }
-    public User? User { get; }
-    public ICollection<Quote> Quotes { get; } = [];
 
     public static Result<Author> Create(AuthorName name, Biography biography, Date birthDate,
         Date? deathDate, Guid? userId)
