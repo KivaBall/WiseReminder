@@ -1,7 +1,7 @@
 ﻿namespace WiseReminder.Application.Categories.CreateCategory;
 
 public sealed class CreateCategoryHandler(
-    ICategoryRepository categoryRepository,
+    ICategoryRepository repository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCategoryCommand, Guid>
 {
@@ -15,7 +15,7 @@ public sealed class CreateCategoryHandler(
 
         var category = new Category(name, description);
 
-        categoryRepository.CreateCategory(category);
+        repository.CreateCategory(category);
 
         return await unitOfWork.SaveChangesAsyncWithResult(() => category.Id);
     }
