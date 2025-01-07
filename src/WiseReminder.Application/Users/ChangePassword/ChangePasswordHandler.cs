@@ -1,7 +1,7 @@
 namespace WiseReminder.Application.Users.ChangePassword;
 
 public sealed class ChangePasswordHandler(
-    IUserRepository userRepository,
+    IUserRepository repository,
     ISender sender,
     IEncryptService encryptService,
     IUnitOfWork unitOfWork)
@@ -26,14 +26,14 @@ public sealed class ChangePasswordHandler(
 
         if (!isOldPasswordCorrect)
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         var newPassword = new HashedPassword(encryptService.Encrypt(request.NewPassword));
 
         user.Value.ChangePassword(newPassword);
 
-        userRepository.UpdateUser(user.Value);
+        repository.UpdateUser(user.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

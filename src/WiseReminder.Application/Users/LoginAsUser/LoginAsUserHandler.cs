@@ -16,14 +16,14 @@ public sealed class LoginAsUserHandler(
 
         if (user == null)
         {
-            return Result.Fail(UserErrors.UserNotFound);
+            return UserErrors.UserNotFound;
         }
 
         var isCorrectPassword = encryptService.Check(user.HashedPassword.Value, request.Password);
 
         if (!isCorrectPassword)
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         var token = jwtService.GenerateJwtTokenForUser(user.Id);

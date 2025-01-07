@@ -1,7 +1,7 @@
 namespace WiseReminder.Application.Users.ChangeUsername;
 
 public sealed class ChangeUsernameHandler(
-    IUserRepository userRepository,
+    IUserRepository repository,
     IEncryptService encryptService,
     ISender sender,
     IUnitOfWork unitOfWork)
@@ -26,14 +26,14 @@ public sealed class ChangeUsernameHandler(
 
         if (!isOldPasswordCorrect)
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         var newUsername = new Username(request.NewUsername);
 
         user.Value.ChangeUsername(newUsername);
 
-        userRepository.UpdateUser(user.Value);
+        repository.UpdateUser(user.Value);
 
         return await unitOfWork.SaveChangesAsync();
     }

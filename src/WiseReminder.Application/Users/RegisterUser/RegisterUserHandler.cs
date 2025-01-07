@@ -1,31 +1,31 @@
-﻿namespace WiseReminder.Application.Users.CreateUser;
+﻿namespace WiseReminder.Application.Users.RegisterUser;
 
-public sealed class CreateUserHandler(
-    IUserRepository userRepository,
+public sealed class RegisterUserHandler(
+    IUserRepository repository,
     IUnitOfWork unitOfWork,
     IEncryptService encryptService)
-    : ICommandHandler<CreateUserCommand, Guid>
+    : ICommandHandler<RegisterUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
-        CreateUserCommand request,
+        RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
         var username = new Username(request.Username);
 
         var login = new Login(request.Login);
 
-        var user = await userRepository.GetUserByLogin(login);
+        var user = await repository.GetUserByLogin(login);
 
         if (user != null)
         {
-            return Result.Fail(UserErrors.LoginAlreadyExists);
+            return UserErrors.LoginAlreadyExists;
         }
 
         var password = new HashedPassword(encryptService.Encrypt(request.Password));
 
         user = new User(username, login, password);
 
-        userRepository.CreateUser(user);
+        repository.CreateUser(user);
 
         return await unitOfWork.SaveChangesAsyncWithResult(() => user.Id);
     }

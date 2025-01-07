@@ -10,17 +10,17 @@ public sealed class LoginAsAdminHandler(
     {
         if (request.FirstPassword != "first_secret_admin_password")
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         if (request.SecondPassword != "second_secret_admin_password")
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         if (request.ThirdPassword != "third_secret_admin_password")
         {
-            return Result.Fail(UserErrors.PasswordNotCorrect);
+            return UserErrors.PasswordNotCorrect;
         }
 
         var token = jwtService.GenerateJwtTokenForAdmin();
