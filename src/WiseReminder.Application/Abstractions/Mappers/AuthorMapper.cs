@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Abstractions.Mapping;
+﻿namespace WiseReminder.Application.Abstractions.Mappers;
 
-public static class AuthorToDtoMapper
+public static class AuthorMapper
 {
     public static AuthorDto ToAuthorDto(this Author author)
     {
@@ -10,8 +10,7 @@ public static class AuthorToDtoMapper
             Name = author.Name.Value,
             Biography = author.Biography.Value,
             BirthDate = author.BirthDate.Value,
-            DeathDate = author.DeathDate?.Value,
-            UserId = author.UserId
+            DeathDate = author.DeathDate?.Value
         };
     }
 }

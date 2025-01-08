@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Abstractions.Mapping;
+﻿namespace WiseReminder.Application.Abstractions.Mappers;
 
-public static class CategoryToDtoMapper
+public static class CategoryMapper
 {
     public static CategoryDto ToCategoryDto(this Category category)
     {

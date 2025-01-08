@@ -1,6 +1,6 @@
-namespace WiseReminder.Application.Abstractions.Mapping;
+namespace WiseReminder.Application.Abstractions.Mappers;
 
-public static class UserToDtoMapper
+public static class UserMapper
 {
     public static UserDto ToUserDto(this User user)
     {

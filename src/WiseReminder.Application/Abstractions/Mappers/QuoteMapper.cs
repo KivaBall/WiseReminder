@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Abstractions.Mapping;
+﻿namespace WiseReminder.Application.Abstractions.Mappers;
 
-public static class QuoteToDtoMapper
+public static class QuoteMapper
 {
     public static QuoteDto ToQuoteDto(this Quote quote)
     {
