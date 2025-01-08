@@ -61,6 +61,16 @@ public sealed class Quote : Entity<Quote>
         return Result.Ok();
     }
 
+    public Result BelongsToAuthor(Guid authorId)
+    {
+        if (AuthorId != authorId)
+        {
+            return QuoteErrors.QuoteNotBelongsToThisAuthor;
+        }
+
+        return Result.Ok();
+    }
+
     private static bool IsValidQuoteDate(Date birthDate, Date? deathDate, Date quoteDate)
     {
         if (deathDate == null)
