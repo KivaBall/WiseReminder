@@ -11,4 +11,7 @@ public static class QuoteErrors
 
     public static Result QuoteLimitExceeded =>
         new Error("The author has exceeded the allowed number of quotes for their subscription");
+
+    public static Result QuoteNotBelongsToThisAuthor =>
+        new Error("The quote is not belong to this author");
 }

@@ -13,4 +13,10 @@ public static class UserErrors
 
     public static Result LoginAlreadyExists =>
         new Error("The provided login already exists");
+
+    public static Result IncorrectNameOfSubscription =>
+        new Error("The name of subscription is incorrect");
+
+    public static Result NothingUpdated =>
+        new Error("Nothing was updated. You must write either username or password");
 }
