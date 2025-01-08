@@ -2,6 +2,6 @@
 
 public interface IJwtService
 {
-    public string GenerateJwtTokenForUser(Guid userId);
-    public string GenerateJwtTokenForAdmin();
+    public string GenerateTokenForUser(Guid userId);
+    public string GenerateTokenForAdmin();
 }
