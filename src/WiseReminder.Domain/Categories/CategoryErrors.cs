@@ -2,6 +2,6 @@
 
 public static class CategoryErrors
 {
-    public static Result CategoryNotFound =>
+    public static readonly Result CategoryNotFound =
         new Error("The category with the specified ID was not found");
 }
