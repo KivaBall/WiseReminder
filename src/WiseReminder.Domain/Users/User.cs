@@ -39,9 +39,4 @@ public sealed class User : Entity<User>
 
         return Result.Ok();
     }
-
-    public void ChangePassword(HashedPassword hashedPassword)
-    {
-        HashedPassword = hashedPassword;
-    }
 }
