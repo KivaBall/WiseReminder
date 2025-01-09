@@ -8,5 +8,6 @@ public interface IReactionRepository
 
     void DeleteReaction(Reaction reaction);
 
-    Task<Reaction?> GetReactionByIds(Guid quoteId, Guid userId, CancellationToken cancellationToken);
+    Task<Reaction?> GetReactionByIds(Guid quoteId, Guid userId,
+        CancellationToken cancellationToken);
 }
