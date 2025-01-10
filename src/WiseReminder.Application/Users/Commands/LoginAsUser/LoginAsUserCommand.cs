@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.LoginAsUser;
+namespace WiseReminder.Application.Users.Commands.LoginAsUser;
 
 public sealed record LoginAsUserCommand : ICommand<string>
 {

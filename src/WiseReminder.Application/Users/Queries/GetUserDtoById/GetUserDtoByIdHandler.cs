@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.GetUserDtoById;
+namespace WiseReminder.Application.Users.Queries.GetUserDtoById;
 
 public sealed class GetUserDtoByIdHandler(
     ISender sender)

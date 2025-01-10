@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.LoginAsAdmin;
+namespace WiseReminder.Application.Users.Commands.LoginAsAdmin;
 
 public sealed class LoginAsAdminHandler(
     IJwtService jwtService)
@@ -23,7 +23,7 @@ public sealed class LoginAsAdminHandler(
             return UserErrors.PasswordNotCorrect;
         }
 
-        var token = jwtService.GenerateJwtTokenForAdmin();
+        var token = jwtService.GenerateTokenForAdmin();
 
         return await Task.FromResult(Result.Ok(token));
     }

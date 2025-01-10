@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.DeleteUser;
+namespace WiseReminder.Application.Users.Commands.DeleteUser;
 
 public sealed class DeleteUserHandler(
     IUserRepository repository,
@@ -19,12 +19,17 @@ public sealed class DeleteUserHandler(
             return UserErrors.UserNotFound;
         }
 
-        var userDeletedEvent = new UserDeletedEvent(request.Id);
-
-        await mediator.Publish(userDeletedEvent, cancellationToken);
-
         repository.DeleteUser(user.Value);
 
-        return await unitOfWork.SaveChangesAsync();
+        var result = await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            var userDeletedEvent = new UserDeletedEvent(request.Id);
+
+            await mediator.Publish(userDeletedEvent, cancellationToken);
+        }
+
+        return result;
     }
 }

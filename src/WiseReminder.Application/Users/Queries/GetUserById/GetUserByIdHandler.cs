@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.GetUserById;
+namespace WiseReminder.Application.Users.Queries.GetUserById;
 
 public sealed class GetUserByIdHandler(
     IUserRepository repository)
@@ -8,7 +8,7 @@ public sealed class GetUserByIdHandler(
         GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var user = await repository.GetUserById(request.Id);
+        var user = await repository.GetUserById(request.Id, cancellationToken);
 
         if (user == null)
         {

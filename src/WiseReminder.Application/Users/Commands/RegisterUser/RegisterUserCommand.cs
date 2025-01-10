@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.Application.Users.RegisterUser;
+﻿namespace WiseReminder.Application.Users.Commands.RegisterUser;
 
-public sealed record RegisterUserCommand : ICommand<Guid>
+public sealed record RegisterUserCommand : ICommand
 {
     public required string Username { get; init; }
     public required string Login { get; init; }

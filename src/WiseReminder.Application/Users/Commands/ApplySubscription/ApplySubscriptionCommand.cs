@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.ApplySubscription;
+namespace WiseReminder.Application.Users.Commands.ApplySubscription;
 
 public sealed record ApplySubscriptionCommand : ICommand
 {

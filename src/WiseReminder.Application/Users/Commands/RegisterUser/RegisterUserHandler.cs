@@ -1,12 +1,12 @@
-﻿namespace WiseReminder.Application.Users.RegisterUser;
+﻿namespace WiseReminder.Application.Users.Commands.RegisterUser;
 
 public sealed class RegisterUserHandler(
     IUserRepository repository,
     IUnitOfWork unitOfWork,
     IEncryptService encryptService)
-    : ICommandHandler<RegisterUserCommand, Guid>
+    : ICommandHandler<RegisterUserCommand>
 {
-    public async Task<Result<Guid>> Handle(
+    public async Task<Result> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
@@ -14,7 +14,7 @@ public sealed class RegisterUserHandler(
 
         var login = new Login(request.Login);
 
-        var user = await repository.GetUserByLogin(login);
+        var user = await repository.GetUserByLogin(login, cancellationToken);
 
         if (user != null)
         {
@@ -27,6 +27,6 @@ public sealed class RegisterUserHandler(
 
         repository.CreateUser(user);
 
-        return await unitOfWork.SaveChangesAsyncWithResult(() => user.Id);
+        return await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

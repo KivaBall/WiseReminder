@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.LoginAsUser;
+namespace WiseReminder.Application.Users.Commands.LoginAsUser;
 
 public sealed class LoginAsUserHandler(
     IUserRepository repository,
@@ -12,7 +12,7 @@ public sealed class LoginAsUserHandler(
     {
         var login = new Login(request.Login);
 
-        var user = await repository.GetUserByLogin(login);
+        var user = await repository.GetUserByLogin(login, cancellationToken);
 
         if (user == null)
         {
@@ -26,7 +26,7 @@ public sealed class LoginAsUserHandler(
             return UserErrors.PasswordNotCorrect;
         }
 
-        var token = jwtService.GenerateJwtTokenForUser(user.Id);
+        var token = jwtService.GenerateTokenForUser(user.Id);
 
         return Result.Ok(token);
     }

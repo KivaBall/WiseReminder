@@ -1,4 +1,4 @@
-namespace WiseReminder.Application.Users.ApplySubscription;
+namespace WiseReminder.Application.Users.Commands.ApplySubscription;
 
 public sealed class ApplySubscriptionHandler(
     IUserRepository repository,
@@ -18,18 +18,19 @@ public sealed class ApplySubscriptionHandler(
             return user.ToResult();
         }
 
-        var isSubscription =
-            Enum.TryParse<Subscription>(request.Subscription, out var subscription);
+        var isSubscription = Enum.TryParse<Subscription>(
+            request.Subscription,
+            out var subscription);
 
         if (!isSubscription)
         {
-            return Result.Fail("Invalid subscription");
+            return UserErrors.IncorrectNameOfSubscription;
         }
 
         user.Value.ApplySubscription(subscription);
 
         repository.UpdateUser(user.Value);
 
-        return await unitOfWork.SaveChangesAsync();
+        return await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }
