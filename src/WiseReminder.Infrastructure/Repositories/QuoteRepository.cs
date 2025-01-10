@@ -9,14 +9,14 @@ public sealed class QuoteRepository(
         context.Quotes.Add(quote);
     }
 
-    public Task UpdateQuote(Quote quote)
+    public Task UpdateQuote(Quote quote, CancellationToken cancellationToken)
     {
         context.Quotes.Update(quote);
 
         return Task.CompletedTask;
     }
 
-    public Task DeleteQuote(Quote quote)
+    public Task DeleteQuote(Quote quote, CancellationToken cancellationToken)
     {
         quote.Delete();
 
@@ -25,51 +25,137 @@ public sealed class QuoteRepository(
         return Task.CompletedTask;
     }
 
-    public async Task<Quote?> GetQuoteById(Guid id)
+    public async Task<Quote?> GetQuoteById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Quotes
-            .FirstOrDefaultAsync(q => q.Id == id);
+            .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
     }
 
-    public async Task<ICollection<Quote>> GetQuotesByCategoryId(Guid categoryId)
+    public async Task<bool> HasQuoteById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Quotes
-            .Where(q => q.CategoryId == categoryId)
-            .ToListAsync();
+            .AnyAsync(q => q.Id == id, cancellationToken);
     }
 
-    public async Task<ICollection<Quote>> GetQuotesByAuthorId(Guid authorId)
-    {
-        return await context.Quotes
-            .Where(q => q.AuthorId == authorId)
-            .ToListAsync();
-    }
-
-    public async Task<ICollection<Quote>> GetRandomQuotes(int amount)
+    public async Task<ICollection<QuoteDetails>> GetRandomQuotes(int amount,
+        CancellationToken cancellationToken)
     {
         return await context.Quotes
             .OrderBy(q => Guid.NewGuid())
             .Take(amount)
-            .ToListAsync();
+            .ConvertToQuoteDetails(context)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<ICollection<Quote>> GetRecentAddedQuotes(int amount)
+    public async Task<ICollection<QuoteDetails>> GetRecentAddedQuotes(int amount,
+        CancellationToken cancellationToken)
     {
         return await context.Quotes
             .OrderByDescending(q => q.AddedAt)
             .Take(amount)
-            .ToListAsync();
+            .ConvertToQuoteDetails(context)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<int> GetNumberOfQuotesByAuthorId(Guid authorId)
-    {
-        return await context.Quotes.CountAsync(q => q.AuthorId == authorId);
-    }
-
-    public async Task<Quote> GetDailyQuote()
+    public async Task<int> GetQuotesAmountByAuthorId(Guid authorId,
+        CancellationToken cancellationToken)
     {
         return await context.Quotes
-            .OrderBy(q => Guid.NewGuid())
-            .FirstAsync();
+            .CountAsync(q => q.AuthorId == authorId, cancellationToken);
+    }
+
+    public async Task<QuoteDetails?> GetQuoteDetailsById(Guid id,
+        CancellationToken cancellationToken)
+    {
+        return await context.Quotes
+            .Where(q => q.Id == id)
+            .ConvertToQuoteDetails(context)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ICollection<QuoteDetails>> GetQuoteDetailsByClauses(Guid? categoryId,
+        Guid? authorId, ICollection<string>? keywords, CancellationToken cancellationToken)
+    {
+        var quotes = context.Quotes.AsQueryable();
+
+        if (categoryId != null)
+        {
+            quotes = quotes.Where(q => q.CategoryId == categoryId);
+        }
+
+        if (authorId != null)
+        {
+            quotes = quotes.Where(q => q.AuthorId == authorId);
+        }
+
+        var quoteDetails = quotes.ConvertToQuoteDetails(context);
+
+        if (keywords != null && keywords.Any())
+        {
+            var list = await quoteDetails
+                .ToListAsync(cancellationToken);
+
+            return list
+                .Where(quote => keywords.Any(str =>
+                    quote.Quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+
+        return await quoteDetails
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<ICollection<Quote>> GetQuotesByClauses(Guid? categoryId, Guid? authorId,
+        ICollection<string>? keywords, CancellationToken cancellationToken)
+    {
+        var quotes = context.Quotes.AsQueryable();
+
+        if (categoryId != null)
+        {
+            quotes = quotes.Where(q => q.CategoryId == categoryId);
+        }
+
+        if (authorId != null)
+        {
+            quotes = quotes.Where(q => q.AuthorId == authorId);
+        }
+
+        if (keywords != null && keywords.Any())
+        {
+            var list = await quotes
+                .ToListAsync(cancellationToken);
+
+            return list
+                .Where(quote => keywords.Any(str =>
+                    quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+
+        return await quotes
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<QuoteDetails> GetDailyQuote(CancellationToken cancellationToken)
+    {
+        return await context.Quotes
+            .GetTopQuote(context, TimeSpan.FromDays(1))
+            .ConvertToQuoteDetails(context)
+            .FirstAsync(cancellationToken);
+    }
+
+    public async Task<QuoteDetails> GetWeeklyQuote(CancellationToken cancellationToken)
+    {
+        return await context.Quotes
+            .GetTopQuote(context, TimeSpan.FromDays(7))
+            .ConvertToQuoteDetails(context)
+            .FirstAsync(cancellationToken);
+    }
+
+    public async Task<QuoteDetails> GetMonthlyQuote(CancellationToken cancellationToken)
+    {
+        return await context.Quotes
+            .GetTopQuote(context, TimeSpan.FromDays(31))
+            .ConvertToQuoteDetails(context)
+            .FirstAsync(cancellationToken);
     }
 }

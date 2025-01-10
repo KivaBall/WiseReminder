@@ -19,15 +19,21 @@ public sealed class UserRepository(
         context.Users.Remove(user);
     }
 
-    public async Task<User?> GetUserById(Guid id)
+    public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Users
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
-    public async Task<User?> GetUserByLogin(Login login)
+    public async Task<bool> HasUserById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Users
-            .FirstOrDefaultAsync(u => u.Login == login);
+            .AnyAsync(u => u.Id == id, cancellationToken);
+    }
+
+    public async Task<User?> GetUserByLogin(Login login, CancellationToken cancellationToken)
+    {
+        return await context.Users
+            .FirstOrDefaultAsync(u => u.Login == login, cancellationToken);
     }
 }
