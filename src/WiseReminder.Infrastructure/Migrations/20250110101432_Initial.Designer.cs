@@ -12,7 +12,7 @@ using WiseReminder.Infrastructure.Data;
 namespace WiseReminder.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250105015708_Initial")]
+    [Migration("20250110101432_Initial")]
     sealed partial class Initial
     {
         /// <inheritdoc />
@@ -158,6 +158,43 @@ namespace WiseReminder.Infrastructure.Migrations
                     b.ToTable("quotes", (string)null);
                 });
 
+            modelBuilder.Entity("WiseReminder.Domain.Reactions.Reaction", b =>
+                {
+                    b.Property<Guid>("QuoteId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("quote_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsLike")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_like");
+
+                    b.HasKey("QuoteId", "UserId");
+
+                    b.HasIndex("QuoteId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("QuoteId", "UserId");
+
+                    b.ToTable("reactions", (string)null);
+                });
+
             modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -209,45 +246,39 @@ namespace WiseReminder.Infrastructure.Migrations
 
             modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
                 {
-                    b.HasOne("WiseReminder.Domain.Users.User", "User")
-                        .WithOne("Author")
+                    b.HasOne("WiseReminder.Domain.Users.User", null)
+                        .WithOne()
                         .HasForeignKey("WiseReminder.Domain.Authors.Author", "UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WiseReminder.Domain.Quotes.Quote", b =>
                 {
-                    b.HasOne("WiseReminder.Domain.Authors.Author", "Author")
-                        .WithMany("Quotes")
+                    b.HasOne("WiseReminder.Domain.Authors.Author", null)
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WiseReminder.Domain.Categories.Category", "Category")
-                        .WithMany("Quotes")
+                    b.HasOne("WiseReminder.Domain.Categories.Category", null)
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WiseReminder.Domain.Authors.Author", b =>
+            modelBuilder.Entity("WiseReminder.Domain.Reactions.Reaction", b =>
                 {
-                    b.Navigation("Quotes");
-                });
+                    b.HasOne("WiseReminder.Domain.Quotes.Quote", null)
+                        .WithMany()
+                        .HasForeignKey("QuoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("WiseReminder.Domain.Categories.Category", b =>
-                {
-                    b.Navigation("Quotes");
-                });
-
-            modelBuilder.Entity("WiseReminder.Domain.Users.User", b =>
-                {
-                    b.Navigation("Author");
+                    b.HasOne("WiseReminder.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

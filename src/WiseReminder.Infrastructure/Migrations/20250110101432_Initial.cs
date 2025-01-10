@@ -99,6 +99,34 @@ namespace WiseReminder.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "reactions",
+                columns: table => new
+                {
+                    quote_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_like = table.Column<bool>(type: "boolean", nullable: false),
+                    added_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_reactions", x => new { x.quote_id, x.user_id });
+                    table.ForeignKey(
+                        name: "FK_reactions_quotes_quote_id",
+                        column: x => x.quote_id,
+                        principalTable: "quotes",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_reactions_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_authors_user_id",
                 table: "authors",
@@ -116,6 +144,21 @@ namespace WiseReminder.Infrastructure.Migrations
                 column: "category_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_reactions_quote_id",
+                table: "reactions",
+                column: "quote_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_reactions_quote_id_user_id",
+                table: "reactions",
+                columns: new[] { "quote_id", "user_id" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_reactions_user_id",
+                table: "reactions",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_login",
                 table: "users",
                 column: "login",
@@ -125,6 +168,9 @@ namespace WiseReminder.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "reactions");
+
             migrationBuilder.DropTable(
                 name: "quotes");
 
