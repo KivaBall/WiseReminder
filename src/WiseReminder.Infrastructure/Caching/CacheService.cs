@@ -1,60 +1,63 @@
 ﻿namespace WiseReminder.Infrastructure.Caching;
 
-public sealed class CacheService(IDistributedCache cache) : ICacheService
+public sealed class CacheService<TConverter>(
+    IDistributedCache cache,
+    TConverter converter)
+    : ICacheService<TConverter>
+    where TConverter : JsonConverter
 {
-    public async Task<T> GetOrCreateAsync<T>(
+    public async Task<TEntity> GetOrCreateAsync<TEntity>(
         string key,
-        Func<Task<T?>> entityFunc,
+        Func<Task<TEntity>> method,
+        CancellationToken cancellationToken,
         TimeSpan? expiration = null)
     {
-        var serializedObject = await cache.GetStringAsync(key);
+        var serialized = await cache.GetStringAsync(key, cancellationToken);
 
-        if (serializedObject != null)
+        if (serialized != null)
         {
-            var deserializedObject =
-                JsonConvert.DeserializeObject<T>(serializedObject, new QuoteConverter());
-
-            if (deserializedObject == null)
-            {
-                throw new Exception($"Could not deserialize object of type {typeof(T).Name}");
-            }
-
-            return deserializedObject;
+            return Deserialize<TEntity>(serialized);
         }
 
-        var entity = await entityFunc();
+        var entity = await method();
 
-        if (entity == null)
+        if (entity != null)
         {
-            return entity!;
+            await SetAsync(key, entity, cancellationToken, expiration);
         }
-
-        var createdSerializedObject = JsonConvert.SerializeObject(entity, new QuoteConverter());
-
-        var options = new DistributedCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(5)
-        };
-
-        await cache.SetStringAsync(key, createdSerializedObject, options);
 
         return entity;
     }
 
-    public async Task SetAsync<T>(string key, T entity)
+    public async Task SetAsync<TEntity>(
+        string key,
+        TEntity entity,
+        CancellationToken cancellationToken,
+        TimeSpan? expiration = null)
     {
-        var createdSerializedObject = JsonConvert.SerializeObject(entity, new QuoteConverter());
+        var serialized = Serialize(entity);
 
         var options = new DistributedCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            SlidingExpiration = expiration ?? TimeSpan.FromMinutes(10),
+            AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(30)
         };
 
-        await cache.SetStringAsync(key, createdSerializedObject, options);
+        await cache.SetStringAsync(key, serialized, options, cancellationToken);
     }
 
-    public async Task RemoveAsync(string key)
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken)
     {
-        await cache.RemoveAsync(key);
+        await cache.RemoveAsync(key, cancellationToken);
+    }
+
+    private string Serialize<TEntity>(TEntity entity)
+    {
+        return JsonConvert.SerializeObject(entity, converter);
+    }
+
+    private TEntity Deserialize<TEntity>(string serialized)
+    {
+        return JsonConvert.DeserializeObject<TEntity>(serialized, converter)!;
     }
 }

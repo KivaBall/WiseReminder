@@ -16,7 +16,7 @@ public sealed class Author : Entity<Author>
     public Biography Biography { get; private set; }
     public Date BirthDate { get; private set; }
     public Date? DeathDate { get; private set; }
-    public Guid? UserId { get; private set; }
+    public Guid? UserId { get; }
 
     public static Result<Author> CreateByAdmin(AuthorName name, Biography biography, Date birthDate,
         Date? deathDate)
@@ -40,8 +40,13 @@ public sealed class Author : Entity<Author>
     }
 
     public Result UpdateByAdmin(AuthorName name, Biography biography, Date birthDate,
-        Date? deathDate, Date minQuoteDate, Date maxQuoteDate)
+        Date? deathDate, Date? minQuoteDate, Date? maxQuoteDate)
     {
+        if (minQuoteDate == null || maxQuoteDate == null)
+        {
+            return AuthorErrors.AuthorQuoteDatesNotFound;
+        }
+
         if (!IsValidBirthAndDeathDateRange(birthDate, deathDate))
         {
             return AuthorErrors.InvalidBirthAndDeathDateRange;
@@ -66,8 +71,13 @@ public sealed class Author : Entity<Author>
     }
 
     public Result UpdateByUser(AuthorName name, Biography biography, Date birthDate,
-        Date minQuoteDate)
+        Date? minQuoteDate)
     {
+        if (minQuoteDate == null)
+        {
+            return AuthorErrors.AuthorQuoteDatesNotFound;
+        }
+
         if (!IsValidBirthAndMinQuoteDateRange(birthDate, minQuoteDate))
         {
             return AuthorErrors.InvalidBirthAndMinQuoteDateRange;
@@ -78,6 +88,13 @@ public sealed class Author : Entity<Author>
         BirthDate = birthDate;
 
         return Result.Ok();
+    }
+
+    public Result HasAccess(bool isUser)
+    {
+        var hasUserId = UserId != null;
+
+        return isUser == hasUserId ? Result.Ok() : AuthorErrors.AccessToModifyAuthorDenied;
     }
 
     private static bool IsValidBirthAndDeathDateRange(Date birthDate, Date? deathDate)

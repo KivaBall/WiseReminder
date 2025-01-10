@@ -7,14 +7,6 @@
         <LangVersion>13</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <NoWarn>CS8618</NoWarn>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <InternalsVisibleTo Include="WiseReminder.IntegrationTests"/>
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="FluentResults" Version="3.16.0"/>
         <PackageReference Include="MediatR.Contracts" Version="2.0.1"/>

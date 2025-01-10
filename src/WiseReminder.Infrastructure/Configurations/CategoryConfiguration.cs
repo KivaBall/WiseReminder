@@ -1,24 +1,14 @@
 ﻿namespace WiseReminder.Infrastructure.Configurations;
 
-public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
+public sealed class CategoryConfiguration : BaseEntityConfiguration<Category>
 {
-    public void Configure(EntityTypeBuilder<Category> builder)
+    public override void Configure(EntityTypeBuilder<Category> builder)
     {
+        base.Configure(builder);
+
+        ApplyPrimaryKey(builder);
+
         builder.ToTable("categories");
-
-        builder.Property(c => c.Id)
-            .HasColumnName("id");
-        builder.HasKey(c => c.Id);
-
-        builder.Property(c => c.AddedAt)
-            .HasColumnName("added_at");
-
-        builder.Property(c => c.IsDeleted)
-            .HasColumnName("is_deleted");
-        builder.HasQueryFilter(c => c.IsDeleted == false);
-
-        builder.Property(c => c.DeletedAt)
-            .HasColumnName("deleted_at");
 
         builder.Property(c => c.Name)
             .HasMaxLength(64)

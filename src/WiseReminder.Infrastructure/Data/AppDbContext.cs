@@ -1,56 +1,61 @@
 ﻿namespace WiseReminder.Infrastructure.Data;
 
-public sealed class AppDbContext : DbContext, IUnitOfWork
+public sealed class AppDbContext(
+    ILogger logger,
+    DbContextOptions<AppDbContext> options)
+    : DbContext(options), IUnitOfWork
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Category> Categories { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Quote> Quotes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Reaction> Reactions { get; set; }
 
-    public async Task<Result> SaveChangesAsync()
+    public new async Task<Result> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            var saveAmount = await base.SaveChangesAsync();
-
-            if (saveAmount <= 0)
-            {
-                return Result.Fail("Nothing was saved");
-            }
-
-            return Result.Ok();
-        }
-        catch
-        {
-            return Result.Fail("Something went wrong with database");
-        }
+        return await ExecuteSaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Result<TResult>> SaveChangesAsyncWithResult<TResult>(Func<TResult> entity)
+    public async Task<Result<T>> SaveChangesAsync<T>(T entity, CancellationToken cancellationToken)
     {
-        try
-        {
-            var saveAmount = await base.SaveChangesAsync();
+        var result = await ExecuteSaveChangesAsync(cancellationToken);
 
-            if (saveAmount <= 0)
-            {
-                return Result.Fail("Nothing was saved");
-            }
-
-            return Result.Ok(entity.Invoke());
-        }
-        catch
+        if (result.IsFailed)
         {
-            return Result.Fail("Something went wrong with database");
+            return result;
         }
+
+        return Result.Ok(entity);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseModel(AppDbContextModel.Instance);
+    }
+
+    private async Task<Result> ExecuteSaveChangesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!ChangeTracker.HasChanges())
+            {
+                return DbErrors.DetectedNoChanges;
+            }
+
+            await base.SaveChangesAsync(cancellationToken);
+
+            return Result.Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "An error occured during SaveChangesAsync");
+
+            return DbErrors.DatabaseError;
+        }
     }
 }

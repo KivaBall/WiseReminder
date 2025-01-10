@@ -3,63 +3,89 @@
 public static class InfrastructureExtensions
 {
     public static void AddInfrastructureServices(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration config)
     {
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DbConnection")));
+        services.AddDbServices(config);
 
-        services.AddScoped<IUnitOfWork>(provider =>
-            provider.GetRequiredService<AppDbContext>());
+        services.AddRepositories();
 
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddKeyedScoped<IQuoteRepository, QuoteRepository>("original-quote-repository");
-        services.AddScoped<IQuoteRepository, CachedQuoteRepository>();
-        services.AddScoped<IAuthorRepository, AuthorRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-
-        services.AddSingleton<ICacheService, CacheService>();
-        services.AddStackExchangeRedisCache(options =>
-            options.Configuration = configuration.GetConnectionString("RedisConnection"));
+        services.AddCacheServices(config);
 
         services.AddSingleton<IJwtService, JwtService>();
 
         services.AddSingleton<IEncryptService, EncryptService>();
+
+        services.AddScoped<ITranslationService, TranslationService>();
+
+        services.AddScoped<HttpClient>();
     }
 
-    public static void ApplyMigrations(this IApplicationBuilder app)
+    private static void AddDbServices(this IServiceCollection services, IConfiguration config)
+    {
+        var dbConnection = config.GetConnectionString("DbConnection")
+                           ?? throw new InvalidOperationException(
+                               "Database connection string is not configured");
+
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnection));
+
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<AppDbContext>());
+    }
+
+    private static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddKeyedScoped<IQuoteRepository, QuoteRepository>("original-quote-repository");
+        services.AddScoped<IQuoteRepository, CachedQuoteRepository>();
+
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IReactionRepository, ReactionRepository>();
+    }
+
+    private static void AddCacheServices(this IServiceCollection services, IConfiguration config)
+    {
+        var redisConnection = config.GetConnectionString("RedisConnection") ??
+                              throw new InvalidOperationException(
+                                  "Redis connection string is not configured");
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = redisConnection);
+
+        services.AddSingleton<QuoteConverter>();
+
+        services.AddSingleton(typeof(ICacheService<>), typeof(CacheService<>));
+    }
+
+    public static async Task ApplyMigrations(this IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices.CreateScope();
 
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        if (context.Database.IsRelational())
+        await context.Database.MigrateAsync();
+    }
+
+    public static async Task ApplySeeding(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        if (!context.Categories.Any())
         {
-            context.Database.Migrate();
+            await context.Database.ExecuteSqlRawAsync(CategorySeed.Sql);
         }
-    }
 
-    public static void ApplySeeding(this IApplicationBuilder app)
-    {
-        using var scope = app.ApplicationServices.CreateScope();
-
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        if (context.Database.IsRelational())
+        if (!context.Authors.Any())
         {
-            if (!context.Categories.Any())
-            {
-                context.Database.ExecuteSqlRaw(CategorySeed.Sql);
-            }
+            await context.Database.ExecuteSqlRawAsync(AuthorSeed.Sql);
+        }
 
-            if (!context.Authors.Any())
-            {
-                context.Database.ExecuteSqlRaw(AuthorSeed.Sql);
-            }
-
-            if (!context.Quotes.Any())
-            {
-                context.Database.ExecuteSqlRaw(QuoteSeed.Sql);
-            }
+        if (!context.Quotes.Any())
+        {
+            await context.Database.ExecuteSqlRawAsync(QuoteSeed.Sql);
         }
     }
 }

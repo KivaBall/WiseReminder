@@ -1,24 +1,14 @@
 namespace WiseReminder.Infrastructure.Configurations;
 
-public sealed class UserConfiguration : IEntityTypeConfiguration<User>
+public sealed class UserConfiguration : BaseEntityConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public override void Configure(EntityTypeBuilder<User> builder)
     {
+        base.Configure(builder);
+
+        ApplyPrimaryKey(builder);
+
         builder.ToTable("users");
-
-        builder.Property(u => u.Id)
-            .HasColumnName("id");
-        builder.HasKey(u => u.Id);
-
-        builder.Property(u => u.AddedAt)
-            .HasColumnName("added_at");
-
-        builder.Property(u => u.IsDeleted)
-            .HasColumnName("is_deleted");
-        builder.HasQueryFilter(u => u.IsDeleted == false);
-
-        builder.Property(u => u.DeletedAt)
-            .HasColumnName("deleted_at");
 
         builder.Property(u => u.Username)
             .HasMaxLength(64)
@@ -29,8 +19,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(64)
             .HasConversion(login => login.Value, value => new Login(value))
             .HasColumnName("login");
-        builder.HasIndex(u => u.Login)
-            .IsUnique();
 
         builder.Property(u => u.HashedPassword)
             .HasMaxLength(64)
@@ -40,5 +28,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Subscription)
             .HasColumnName("subscription");
+
+        builder.HasMany<Reaction>().WithOne()
+            .HasForeignKey(r => r.UserId);
+
+        builder.HasIndex(u => u.Login)
+            .IsUnique();
     }
 }

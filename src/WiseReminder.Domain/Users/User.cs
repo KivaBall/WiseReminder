@@ -20,13 +20,23 @@ public sealed class User : Entity<User>
         Subscription = subscription;
     }
 
-    public void ChangeUsername(Username username)
+    public Result Update(Username? username, HashedPassword? hashedPassword)
     {
-        Username = username;
-    }
+        if (username == null && hashedPassword == null)
+        {
+            return UserErrors.NothingUpdated;
+        }
 
-    public void ChangePassword(HashedPassword hashedPassword)
-    {
-        HashedPassword = hashedPassword;
+        if (username != null)
+        {
+            Username = username;
+        }
+
+        if (hashedPassword != null)
+        {
+            HashedPassword = hashedPassword;
+        }
+
+        return Result.Ok();
     }
 }

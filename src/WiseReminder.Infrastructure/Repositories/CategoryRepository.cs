@@ -21,15 +21,32 @@ public sealed class CategoryRepository(
         context.Categories.Update(category);
     }
 
-    public async Task<Category?> GetCategoryById(Guid id)
+    public async Task<Category?> GetCategoryById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Categories
-            .FirstOrDefaultAsync(category => category.Id == id);
+            .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
     }
 
-    public async Task<ICollection<Category>> GetAllCategories()
+    public async Task<CategoryDetails?> GetCategoryDetailsById(Guid id,
+        CancellationToken cancellationToken)
     {
         return await context.Categories
-            .ToListAsync();
+            .Where(category => category.Id == id)
+            .ConvertToCategoryDetails(context)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<bool> HasCategoryById(Guid id, CancellationToken cancellationToken)
+    {
+        return await context.Categories
+            .AnyAsync(category => category.Id == id, cancellationToken);
+    }
+
+    public async Task<ICollection<CategoryDetails>> GetAllCategories(
+        CancellationToken cancellationToken)
+    {
+        return await context.Categories
+            .ConvertToCategoryDetails(context)
+            .ToListAsync(cancellationToken);
     }
 }

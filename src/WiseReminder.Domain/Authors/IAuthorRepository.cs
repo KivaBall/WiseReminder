@@ -3,10 +3,23 @@
 public interface IAuthorRepository
 {
     void CreateAuthor(Author author);
+
     void UpdateAuthor(Author author);
+
     void DeleteAuthor(Author author);
-    Task<Author?> GetAuthorById(Guid id);
-    Task<Author?> GetAuthorByUserId(Guid userId);
-    Task<ICollection<Author>> GetAllAuthors();
-    Task<(Date minQuoteDate, Date maxQuoteDate)> GetMinimalAndMaxQuoteDatesById(Guid id);
+
+    Task<Author?> GetAuthorById(Guid id, CancellationToken cancellationToken);
+
+    Task<AuthorDetails?> GetAuthorDetailsById(Guid id, CancellationToken cancellationToken);
+
+    Task<Author?> GetAuthorByUserId(Guid userId, CancellationToken cancellationToken);
+
+    Task<AuthorDetails?> GetAuthorDetailsByUserId(Guid userId, CancellationToken cancellationToken);
+
+    Task<bool> HasAuthorByUserId(Guid userId, CancellationToken cancellationToken);
+
+    Task<ICollection<AuthorDetails>> GetAllAuthors(CancellationToken cancellationToken);
+
+    Task<(Date? minQuoteDate, Date? maxQuoteDate)> GetMinAndMaxQuoteDatesById(Guid id,
+        CancellationToken cancellationToken);
 }

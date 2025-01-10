@@ -1,4 +1,5 @@
 ﻿namespace WiseReminder.Application.Abstractions.MediatR;
 
-public interface IQueryHandler<in TQuery, TEntity> : IRequestHandler<TQuery, Result<TEntity>>
+public interface IQueryHandler<in TQuery, TEntity>
+    : IRequestHandler<TQuery, Result<TEntity>>
     where TQuery : IQuery<TEntity>;

@@ -18,7 +18,8 @@ public sealed class Quote : Entity<Quote>
     public static Result<Quote> CreateByAdmin(Text text, Date quoteDate, Author author,
         Guid categoryId)
     {
-        if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
+        if (!IsQuoteDateBetweenBirthAndDeathAuthorDates(author.BirthDate, author.DeathDate,
+                quoteDate))
         {
             return QuoteErrors.QuoteDateOutOfRange;
         }
@@ -31,12 +32,13 @@ public sealed class Quote : Entity<Quote>
     public static Result<Quote> CreateByUser(Text text, Author author, Guid categoryId,
         Date quoteDate, Subscription subscription, int authorQuotesAmount)
     {
-        if (!AuthorMayHaveAdditionalQuote(subscription, authorQuotesAmount))
+        if (!IsAbleToHaveExtraQuote(subscription, authorQuotesAmount))
         {
             return QuoteErrors.QuoteLimitExceeded;
         }
 
-        if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
+        if (!IsQuoteDateBetweenBirthAndDeathAuthorDates(author.BirthDate, author.DeathDate,
+                quoteDate))
         {
             return QuoteErrors.QuoteDateOutOfRange;
         }
@@ -48,7 +50,8 @@ public sealed class Quote : Entity<Quote>
 
     public Result Update(Text text, Author author, Guid categoryId, Date quoteDate)
     {
-        if (!IsValidQuoteDate(author.BirthDate, author.DeathDate, quoteDate))
+        if (!IsQuoteDateBetweenBirthAndDeathAuthorDates(author.BirthDate, author.DeathDate,
+                quoteDate))
         {
             return QuoteErrors.QuoteDateOutOfRange;
         }
@@ -61,7 +64,18 @@ public sealed class Quote : Entity<Quote>
         return Result.Ok();
     }
 
-    private static bool IsValidQuoteDate(Date birthDate, Date? deathDate, Date quoteDate)
+    public Result IsAuthor(Guid authorId)
+    {
+        if (AuthorId != authorId)
+        {
+            return QuoteErrors.QuoteNotBelongsToThisAuthor;
+        }
+
+        return Result.Ok();
+    }
+
+    private static bool IsQuoteDateBetweenBirthAndDeathAuthorDates(Date birthDate,
+        Date? deathDate, Date quoteDate)
     {
         if (deathDate == null)
         {
@@ -77,7 +91,7 @@ public sealed class Quote : Entity<Quote>
         return true;
     }
 
-    private static bool AuthorMayHaveAdditionalQuote(Subscription subscription,
+    private static bool IsAbleToHaveExtraQuote(Subscription subscription,
         int authorQuotesAmount)
     {
         return subscription switch

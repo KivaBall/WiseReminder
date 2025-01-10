@@ -1,24 +1,14 @@
 ﻿namespace WiseReminder.Infrastructure.Configurations;
 
-public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
+public sealed class QuoteConfiguration : BaseEntityConfiguration<Quote>
 {
-    public void Configure(EntityTypeBuilder<Quote> builder)
+    public override void Configure(EntityTypeBuilder<Quote> builder)
     {
+        base.Configure(builder);
+
+        ApplyPrimaryKey(builder);
+
         builder.ToTable("quotes");
-
-        builder.Property(q => q.Id)
-            .HasColumnName("id");
-        builder.HasKey(q => q.Id);
-
-        builder.Property(q => q.AddedAt)
-            .HasColumnName("added_at");
-
-        builder.Property(q => q.IsDeleted)
-            .HasColumnName("is_deleted");
-        builder.HasQueryFilter(q => q.IsDeleted == false);
-
-        builder.Property(q => q.DeletedAt)
-            .HasColumnName("deleted_at");
 
         builder.Property(q => q.Text)
             .HasMaxLength(1024)
@@ -40,5 +30,12 @@ public sealed class QuoteConfiguration : IEntityTypeConfiguration<Quote>
 
         builder.HasOne<Author>().WithMany()
             .HasForeignKey(q => q.AuthorId);
+
+        builder.HasMany<Reaction>().WithOne()
+            .HasForeignKey(r => r.QuoteId);
+
+        builder.HasIndex(q => q.CategoryId);
+
+        builder.HasIndex(q => q.AuthorId);
     }
 }
