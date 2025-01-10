@@ -1,6 +1,6 @@
 ﻿namespace WiseReminder.WebAPI.Controllers.Quotes;
 
-public sealed record AdminQuoteRequest
+public sealed record QuoteByAdminRequest
 {
     public required string Text { get; init; }
     public required Guid AuthorId { get; init; }

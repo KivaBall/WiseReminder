@@ -12,21 +12,16 @@ public abstract class BaseController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok()
-            : BadRequest(result.Errors
-                .Select(e => e.Message)
-                .ToList());
+            : BadRequest(result.Errors.Select(e => e.Message).ToList());
     }
 
-    protected async Task<IActionResult> ExecuteCommandWithEntity<TResponse>(
-        ICommand<TResponse> command)
+    protected async Task<IActionResult> ExecuteCommand<TResponse>(ICommand<TResponse> command)
     {
         var result = await sender.Send(command);
 
         return result.IsSuccess
             ? Ok(result.Value)
-            : BadRequest(result.Errors
-                .Select(e => e.Message)
-                .ToList());
+            : BadRequest(result.Errors.Select(e => e.Message).ToList());
     }
 
     protected async Task<IActionResult> ExecuteQuery<TResponse>(IQuery<TResponse> query)
@@ -35,8 +30,6 @@ public abstract class BaseController(ISender sender) : ControllerBase
 
         return result.IsSuccess
             ? Ok(result.Value)
-            : NotFound(result.Errors
-                .Select(e => e.Message)
-                .ToList());
+            : NotFound(result.Errors.Select(e => e.Message).ToList());
     }
 }

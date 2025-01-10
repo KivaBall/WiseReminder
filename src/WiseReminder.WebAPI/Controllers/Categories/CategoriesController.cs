@@ -7,7 +7,7 @@ public sealed class CategoriesController(ISender sender) : BaseController(sender
     public async Task<IActionResult> CreateCategory(CategoryRequest request)
     {
         var command = request.ToCreateCategoryCommand();
-        return await ExecuteCommandWithEntity(command);
+        return await ExecuteCommand(command);
     }
 
     [HttpPut("{id}")]
@@ -34,7 +34,7 @@ public sealed class CategoriesController(ISender sender) : BaseController(sender
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllCategories()
+    public async Task<IActionResult> GetCategories()
     {
         var query = new GetCategoryDtosQuery();
         return await ExecuteQuery(query);
