@@ -1,6 +1,6 @@
-﻿namespace WiseReminder.WebAPI.Mapping;
+﻿namespace WiseReminder.WebAPI.Mappers;
 
-public static class CategoryRequestsToCommandExtensions
+public static class CategoryRequestMapper
 {
     public static CreateCategoryCommand ToCreateCategoryCommand(
         this CategoryRequest request)

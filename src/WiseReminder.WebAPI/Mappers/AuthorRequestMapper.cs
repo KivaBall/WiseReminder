@@ -1,9 +1,9 @@
-namespace WiseReminder.WebAPI.Mapping;
+namespace WiseReminder.WebAPI.Mappers;
 
-public static class AuthorRequestsToCommandExtensions
+public static class AuthorRequestMapper
 {
-    public static CreateAuthorByAdminCommand ToAdminCreateAuthorCommand(
-        this AdminAuthorRequest request)
+    public static CreateAuthorByAdminCommand ToCreateAuthorByAdminCommand(
+        this AuthorByAdminRequest request)
     {
         return new CreateAuthorByAdminCommand
         {
@@ -14,8 +14,8 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static CreateAuthorByUserCommand ToUserCreateAuthorCommand(
-        this UserAuthorRequest request,
+    public static CreateAuthorByUserCommand ToCreateAuthorByUserCommand(
+        this AuthorByUserRequest request,
         Guid userId)
     {
         return new CreateAuthorByUserCommand
@@ -27,8 +27,8 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static UpdateAuthorByAdminCommand ToAdminUpdateAuthorCommand(
-        this AdminAuthorRequest request,
+    public static UpdateAuthorByAdminCommand ToUpdateAuthorByAdminCommand(
+        this AuthorByAdminRequest request,
         Guid id)
     {
         return new UpdateAuthorByAdminCommand
@@ -41,8 +41,8 @@ public static class AuthorRequestsToCommandExtensions
         };
     }
 
-    public static UpdateAuthorByUserCommand ToUserUpdateAuthorCommand(
-        this UserAuthorRequest request,
+    public static UpdateAuthorByUserCommand ToUpdateAuthorByUserCommand(
+        this AuthorByUserRequest request,
         Guid userId)
     {
         return new UpdateAuthorByUserCommand

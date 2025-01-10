@@ -1,9 +1,9 @@
-﻿namespace WiseReminder.WebAPI.Mapping;
+﻿namespace WiseReminder.WebAPI.Mappers;
 
-public static class QuoteRequestsToCommandExtensions
+public static class QuoteRequestMapper
 {
-    public static CreateQuoteByAdminCommand ToAdminCreateQuoteCommand(
-        this AdminQuoteRequest request)
+    public static CreateQuoteByAdminCommand ToCreateQuoteByAdminCommand(
+        this QuoteByAdminRequest request)
     {
         return new CreateQuoteByAdminCommand
         {
@@ -14,8 +14,8 @@ public static class QuoteRequestsToCommandExtensions
         };
     }
 
-    public static CreateQuoteByUserCommand ToUserCreateQuoteCommand(
-        this UserQuoteRequest request,
+    public static CreateQuoteByUserCommand ToCreateQuoteByUserCommand(
+        this QuoteByUserRequest request,
         Guid userId)
     {
         return new CreateQuoteByUserCommand
@@ -27,8 +27,8 @@ public static class QuoteRequestsToCommandExtensions
         };
     }
 
-    public static UpdateQuoteByAdminCommand ToAdminUpdateQuoteCommand(
-        this AdminQuoteRequest request,
+    public static UpdateQuoteByAdminCommand ToUpdateQuoteByAdminCommand(
+        this QuoteByAdminRequest request,
         Guid id)
     {
         return new UpdateQuoteByAdminCommand
@@ -41,8 +41,8 @@ public static class QuoteRequestsToCommandExtensions
         };
     }
 
-    public static UpdateQuoteByUserCommand ToUserUpdateQuoteCommand(
-        this UserQuoteRequest request,
+    public static UpdateQuoteByUserCommand ToUpdateQuoteByUserCommand(
+        this QuoteByUserRequest request,
         Guid id,
         Guid userId)
     {
@@ -53,6 +53,18 @@ public static class QuoteRequestsToCommandExtensions
             CategoryId = request.CategoryId,
             QuoteDate = request.QuoteDate,
             UserId = userId
+        };
+    }
+
+    public static GetQuoteDtosQuery ToGetQuoteDtosQuery(
+        this GetQuotesRequest request)
+    {
+        return new GetQuoteDtosQuery
+        {
+            CategoryId = request.CategoryId,
+            AuthorId = request.AuthorId,
+            Keywords = request.Keywords,
+            DesiredLanguage = request.DesiredLanguage
         };
     }
 }
