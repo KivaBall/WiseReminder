@@ -1,6 +1,6 @@
 namespace WiseReminder.WebAPI.Validators.Users;
 
-public sealed class LoginAsAdminRequestValidator : AbstractValidator<AdminLoginRequest>
+public sealed class LoginAsAdminRequestValidator : AbstractValidator<LoginAsAdminRequest>
 {
     public LoginAsAdminRequestValidator()
     {
