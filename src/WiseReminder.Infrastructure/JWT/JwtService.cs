@@ -25,7 +25,8 @@ public sealed class JwtService(IConfiguration configuration) : IJwtService
 
     private string GenerateToken(Dictionary<string, object> claims)
     {
-        var jwtPassword = configuration["JWTPassword"]!;
+        var jwtPassword = configuration["JWTPassword"] ??
+                          throw new InvalidOperationException("JWTPassword is not configured");
 
         var key = Encoding.UTF8.GetBytes(jwtPassword);
 
