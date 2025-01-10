@@ -1,24 +1,14 @@
 ﻿namespace WiseReminder.Infrastructure.Configurations;
 
-public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
+public sealed class AuthorConfiguration : BaseEntityConfiguration<Author>
 {
-    public void Configure(EntityTypeBuilder<Author> builder)
+    public override void Configure(EntityTypeBuilder<Author> builder)
     {
+        base.Configure(builder);
+
+        ApplyPrimaryKey(builder);
+
         builder.ToTable("authors");
-
-        builder.Property(a => a.Id)
-            .HasColumnName("id");
-        builder.HasKey(a => a.Id);
-
-        builder.Property(a => a.AddedAt)
-            .HasColumnName("added_at");
-
-        builder.Property(a => a.IsDeleted)
-            .HasColumnName("is_deleted");
-        builder.HasQueryFilter(a => a.IsDeleted == false);
-
-        builder.Property(c => c.DeletedAt)
-            .HasColumnName("deleted_at");
 
         builder.Property(a => a.Name)
             .HasMaxLength(64)
@@ -47,5 +37,7 @@ public sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
 
         builder.HasOne<User>().WithOne()
             .HasForeignKey<Author>(a => a.UserId);
+
+        builder.HasIndex(a => a.UserId);
     }
 }
