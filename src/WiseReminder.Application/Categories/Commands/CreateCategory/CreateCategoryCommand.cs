@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.CreateCategory;
+﻿namespace WiseReminder.Application.Categories.Commands.CreateCategory;
 
 public sealed record CreateCategoryCommand : ICommand<Guid>
 {

@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.CreateCategory;
+﻿namespace WiseReminder.Application.Categories.Commands.CreateCategory;
 
 public sealed class CreateCategoryHandler(
     ICategoryRepository repository,
@@ -17,6 +17,6 @@ public sealed class CreateCategoryHandler(
 
         repository.CreateCategory(category);
 
-        return await unitOfWork.SaveChangesAsyncWithResult(() => category.Id);
+        return await unitOfWork.SaveChangesAsync(category.Id, cancellationToken);
     }
 }

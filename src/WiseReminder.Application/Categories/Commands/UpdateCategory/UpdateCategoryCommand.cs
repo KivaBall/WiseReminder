@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.UpdateCategory;
+﻿namespace WiseReminder.Application.Categories.Commands.UpdateCategory;
 
 public sealed record UpdateCategoryCommand : ICommand
 {

@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.GetCategoryDtoById;
+﻿namespace WiseReminder.Application.Categories.Queries.GetCategoryDtoById;
 
 public sealed class GetCategoryDtoByIdHandler(
     ISender sender)
@@ -8,7 +8,7 @@ public sealed class GetCategoryDtoByIdHandler(
         GetCategoryDtoByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new GetCategoryByIdQuery(request.Id);
+        var query = new GetCategoryDetailsByIdQuery(request.Id);
 
         var category = await sender.Send(query, cancellationToken);
 

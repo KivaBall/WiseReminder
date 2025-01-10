@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.GetCategoryById;
+﻿namespace WiseReminder.Application.Categories.Queries.GetCategoryById;
 
 public sealed class GetCategoryByIdHandler(
     ICategoryRepository repository)
@@ -8,7 +8,7 @@ public sealed class GetCategoryByIdHandler(
         GetCategoryByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var category = await repository.GetCategoryById(request.Id);
+        var category = await repository.GetCategoryById(request.Id, cancellationToken);
 
         if (category == null)
         {

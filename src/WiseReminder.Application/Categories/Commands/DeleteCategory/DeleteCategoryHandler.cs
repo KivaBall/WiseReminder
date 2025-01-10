@@ -1,4 +1,4 @@
-﻿namespace WiseReminder.Application.Categories.DeleteCategory;
+﻿namespace WiseReminder.Application.Categories.Commands.DeleteCategory;
 
 public sealed class DeleteCategoryHandler(
     ICategoryRepository repository,
@@ -19,12 +19,17 @@ public sealed class DeleteCategoryHandler(
             return category.ToResult();
         }
 
-        var categoryDeletedEvent = new CategoryDeletedEvent(request.Id);
-
-        await mediator.Publish(categoryDeletedEvent, cancellationToken);
-
         repository.DeleteCategory(category.Value);
 
-        return await unitOfWork.SaveChangesAsync();
+        var result = await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            var categoryDeletedEvent = new CategoryDeletedEvent(request.Id);
+
+            await mediator.Publish(categoryDeletedEvent, cancellationToken);
+        }
+
+        return result;
     }
 }
