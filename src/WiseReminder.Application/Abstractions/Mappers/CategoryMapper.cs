@@ -2,13 +2,14 @@
 
 public static class CategoryMapper
 {
-    public static CategoryDto ToCategoryDto(this Category category)
+    public static CategoryDto ToCategoryDto(this CategoryDetails categoryDetails)
     {
         return new CategoryDto
         {
-            Id = category.Id,
-            Name = category.Name.Value,
-            Description = category.Description.Value
+            Id = categoryDetails.Category.Id,
+            Name = categoryDetails.Category.Name.Value,
+            Description = categoryDetails.Category.Description.Value,
+            Quotes = categoryDetails.Quotes
         };
     }
 }
