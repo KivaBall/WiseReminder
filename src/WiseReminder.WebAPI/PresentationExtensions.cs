@@ -9,13 +9,18 @@ public static class PresentationExtensions
 
         services.AddControllers();
 
+        services.AddValidation();
+
+        services.AddAuth(configuration);
+
+        services.AddOpenApi();
+    }
+
+    private static void AddValidation(this IServiceCollection services)
+    {
         services.AddFluentValidationAutoValidation();
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
-        services.AddOpenApi();
-
-        services.AddAuth(configuration);
     }
 
     private static void AddAuth(this IServiceCollection services, IConfiguration configuration)
@@ -35,6 +40,7 @@ public static class PresentationExtensions
                         Encoding.UTF8.GetBytes(configuration["JWTPassword"]!))
                 };
             });
+
         services.AddAuthorization();
     }
 }

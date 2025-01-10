@@ -1,28 +1,17 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices(builder.Configuration);
+
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
 builder.Services.AddPresentationServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.ApplyMigrations();
+await app.ApplyDbConfiguration();
 
-if (app.Configuration["InitialSeeding"] == "true")
-{
-    app.ApplySeeding();
-}
+app.BuildPipeline();
 
-if (app.Configuration["AllowScalar"] == "true")
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+await app.RunAsync();
 
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
-
-public sealed partial class Program;
+public abstract partial class Program;
