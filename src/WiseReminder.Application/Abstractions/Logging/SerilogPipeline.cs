@@ -1,7 +1,7 @@
 namespace WiseReminder.Application.Abstractions.Logging;
 
 public sealed class SerilogPipeline<TRequest, TResponse>(
-    ILogger<TRequest> logger)
+    ILogger logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommon
     where TResponse : ResultBase
@@ -11,7 +11,7 @@ public sealed class SerilogPipeline<TRequest, TResponse>(
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation(
+        logger.Information(
             "Handling request {RequestName} with payload: {@Request}",
             typeof(TRequest).Name,
             request);
@@ -24,7 +24,7 @@ public sealed class SerilogPipeline<TRequest, TResponse>(
 
         if (response.IsSuccess)
         {
-            logger.LogInformation(
+            logger.Information(
                 "Handled request {RequestName} successfully in {ElapsedTicks} ticks. Response: {@Response}",
                 typeof(TRequest).Name,
                 stopwatch.ElapsedTicks,
@@ -32,7 +32,7 @@ public sealed class SerilogPipeline<TRequest, TResponse>(
         }
         else
         {
-            logger.LogWarning(
+            logger.Warning(
                 "Handled request {RequestName} with errors in {ElapsedTicks} ticks. Errors: {@Errors}",
                 typeof(TRequest).Name,
                 stopwatch.ElapsedTicks,
