@@ -40,8 +40,8 @@ public sealed class QuoteConverter : JsonConverter<Quote>
         JsonSerializer serializer)
     {
         var id = Guid.Empty;
-        var textValue = string.Empty;
-        var quoteDateValue = default(DateOnly);
+        var text = string.Empty;
+        var quoteDate = default(DateOnly);
         var authorId = Guid.Empty;
         var categoryId = Guid.Empty;
 
@@ -55,38 +55,35 @@ public sealed class QuoteConverter : JsonConverter<Quote>
             if (reader.TokenType == JsonToken.PropertyName)
             {
                 var propertyName = reader.Value?.ToString();
+
                 reader.Read();
 
                 switch (propertyName)
                 {
                     case "Id":
-                        id = Guid.Parse(reader.Value?.ToString() ?? string.Empty);
+                        id = Guid.Parse(reader.Value?.ToString()!);
                         break;
                     case "Text":
-                        textValue = reader.Value?.ToString();
+                        text = reader.Value?.ToString();
                         break;
                     case "QuoteDate":
-                        quoteDateValue =
-                            DateOnly.Parse(reader.Value?.ToString() ?? string.Empty);
+                        quoteDate = DateOnly.Parse(reader.Value?.ToString()!);
                         break;
                     case "AuthorId":
-                        authorId = Guid.Parse(reader.Value?.ToString() ?? string.Empty);
+                        authorId = Guid.Parse(reader.Value?.ToString()!);
                         break;
                     case "CategoryId":
-                        categoryId = Guid.Parse(reader.Value?.ToString() ?? string.Empty);
+                        categoryId = Guid.Parse(reader.Value?.ToString()!);
                         break;
                 }
             }
         }
 
-        var text = new Text(textValue!);
-        var date = Date.Create(quoteDateValue).Value;
-
         var quote = (Quote)Activator.CreateInstance(
             typeof(Quote),
             BindingFlags.Instance | BindingFlags.NonPublic,
             null,
-            [text, date, authorId, categoryId],
+            [new Text(text!), Date.Create(quoteDate).Value, authorId, categoryId],
             null
         )!;
 
