@@ -4,6 +4,5 @@ public interface IUnitOfWork
 {
     Task<Result> SaveChangesAsync(CancellationToken cancellationToken);
 
-    Task<Result<TResult>> SaveChangesAsync<TResult>(Func<TResult> entity,
-        CancellationToken cancellationToken);
+    Task<Result<T>> SaveChangesAsync<T>(T entity, CancellationToken cancellationToken);
 }
