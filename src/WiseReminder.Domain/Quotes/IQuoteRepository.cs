@@ -4,9 +4,9 @@ public interface IQuoteRepository
 {
     void CreateQuote(Quote quote);
 
-    Task UpdateQuote(Quote quote);
+    Task UpdateQuote(Quote quote, CancellationToken cancellationToken);
 
-    Task DeleteQuote(Quote quote);
+    Task DeleteQuote(Quote quote, CancellationToken cancellationToken);
 
     Task<Quote?> GetQuoteById(Guid id, CancellationToken cancellationToken);
 
