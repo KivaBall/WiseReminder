@@ -3,23 +3,34 @@
 public static class ApplicationExtensions
 {
     public static void AddApplicationServices(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration config)
     {
-        if (configuration.GetConnectionString("SeqConnection") == "Default")
-        {
-            services.AddSerilog(config => config
-                .WriteTo.Console());
-        }
-        else
-        {
-            services.AddSerilog(config => config
-                .WriteTo.Console()
-                .WriteTo.Seq(configuration.GetConnectionString("SeqConnection")!));
-        }
+        services.AddLogging(config);
 
+        services.AddCqrs();
+    }
+
+    private static void AddLogging(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddSerilog(logger =>
+        {
+            logger.MinimumLevel.Is(Enum.Parse<LogEventLevel>(config["Logging:LogLevel:Default"]!));
+
+            logger.WriteTo.Console();
+
+            if (config.GetConnectionString("SeqConnection") != "Default")
+            {
+                logger.WriteTo.Seq(config.GetConnectionString("SeqConnection")!);
+            }
+        });
+    }
+
+    private static void AddCqrs(this IServiceCollection services)
+    {
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+
             config.AddOpenBehavior(typeof(SerilogPipeline<,>));
         });
     }
