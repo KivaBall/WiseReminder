@@ -13,7 +13,7 @@ public sealed class Reaction : Entity<Reaction>
     public Guid UserId { get; private set; }
     public IsLike IsLike { get; private set; }
 
-    public Result Update(IsLike isLike)
+    public Result ChangeReaction(IsLike isLike)
     {
         if (IsLike == isLike)
         {
