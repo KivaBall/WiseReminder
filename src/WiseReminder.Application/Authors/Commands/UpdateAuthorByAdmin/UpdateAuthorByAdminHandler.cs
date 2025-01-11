@@ -49,6 +49,11 @@ public sealed class UpdateAuthorByAdminHandler(
         var (minQuoteDate, maxQuoteDate) =
             await repository.GetMinAndMaxQuoteDatesById(request.Id, cancellationToken);
 
+        if (minQuoteDate == null || maxQuoteDate == null)
+        {
+            return AuthorErrors.AuthorQuoteDatesNotFound;
+        }
+
         var result = author.Value.UpdateByAdmin(name, biography, birthDate.Value, deathDate?.Value,
             minQuoteDate, maxQuoteDate);
 
