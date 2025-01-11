@@ -15,14 +15,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\src\WiseReminder.Application\WiseReminder.Application.csproj"/>
         <ProjectReference Include="..\..\src\WiseReminder.Domain\WiseReminder.Domain.csproj"/>
         <ProjectReference Include="..\..\src\WiseReminder.Infrastructure\WiseReminder.Infrastructure.csproj"/>
         <ProjectReference Include="..\..\src\WiseReminder.WebAPI\WiseReminder.WebAPI.csproj"/>
+        <ProjectReference Include="..\WiseReminder.Domain.UnitTests\WiseReminder.Domain.UnitTests.csproj"/>
+        <ProjectReference Include="..\WiseReminder.WebAPI.IntegrationTests\WiseReminder.WebAPI.IntegrationTests.csproj"/>
     </ItemGroup>
 
 </Project>
