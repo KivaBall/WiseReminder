@@ -1,68 +1,172 @@
 ﻿namespace WiseReminder.Domain.UnitTests.Entities;
 
-public class QuoteTests
+public sealed class QuoteTests
 {
-    [Theory]
-    [InlineData(1880, 1920, 1885)]
-    [InlineData(1880, 1920, 1880)]
-    [InlineData(1880, 1920, 1780)]
-    [InlineData(1880, 1920, 1889)]
-    [InlineData(1880, 1920, 1920)]
-    public void CreateQuote_WhenQuoteDateOutOfRange_ShouldReturnFailure(short birthYear,
-        short deathYear, short quoteYear)
+    [Fact]
+    public void CreateByAdmin_WhenAllOk_ReturnsSuccess()
     {
         // Arrange
-        var category = new Category(
-            new CategoryName("TestName"),
-            new Description("TestDescription"));
+        var text = QuoteData.Text;
 
-        var author = Author.Create(
-            new AuthorName("TestName"),
-            new Biography("TestBiography"),
-            Date.Create(new DateOnly(birthYear, 1, 1)).Value,
-            Date.Create(new DateOnly(deathYear, 1, 1)).Value,
-            null);
+        var quoteDate = QuoteData.QuoteDate;
 
         // Act
-        var quote = Quote.Create(
-            new Text("TestText"),
-            author.Value,
-            category.Id,
-            Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
+        var result = Quote.CreateByAdmin(text, quoteDate, AuthorData.AdminAuthor, Guid.Empty);
+
+        var quote = result.Value;
 
         // Assert
-        quote.IsSuccess.Should().BeFalse();
+        result.IsSuccess.Should().BeTrue();
+
+        quote.Text.Should().Be(QuoteData.Text);
+        quote.QuoteDate.Should().Be(QuoteData.QuoteDate);
     }
 
     [Theory]
-    [InlineData(1880, 1920, 1890)]
-    [InlineData(1880, 1920, 1900)]
-    [InlineData(1880, 1920, 1910)]
-    [InlineData(1880, 1920, 1915)]
-    [InlineData(1880, 1920, 1919)]
-    public void CreateQuote_WhenQuoteDateInRange_ShouldReturnSuccess(short birthYear,
-        short deathYear, short quoteYear)
+    [InlineData("2001")]
+    [InlineData("1959")]
+    [InlineData("1942")]
+    public void CreateByAdmin_WhenQuoteDateOutOfRange_ReturnsFailure(string quoteYear)
     {
         // Arrange
-        var category = new Category(
-            new CategoryName("TestName"),
-            new Description("TestDescription"));
+        var text = QuoteData.Text;
 
-        var author = Author.Create(
-            new AuthorName("TestName"),
-            new Biography("TestBiography"),
-            Date.Create(new DateOnly(birthYear, 1, 1)).Value,
-            Date.Create(new DateOnly(deathYear, 1, 1)).Value,
-            null);
+        var quoteDate = Date.Create(DateOnly.Parse($"{quoteYear}-01-01")).Value;
+
+        var author = AuthorData.AdminAuthor;
 
         // Act
-        var quote = Quote.Create(
-            new Text("TestText"),
-            author.Value,
-            category.Id,
-            Date.Create(new DateOnly(quoteYear, 1, 1)).Value);
+        var result = Quote.CreateByAdmin(text, quoteDate, author, Guid.Empty);
 
         // Assert
-        quote.IsSuccess.Should().BeTrue();
+        result.Errors.First().Equals(QuoteErrors.QuoteDateOutOfRange.Errors.First()).Should()
+            .BeTrue();
+    }
+
+    [Fact]
+    public void CreateByUser_WhenAllOk_ReturnsSuccess()
+    {
+        // Arrange
+        var text = QuoteData.Text;
+
+        var quoteDate = QuoteData.QuoteDate;
+
+        var author = AuthorData.AdminAuthor;
+
+        // Act
+        var result = Quote.CreateByUser(text, author, Guid.Empty, quoteDate,
+            Subscription.Free, 4);
+
+        var quote = result.Value;
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+
+        quote.Text.Should().Be(QuoteData.Text);
+        quote.QuoteDate.Should().Be(QuoteData.QuoteDate);
+    }
+
+    [Theory]
+    [InlineData("1976")]
+    [InlineData("1966")]
+    [InlineData("2000")]
+    public void CreateByUser_WhenQuoteDateOutOfRange_ReturnsFailure(string birthYear)
+    {
+        // Arrange
+        var text = QuoteData.Text;
+
+        var quoteDate = QuoteData.QuoteDate;
+
+        var author = Author.CreateByUser(
+            AuthorData.AuthorName,
+            AuthorData.Biography,
+            Date.Create(DateOnly.Parse($"{birthYear}-01-01")).Value,
+            Guid.Empty);
+
+        // Act
+        var result = Quote.CreateByUser(text, author, Guid.Empty, quoteDate, Subscription.Free, 4);
+
+        // Assert
+        result.Errors.First().Equals(QuoteErrors.QuoteDateOutOfRange.Errors.First()).Should()
+            .BeTrue();
+    }
+
+    [Fact]
+    public void CreateByUser_WhenQuoteLimitExceeded_ReturnsFailure()
+    {
+        // Arrange
+        var text = QuoteData.Text;
+
+        var quoteDate = QuoteData.QuoteDate;
+
+        var author = AuthorData.UserAuthor;
+
+        // Act
+        var result = Quote.CreateByUser(text, author, Guid.Empty, quoteDate, Subscription.Free, 5);
+
+        // Assert
+        result.Errors.First().Equals(QuoteErrors.QuoteLimitExceeded.Errors.First()).Should()
+            .BeTrue();
+    }
+
+    [Fact]
+    public void CreateByUser_WithInvalidSubscription_ThrowsException()
+    {
+        // Arrange
+        var text = QuoteData.Text;
+
+        var quoteDate = QuoteData.QuoteDate;
+
+        var author = AuthorData.UserAuthor;
+
+        // Act
+        Action act = () =>
+            Quote.CreateByUser(text, author, Guid.Empty, quoteDate, (Subscription)999, 1);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void Update_WhenAllOk_ReturnsSuccess()
+    {
+        // Arrange
+        var quote = QuoteData.AdminQuote;
+
+        var text = QuoteData.NewText;
+
+        var quoteDate = QuoteData.NewQuoteDate;
+
+        // Act
+        var result = quote.Update(text, AuthorData.AdminAuthor, Guid.Empty, quoteDate);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+
+        quote.Text.Should().Be(QuoteData.NewText);
+        quote.QuoteDate.Should().Be(QuoteData.NewQuoteDate);
+    }
+
+    [Theory]
+    [InlineData("1941")]
+    [InlineData("1959")]
+    [InlineData("2001")]
+    public void Update_WhenQuoteDateOutOfRange_ReturnsFailure(string quoteYear)
+    {
+        // Arrange
+        var quote = QuoteData.AdminQuote;
+
+        var text = QuoteData.NewText;
+
+        var quoteDate = Date.Create(DateOnly.Parse($"{quoteYear}-01-01")).Value;
+
+        // Act
+        var result = quote.Update(text, AuthorData.AdminAuthor, Guid.Empty, quoteDate);
+
+        // Assert
+        result.Equals(QuoteErrors.QuoteDateOutOfRange).Should().BeTrue();
+
+        quote.Text.Should().Be(QuoteData.Text);
+        quote.QuoteDate.Should().Be(QuoteData.QuoteDate);
     }
 }
