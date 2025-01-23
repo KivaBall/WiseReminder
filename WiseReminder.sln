@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WiseReminder.WebAPI", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5B651974-88CE-4ADC-9110-E631FE66B5FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiseReminder.WebAPI.IntegrationTests", "tests\WiseReminder.WebAPI.IntegrationTests\WiseReminder.WebAPI.IntegrationTests.csproj", "{174648BF-E237-44F0-AD7B-9F3504D1BD00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiseReminder.WebAPI.FunctionalTests", "tests\WiseReminder.WebAPI.FunctionalTests\WiseReminder.WebAPI.FunctionalTests.csproj", "{174648BF-E237-44F0-AD7B-9F3504D1BD00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiseReminder.Domain.UnitTests", "tests\WiseReminder.Domain.UnitTests\WiseReminder.Domain.UnitTests.csproj", "{51BBBA3C-BB66-496B-AF91-D9E89A12D130}"
 EndProject

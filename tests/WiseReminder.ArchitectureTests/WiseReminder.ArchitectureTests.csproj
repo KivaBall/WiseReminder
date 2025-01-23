@@ -20,7 +20,7 @@
         <ProjectReference Include="..\..\src\WiseReminder.Infrastructure\WiseReminder.Infrastructure.csproj"/>
         <ProjectReference Include="..\..\src\WiseReminder.WebAPI\WiseReminder.WebAPI.csproj"/>
         <ProjectReference Include="..\WiseReminder.Domain.UnitTests\WiseReminder.Domain.UnitTests.csproj"/>
-        <ProjectReference Include="..\WiseReminder.WebAPI.IntegrationTests\WiseReminder.WebAPI.IntegrationTests.csproj"/>
+        <ProjectReference Include="..\WiseReminder.WebAPI.FunctionalTests\WiseReminder.WebAPI.FunctionalTests.csproj"/>
     </ItemGroup>
 
 </Project>
