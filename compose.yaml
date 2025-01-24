@@ -13,7 +13,7 @@ services:
       - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=wisereminder;Username=postgres;Password=123456
       - ConnectionStrings__SeqConnection=http://seq:5341/
       - JWTPassword=ThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKey
-      - AllowMigrations=false
+      - AllowMigrations=true
       - AllowSeeding=true
       - AllowScalar=true
     ports:
