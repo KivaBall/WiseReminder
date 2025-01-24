@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Users;
-/*
+
 public sealed class UsersControllerPutMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -91,10 +91,10 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     }
 
     [Fact]
-    public async Task ChangeUsername_WhenAllOk_ReturnsOk()
+    public async Task UpdateUser_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = UserData.DefaultChangeUsernameRequest;
+        var request = UserData.UpdateUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -103,7 +103,7 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
 
         var preUserDto = await preGetResponse.ReadJson<UserDto>();
 
-        var changeUsernameResponse = await Client.PutAsync("api/users/own/username", request);
+        var changeUsernameResponse = await Client.PutAsync("api/users/own", request);
 
         var postGetResponse = await Client.GetAsync("api/users/own");
 
@@ -126,103 +126,35 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     }
 
     [Fact]
-    public async Task ChangeUsername_WhenAdmin_ReturnsForbidden()
+    public async Task UpdateUser_WhenAdmin_ReturnsForbidden()
     {
         //Arrange
-        var request = UserData.DefaultChangeUsernameRequest;
+        var request = UserData.UpdateUserRequest();
 
         //Act
         await Client.AdminLoginAsync();
 
-        var response = await Client.PutAsync("api/users/own/username", request);
+        var response = await Client.PutAsync("api/users/own", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]
-    public async Task ChangeUsername_WhenUnauthorized_ReturnsUnauthorized()
+    public async Task UpdateUser_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = UserData.DefaultChangeUsernameRequest;
+        var request = UserData.UpdateUserRequest();
 
         //Act
-        var response = await Client.PutAsync("api/users/own/username", request);
+        var response = await Client.PutAsync("api/users/own", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task ChangeUsername_WhenInvalid_ReturnsBadRequest()
-    {
-        //Arrange
-        var request = UserData.InvalidChangeUsernameRequest;
-
-        //Act
-        await Client.EmptyUserLoginAsync();
-
-        var response = await Client.PutAsync("api/users/own/username", request);
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    }
-
-    [Fact]
-    public async Task ChangePassword_WhenAllOk_ReturnsOk()
-    {
-        //Arrange
-        var loginRequest = UserData.EmptyUserLoginRequest;
-        var changePasswordRequest = UserData.UpdateUserRequest;
-
-        //Act
-        await Client.EmptyUserLoginAsync();
-
-        var preLoginResponse = await Client.PostAsync("api/users/login", loginRequest);
-
-        var changePasswordResponse =
-            await Client.PutAsync("api/users/own/password", changePasswordRequest);
-
-        var postLoginResponse = await Client.PostAsync("api/users/login", loginRequest);
-
-        //Assert
-        preLoginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        changePasswordResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        postLoginResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    }
-
-    [Fact]
-    public async Task ChangePassword_WhenAdmin_ReturnsForbidden()
-    {
-        //Arrange
-        var request = UserData.UpdateUserRequest;
-
-        //Act
-        await Client.AdminLoginAsync();
-
-        var response = await Client.PutAsync("api/users/own/password", request);
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-    }
-
-    [Fact]
-    public async Task ChangePassword_WhenUnauthorized_ReturnsUnauthorized()
-    {
-        //Arrange
-        var request = UserData.UpdateUserRequest;
-
-        //Act
-        var response = await Client.PutAsync("api/users/own/password", request);
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
-
-    [Fact]
-    public async Task ChangePassword_WhenInvalid_ReturnsBadRequest()
+    public async Task UpdateUser_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
         var request = UserData.InvalidUpdateUserRequest;
@@ -230,9 +162,9 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
         //Act
         await Client.EmptyUserLoginAsync();
 
-        var response = await Client.PutAsync("api/users/own/password", request);
+        var response = await Client.PutAsync("api/users/own", request);
 
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-}*/
+}

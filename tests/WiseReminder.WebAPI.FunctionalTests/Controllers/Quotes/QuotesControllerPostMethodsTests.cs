@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Quotes;
-/*
+
 public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -25,7 +25,7 @@ public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         quoteDto!.Id.Should().Be(id);
-        quoteDto.Text.Should().Be(QuoteData.Text);
+        quoteDto.OriginalText.Should().Be(QuoteData.Text);
         quoteDto.AuthorId.Should().Be(AdminIds.AuthorId);
         quoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         quoteDto.QuoteDate.Should().Be(QuoteData.QuoteDate);
@@ -142,7 +142,7 @@ public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         quoteDto!.Id.Should().Be(id);
-        quoteDto.Text.Should().Be(QuoteData.Text);
+        quoteDto.OriginalText.Should().Be(QuoteData.Text);
         quoteDto.AuthorId.Should().Be(UserIds.AuthorId);
         quoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         quoteDto.QuoteDate.Should().Be(QuoteData.QuoteDate);
@@ -205,4 +205,4 @@ public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-}*/
+}

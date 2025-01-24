@@ -2,6 +2,7 @@ namespace WiseReminder.IntegrationTests.Controllers.Users;
 
 public sealed class UsersControllerPostMethodsTests : BaseControllerTests
 {
+    
     [Fact]
     public async Task RegisterUser_WhenAllOk_ReturnsOk()
     {

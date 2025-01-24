@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Authors;
-/*
+
 public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -29,7 +29,6 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
         preAuthorDto.Biography.Should().Be(AuthorData.Biography);
         preAuthorDto.BirthDate.Should().Be(AuthorData.BirthDate);
         preAuthorDto.DeathDate.Should().Be(AuthorData.DeathDate);
-        preAuthorDto.UserId.Should().BeNull();
 
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -40,7 +39,6 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
         postAuthorDto.Biography.Should().Be(AuthorData.NewBiography);
         postAuthorDto.BirthDate.Should().Be(AuthorData.NewBirthDate);
         postAuthorDto.DeathDate.Should().Be(AuthorData.NewDeathDate);
-        postAuthorDto.UserId.Should().BeNull();
     }
 
     [Fact]
@@ -143,7 +141,6 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
         preAuthorDto.Biography.Should().Be(AuthorData.Biography);
         preAuthorDto.BirthDate.Should().Be(AuthorData.BirthDate);
         preAuthorDto.DeathDate.Should().BeNull();
-        preAuthorDto.UserId.Should().Be(UserIds.UserId);
 
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -154,7 +151,6 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
         postAuthorDto.Biography.Should().Be(AuthorData.NewBiography);
         postAuthorDto.BirthDate.Should().Be(AuthorData.NewBirthDate);
         postAuthorDto.DeathDate.Should().BeNull();
-        postAuthorDto.UserId.Should().Be(UserIds.UserId);
     }
 
     [Fact]
@@ -214,4 +210,4 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
         //Assert
         updateResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-}*/
+}

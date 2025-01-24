@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Quotes;
-/*
+
 public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -25,7 +25,7 @@ public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
         preGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         preQuoteDto!.Id.Should().Be(AdminIds.QuoteId);
-        preQuoteDto.Text.Should().Be(QuoteData.Text);
+        preQuoteDto.OriginalText.Should().Be(QuoteData.Text);
         preQuoteDto.AuthorId.Should().Be(AdminIds.AuthorId);
         preQuoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         preQuoteDto.QuoteDate.Should().Be(QuoteData.QuoteDate);
@@ -35,7 +35,7 @@ public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
         postGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         postQuoteDto!.Id.Should().Be(AdminIds.QuoteId);
-        postQuoteDto.Text.Should().Be(QuoteData.NewText);
+        postQuoteDto.OriginalText.Should().Be(QuoteData.NewText);
         postQuoteDto.AuthorId.Should().Be(AdminIds.AuthorId);
         postQuoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         postQuoteDto.QuoteDate.Should().Be(QuoteData.NewQuoteDate);
@@ -167,7 +167,7 @@ public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
         preGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         preQuoteDto!.Id.Should().Be(UserIds.QuoteId);
-        preQuoteDto.Text.Should().Be(QuoteData.Text);
+        preQuoteDto.OriginalText.Should().Be(QuoteData.Text);
         preQuoteDto.AuthorId.Should().Be(UserIds.AuthorId);
         preQuoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         preQuoteDto.QuoteDate.Should().Be(QuoteData.QuoteDate);
@@ -177,7 +177,7 @@ public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
         postGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         postQuoteDto!.Id.Should().Be(UserIds.QuoteId);
-        postQuoteDto.Text.Should().Be(QuoteData.NewText);
+        postQuoteDto.OriginalText.Should().Be(QuoteData.NewText);
         postQuoteDto.AuthorId.Should().Be(UserIds.AuthorId);
         postQuoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         postQuoteDto.QuoteDate.Should().Be(QuoteData.NewQuoteDate);
@@ -285,4 +285,4 @@ public sealed class QuotesControllerPutMethodsTests : BaseControllerTests
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-}*/
+}

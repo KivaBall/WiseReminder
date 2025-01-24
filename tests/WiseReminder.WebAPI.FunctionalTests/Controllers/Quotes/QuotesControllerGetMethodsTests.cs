@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Quotes;
-/*
+
 public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -14,7 +14,7 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         quoteDto!.Id.Should().Be(AdminIds.QuoteId);
-        quoteDto.Text.Should().Be(QuoteData.Text);
+        quoteDto.OriginalText.Should().Be(QuoteData.Text);
         quoteDto.AuthorId.Should().Be(AdminIds.AuthorId);
         quoteDto.CategoryId.Should().Be(AdminIds.CategoryId);
         quoteDto.QuoteDate.Should().Be(QuoteData.QuoteDate);
@@ -167,4 +167,4 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
-}*/
+}

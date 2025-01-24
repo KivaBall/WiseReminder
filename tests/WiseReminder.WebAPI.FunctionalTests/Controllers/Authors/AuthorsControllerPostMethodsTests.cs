@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Authors;
-/*
+
 public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -101,7 +101,6 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
         authorDto.Biography.Should().Be(AuthorData.Biography);
         authorDto.BirthDate.Should().Be(AuthorData.BirthDate);
         authorDto.DeathDate.Should().BeNull();
-        authorDto.UserId.Should().Be(AdminIds.UserId);
     }
 
     [Fact]
@@ -161,4 +160,4 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-}*/
+}
