@@ -10,9 +10,9 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsUser(LoginAsUserRequest asUserRequest)
+    public async Task<IActionResult> LoginAsUser(LoginAsUserRequest request)
     {
-        var command = asUserRequest.ToLoginAsUserCommand();
+        var command = request.ToLoginAsUserCommand();
         return await ExecuteCommand(command);
     }
 

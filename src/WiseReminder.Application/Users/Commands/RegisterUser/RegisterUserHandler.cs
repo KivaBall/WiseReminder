@@ -4,9 +4,9 @@ public sealed class RegisterUserHandler(
     IUserRepository repository,
     IUnitOfWork unitOfWork,
     IEncryptService encryptService)
-    : ICommandHandler<RegisterUserCommand>
+    : ICommandHandler<RegisterUserCommand, Guid>
 {
-    public async Task<Result> Handle(
+    public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
@@ -27,6 +27,6 @@ public sealed class RegisterUserHandler(
 
         repository.CreateUser(user);
 
-        return await unitOfWork.SaveChangesAsync(cancellationToken);
+        return await unitOfWork.SaveChangesAsync(user.Id, cancellationToken);
     }
 }
