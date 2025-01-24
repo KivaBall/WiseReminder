@@ -1,5 +1,5 @@
 namespace WiseReminder.IntegrationTests.Controllers.Authors;
-/*
+
 public sealed class AuthorsControllerGetMethodsTests : BaseControllerTests
 {
     [Fact]
@@ -57,7 +57,6 @@ public sealed class AuthorsControllerGetMethodsTests : BaseControllerTests
         authorDto.Biography.Should().Be(AuthorData.Biography);
         authorDto.BirthDate.Should().Be(AuthorData.BirthDate);
         authorDto.DeathDate.Should().BeNull();
-        authorDto.UserId.Should().Be(UserIds.UserId);
     }
 
     [Fact]
@@ -90,7 +89,6 @@ public sealed class AuthorsControllerGetMethodsTests : BaseControllerTests
         authorDto.Biography.Should().Be(AuthorData.Biography);
         authorDto.BirthDate.Should().Be(AuthorData.BirthDate);
         authorDto.DeathDate.Should().BeNull();
-        authorDto.UserId.Should().Be(UserIds.UserId);
     }
 
     [Fact]
@@ -138,4 +136,4 @@ public sealed class AuthorsControllerGetMethodsTests : BaseControllerTests
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
-}*/
+}
