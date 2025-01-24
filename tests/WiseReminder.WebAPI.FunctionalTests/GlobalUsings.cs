@@ -5,6 +5,7 @@ global using FluentAssertions;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Hosting;
 global using Npgsql;
 global using Testcontainers.PostgreSql;
 global using Testcontainers.Redis;
