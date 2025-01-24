@@ -4,7 +4,7 @@ public static class AuthHelper
 {
     public static async Task AdminLoginAsync(this HttpClient httpClient)
     {
-        var request = UserData.LoginAsAdminRequest;
+        var request = UserData.LoginAsAdminRequest();
 
         var response = await httpClient.PostAsync("api/users/admin-login", request);
 
@@ -16,7 +16,7 @@ public static class AuthHelper
 
     public static async Task EmptyUserLoginAsync(this HttpClient httpClient)
     {
-        var request = UserData.EmptyUserLoginRequest;
+        var request = UserData.EmptyUserLoginRequest();
 
         var response = await httpClient.PostAsync("api/users/login", request);
 
@@ -28,7 +28,7 @@ public static class AuthHelper
 
     public static async Task UserWithDataLoginAsync(this HttpClient httpClient)
     {
-        var request = UserData.UserWithDataLoginRequest;
+        var request = UserData.UserWithDataLoginRequest();
 
         var response = await httpClient.PostAsync("api/users/login", request);
 

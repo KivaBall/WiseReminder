@@ -7,7 +7,7 @@ public static class SeedHelper
         await client.AdminLoginAsync();
 
 
-        var categoryRequest = CategoryData.CreateCategoryRequest;
+        var categoryRequest = CategoryData.CreateCategoryRequest();
 
         var categoryResponse = await client.PostAsync("api/categories", categoryRequest);
         await client.PostAsync("api/categories", categoryRequest);
@@ -16,7 +16,7 @@ public static class SeedHelper
         var categoryId = await categoryResponse.ReadJson<Guid>();
 
 
-        var authorRequest = AuthorData.CreateAuthorByAdminRequest;
+        var authorRequest = AuthorData.CreateAuthorByAdminRequest();
 
         var authorResponse = await client.PostAsync("api/authors", authorRequest);
         await client.PostAsync("api/authors", authorRequest);
@@ -34,7 +34,7 @@ public static class SeedHelper
         var quoteId = await quoteResponse.ReadJson<Guid>();
 
 
-        var userRequest = UserData.CreateEmptyUserRequest;
+        var userRequest = UserData.CreateEmptyUserRequest();
 
         var userResponse = await client.PostAsync("api/users/register", userRequest);
 
@@ -59,7 +59,7 @@ public static class SeedHelper
         this HttpClient client,
         Guid categoryId)
     {
-        var userRequest = UserData.CreateUserWithDataRequest;
+        var userRequest = UserData.CreateUserWithDataRequest();
 
         var userResponse = await client.PostAsync("api/users/register", userRequest);
 
@@ -69,7 +69,7 @@ public static class SeedHelper
         await client.UserWithDataLoginAsync();
 
 
-        var authorRequest = AuthorData.CreateAuthorByUserRequest;
+        var authorRequest = AuthorData.CreateAuthorByUserRequest();
 
         var authorResponse = await client.PostAsync("api/authors/own", authorRequest);
 

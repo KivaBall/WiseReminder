@@ -2,7 +2,7 @@ namespace WiseReminder.IntegrationTests.Abstractions;
 
 public sealed class WebAppFactory : WebApplicationFactory<Program>
 {
-    private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
         .WithImage("postgres:12-alpine")
         .WithName($"test-postgres-{Guid.NewGuid()}")
         .WithUsername("postgres")
@@ -15,37 +15,38 @@ public sealed class WebAppFactory : WebApplicationFactory<Program>
         .WithName($"test-redis-{Guid.NewGuid()}")
         .Build();
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override IHost CreateHost(IHostBuilder builder)
     {
-        var redisTask = _redisContainer.StartAsync();
-        var postgresqlTask = _postgreSqlContainer.StartAsync();
+        var redis = _redisContainer.StartAsync();
+        var db = _dbContainer.StartAsync();
 
-        Task.WaitAll(redisTask, postgresqlTask);
+        Task.WaitAll(redis, db);
 
         EnsurePostgresConnection();
 
-        builder.ConfigureAppConfiguration(config =>
+        builder.ConfigureHostConfiguration(config =>
         {
-            config.AddInMemoryCollection(new Dictionary<string, string>
+            config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:RedisConnection"] = _redisContainer.GetConnectionString(),
-                ["ConnectionStrings:DbConnection"] = _postgreSqlContainer.GetConnectionString(),
+                ["ConnectionStrings:DbConnection"] = _dbContainer.GetConnectionString(),
                 ["AllowMigrations"] = "true",
                 ["AllowSeeding"] = "false",
                 ["AllowScalar"] = "false",
                 ["Logging:LogLevel:Default"] = "Warning"
-            }!);
+            });
         });
+
+        return base.CreateHost(builder);
     }
 
     private void EnsurePostgresConnection()
     {
-        for (var i = 1; i <= 40; i++)
+        for (var i = 1; i <= 100; i++)
         {
             try
             {
-                using var connection =
-                    new NpgsqlConnection(_postgreSqlContainer.GetConnectionString());
+                using var connection = new NpgsqlConnection(_dbContainer.GetConnectionString());
 
                 connection.Open();
 
@@ -63,7 +64,7 @@ public sealed class WebAppFactory : WebApplicationFactory<Program>
     public override async ValueTask DisposeAsync()
     {
         await _redisContainer.StopAsync();
-        await _postgreSqlContainer.StopAsync();
+        await _dbContainer.StopAsync();
 
         await base.DisposeAsync();
     }
