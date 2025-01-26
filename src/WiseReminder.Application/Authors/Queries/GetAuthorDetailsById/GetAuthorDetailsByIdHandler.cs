@@ -1,8 +1,7 @@
 namespace WiseReminder.Application.Authors.Queries.GetAuthorDetailsById;
 
 public sealed class GetAuthorDetailsByIdHandler(
-    IAuthorRepository repository,
-    ISender sender)
+    IAuthorRepository repository)
     : IQueryHandler<GetAuthorDetailsByIdQuery, AuthorDetails>
 {
     public async Task<Result<AuthorDetails>> Handle(GetAuthorDetailsByIdQuery request,

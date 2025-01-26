@@ -30,12 +30,14 @@ public sealed class DeleteAuthorByAdminHandler(
 
         var result = await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            var authorDeletedEvent = new AuthorDeletedEvent(request.Id);
-
-            await mediator.Publish(authorDeletedEvent, cancellationToken);
+            return result;
         }
+
+        var authorDeletedEvent = new AuthorDeletedEvent(request.Id);
+
+        await mediator.Publish(authorDeletedEvent, cancellationToken);
 
         return result;
     }

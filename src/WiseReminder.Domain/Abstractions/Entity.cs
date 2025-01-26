@@ -7,10 +7,9 @@ public abstract class Entity<T> where T : Entity<T>
     public bool IsDeleted { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
-    public T Delete()
+    public void Delete()
     {
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
-        return (T)this;
     }
 }

@@ -18,7 +18,7 @@ public sealed class AuthorsController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateAuthorByAdmin(Guid id, AuthorByAdminRequest request)
     {
@@ -34,7 +34,7 @@ public sealed class AuthorsController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteAuthorByAdmin(Guid id)
     {
@@ -58,7 +58,7 @@ public sealed class AuthorsController(ISender sender) : BaseController(sender)
         return await ExecuteQuery(query);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetAuthorById(Guid id)
     {
         var query = new GetAuthorDtoByIdQuery(id);
