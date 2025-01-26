@@ -12,7 +12,4 @@ public static class QuoteData
 
     public static Quote AdminQuote => Quote.CreateByAdmin(Text, QuoteDate, AuthorData.AdminAuthor,
         Guid.Empty).Value;
-
-    public static Quote UserQuote => Quote.CreateByUser(Text, AuthorData.UserAuthor, Guid.Empty,
-        QuoteDate, Subscription.Free, 4).Value;
 }

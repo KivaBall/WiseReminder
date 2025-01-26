@@ -44,7 +44,7 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
     public async Task GetRandomQuotes_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var amount = 2;
+        const int amount = 2;
 
         //Act
         var response = await Client.GetAsync($"api/quotes/random?amount={amount}");
@@ -81,7 +81,7 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
     public async Task GetRecentQuotes_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var amount = 2;
+        const int amount = 2;
 
         //Act
         var response = await Client.GetAsync($"api/quotes/recent?amount={amount}");

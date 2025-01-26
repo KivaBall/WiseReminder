@@ -59,7 +59,7 @@ public sealed class SealedModificatorTests(ITestOutputHelper testOutputHelper)
             }
 
             var derivedTypes = types.Where(t => t.BaseType == type).ToList();
-            var hasChildren = derivedTypes.Any();
+            var hasChildren = derivedTypes.Count != 0;
 
             if (type is { IsSealed: false, IsAbstract: false } && !hasChildren)
             {

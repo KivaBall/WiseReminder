@@ -58,7 +58,7 @@ public static class RepositoryExtensions
     {
         var cutoffTime = DateTime.UtcNow - period;
 
-        return context.Quotes
+        return query
             .Where(q => q.AddedAt >= cutoffTime)
             .Select(q => new
             {

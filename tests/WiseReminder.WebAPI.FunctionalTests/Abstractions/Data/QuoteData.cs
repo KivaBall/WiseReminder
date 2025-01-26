@@ -60,26 +60,4 @@ public static class QuoteData
             QuoteDate = quoteDate
         };
     }
-
-    public static GetQuotesRequest CleanGetQuotesRequest()
-    {
-        return ToGetQuotesRequest(null, null, null, null);
-    }
-
-    public static GetQuotesRequest ExactGetQuotesRequest(Guid authorId, Guid categoryId)
-    {
-        return ToGetQuotesRequest(authorId, categoryId, null, null);
-    }
-
-    private static GetQuotesRequest ToGetQuotesRequest(Guid? authorId, Guid? categoryId,
-        List<string>? keywords, string? desiredLanguage)
-    {
-        return new GetQuotesRequest
-        {
-            AuthorId = authorId,
-            CategoryId = categoryId,
-            Keywords = keywords,
-            DesiredLanguage = desiredLanguage
-        };
-    }
 }

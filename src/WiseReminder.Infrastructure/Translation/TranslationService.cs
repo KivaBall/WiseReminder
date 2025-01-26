@@ -58,14 +58,16 @@ public sealed class TranslationService(
         {
             var translatedTexts = await SendRequestAsync(prompt, cancellationToken);
 
-            if (!string.IsNullOrEmpty(translatedTexts))
+            if (string.IsNullOrEmpty(translatedTexts))
             {
-                var list = translatedTexts.Split("+++").ToList();
+                continue;
+            }
 
-                if (list.Count == texts.Count)
-                {
-                    return list;
-                }
+            var list = translatedTexts.Split("+++").ToList();
+
+            if (list.Count == texts.Count)
+            {
+                return list;
             }
         }
 
