@@ -41,7 +41,7 @@ public sealed class QuoteRepository(
         CancellationToken cancellationToken)
     {
         return await context.Quotes
-            .OrderBy(q => Guid.NewGuid())
+            .OrderBy(_ => EF.Functions.Random())
             .Take(amount)
             .ConvertToQuoteDetails(context)
             .ToListAsync(cancellationToken);

@@ -16,7 +16,9 @@ public sealed class UserRepository(
 
     public void DeleteUser(User user)
     {
-        context.Users.Remove(user);
+        user.Delete();
+
+        context.Users.Update(user);
     }
 
     public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken)

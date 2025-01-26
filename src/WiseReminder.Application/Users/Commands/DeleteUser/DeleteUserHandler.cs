@@ -19,16 +19,13 @@ public sealed class DeleteUserHandler(
             return UserErrors.UserNotFound;
         }
 
+        var userDeletedEvent = new UserDeletedEvent(request.Id);
+
+        await mediator.Publish(userDeletedEvent, cancellationToken);
+
         repository.DeleteUser(user.Value);
 
         var result = await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        if (result.IsSuccess)
-        {
-            var userDeletedEvent = new UserDeletedEvent(request.Id);
-
-            await mediator.Publish(userDeletedEvent, cancellationToken);
-        }
 
         return result;
     }
