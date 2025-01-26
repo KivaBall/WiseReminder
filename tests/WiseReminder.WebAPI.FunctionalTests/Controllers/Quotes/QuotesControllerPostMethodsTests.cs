@@ -63,7 +63,7 @@ public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
     public async Task AdminCreateQuote_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = QuoteData.InvalidQuoteByAdminRequest;
+        var request = QuoteData.InvalidQuoteByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -180,7 +180,7 @@ public sealed class QuotesControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateQuote_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = QuoteData.InvalidQuoteByUserRequest;
+        var request = QuoteData.InvalidQuoteByUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();

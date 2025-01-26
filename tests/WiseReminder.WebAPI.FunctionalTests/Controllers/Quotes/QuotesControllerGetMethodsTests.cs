@@ -31,46 +31,6 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
     }
 
     [Fact]
-    public async Task GetQuotesByAuthorId_WhenAllOk_ReturnsOk()
-    {
-        //Act
-        var response = await Client.GetAsync($"api/quotes/author/{AdminIds.AuthorId}");
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
-
-    [Fact]
-    public async Task GetQuotesByAuthorId_WhenAuthorNotExists_ReturnsNotFound()
-    {
-        //Act
-        var response = await Client.GetAsync($"api/quotes/author/{Guid.NewGuid()}");
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    [Fact]
-    public async Task GetQuotesByCategoryId_WhenAllOk_ReturnsOk()
-    {
-        //Act
-        var response = await Client.GetAsync($"api/quotes/category/{AdminIds.CategoryId}");
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
-
-    [Fact]
-    public async Task GetQuotesByCategoryId_WhenCategoryNotExists_ReturnsNotFound()
-    {
-        //Act
-        var response = await Client.GetAsync($"api/quotes/category/{Guid.NewGuid()}");
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    [Fact]
     public async Task GetRandomQuote_WhenAllOk_ReturnsOk()
     {
         //Act
@@ -87,7 +47,7 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
         var amount = 2;
 
         //Act
-        var response = await Client.GetAsync($"api/quotes/random/{amount}");
+        var response = await Client.GetAsync($"api/quotes/random?amount={amount}");
 
         var quoteDtos = await response.ReadJson<List<QuoteDto>>();
 
@@ -124,7 +84,7 @@ public sealed class QuotesControllerGetMethodsTests : BaseControllerTests
         var amount = 2;
 
         //Act
-        var response = await Client.GetAsync($"api/quotes/recent/{amount}");
+        var response = await Client.GetAsync($"api/quotes/recent?amount={amount}");
 
         var quoteDtos = await response.ReadJson<List<QuoteDto>>();
 

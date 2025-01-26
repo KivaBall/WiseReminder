@@ -6,7 +6,7 @@ public sealed class CategoriesControllerPostMethodsTests : BaseControllerTests
     public async Task CreateCategory_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = CategoryData.CreateCategoryRequest;
+        var request = CategoryData.CreateCategoryRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -33,7 +33,7 @@ public sealed class CategoriesControllerPostMethodsTests : BaseControllerTests
     public async Task CreateCategory_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = CategoryData.CreateCategoryRequest;
+        var request = CategoryData.CreateCategoryRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -48,7 +48,7 @@ public sealed class CategoriesControllerPostMethodsTests : BaseControllerTests
     public async Task CreateCategory_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = CategoryData.CreateCategoryRequest;
+        var request = CategoryData.CreateCategoryRequest();
 
         //Act
         var response = await Client.PostAsync("api/categories", request);
@@ -61,7 +61,7 @@ public sealed class CategoriesControllerPostMethodsTests : BaseControllerTests
     public async Task CreateCategory_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = CategoryData.InvalidCategoryRequest;
+        var request = CategoryData.InvalidCategoryRequest();
 
         //Act
         await Client.AdminLoginAsync();

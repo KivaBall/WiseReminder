@@ -6,7 +6,7 @@ public sealed class CategoriesControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateCategory_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = CategoryData.UpdateCategoryRequest;
+        var request = CategoryData.UpdateCategoryRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -42,7 +42,7 @@ public sealed class CategoriesControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateCategory_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = CategoryData.UpdateCategoryRequest;
+        var request = CategoryData.UpdateCategoryRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -57,7 +57,7 @@ public sealed class CategoriesControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateCategory_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = CategoryData.UpdateCategoryRequest;
+        var request = CategoryData.UpdateCategoryRequest();
 
         //Act
         var response = await Client.PutAsync($"api/categories/{AdminIds.CategoryId}", request);
@@ -70,7 +70,7 @@ public sealed class CategoriesControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateCategory_WhenCategoryNotExists_ReturnsBadRequest()
     {
         //Arrange
-        var request = CategoryData.UpdateCategoryRequest;
+        var request = CategoryData.UpdateCategoryRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -85,7 +85,7 @@ public sealed class CategoriesControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateCategory_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = CategoryData.InvalidCategoryRequest;
+        var request = CategoryData.InvalidCategoryRequest();
 
         //Act
         await Client.AdminLoginAsync();

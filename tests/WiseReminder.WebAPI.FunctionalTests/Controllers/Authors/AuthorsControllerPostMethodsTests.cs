@@ -6,7 +6,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task AdminCreateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByAdminRequest;
+        var request = AuthorData.CreateAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -35,7 +35,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task AdminCreateAuthor_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByAdminRequest;
+        var request = AuthorData.CreateAuthorByAdminRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -50,7 +50,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task AdminCreateAuthor_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByAdminRequest;
+        var request = AuthorData.CreateAuthorByAdminRequest();
 
         //Act
         var response = await Client.PostAsync("api/authors", request);
@@ -63,7 +63,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task AdminCreateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByAdminRequest;
+        var request = AuthorData.InvalidAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -78,7 +78,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByUserRequest;
+        var request = AuthorData.CreateAuthorByUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -107,7 +107,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateAuthor_WhenAdmin_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByUserRequest;
+        var request = AuthorData.CreateAuthorByUserRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -122,7 +122,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateAuthor_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = AuthorData.CreateAuthorByUserRequest;
+        var request = AuthorData.CreateAuthorByUserRequest();
 
         //Act
         var response = await Client.PostAsync("api/authors/own", request);
@@ -135,7 +135,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByUserRequest;
+        var request = AuthorData.InvalidAuthorByUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -150,7 +150,7 @@ public sealed class AuthorsControllerPostMethodsTests : BaseControllerTests
     public async Task UserCreateAuthor_WhenAuthorExistsInUser_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByUserRequest;
+        var request = AuthorData.InvalidAuthorByUserRequest();
 
         //Act
         await Client.UserWithDataLoginAsync();

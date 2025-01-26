@@ -6,7 +6,7 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     public async Task ApplySubscription_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = UserData.ApplySubscriptionRequest;
+        var request = UserData.ApplySubscriptionRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -16,8 +16,7 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
         var preUserDto = await preGetResponse.ReadJson<UserDto>();
 
         var applySubscriptionResponse =
-            await Client.PutAsync($"api/users/{AdminIds.UserId}/apply-subscription",
-                request);
+            await Client.PutAsync($"api/users/{AdminIds.UserId}/subscription", request);
 
         var postGetResponse = await Client.GetAsync($"api/users/{AdminIds.UserId}");
 
@@ -45,14 +44,13 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     public async Task ApplySubscription_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = UserData.ApplySubscriptionRequest;
+        var request = UserData.ApplySubscriptionRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
 
         var applySubscriptionResponse =
-            await Client.PutAsync($"api/users/{AdminIds.UserId}/apply-subscription",
-                request);
+            await Client.PutAsync($"api/users/{AdminIds.UserId}/subscription", request);
 
         //Assert
         applySubscriptionResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -62,12 +60,11 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     public async Task ApplySubscription_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = UserData.ApplySubscriptionRequest;
+        var request = UserData.ApplySubscriptionRequest();
 
         //Act
         var applySubscriptionResponse =
-            await Client.PutAsync($"api/users/{AdminIds.UserId}/apply-subscription",
-                request);
+            await Client.PutAsync($"api/users/{AdminIds.UserId}/subscription", request);
 
         //Assert
         applySubscriptionResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -77,14 +74,13 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     public async Task ApplySubscription_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = UserData.InvalidApplySubscriptionRequest;
+        var request = UserData.InvalidApplySubscriptionRequest();
 
         //Act
         await Client.AdminLoginAsync();
 
         var applySubscriptionResponse =
-            await Client.PutAsync($"api/users/{AdminIds.UserId}/apply-subscription",
-                request);
+            await Client.PutAsync($"api/users/{AdminIds.UserId}/subscription", request);
 
         //Assert
         applySubscriptionResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -157,7 +153,7 @@ public sealed class UsersControllerPutMethodsTests : BaseControllerTests
     public async Task UpdateUser_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = UserData.InvalidUpdateUserRequest;
+        var request = UserData.InvalidUpdateUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();

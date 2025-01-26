@@ -6,7 +6,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByAdminRequest;
+        var request = AuthorData.UpdateAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -45,7 +45,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenUser_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByAdminRequest;
+        var request = AuthorData.UpdateAuthorByAdminRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
@@ -60,7 +60,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByAdminRequest;
+        var request = AuthorData.UpdateAuthorByAdminRequest();
 
         //Act
         var response = await Client.PutAsync($"api/authors/{AdminIds.AuthorId}", request);
@@ -73,7 +73,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByAdminRequest;
+        var request = AuthorData.InvalidAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -88,7 +88,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenAuthorNotExists_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByAdminRequest;
+        var request = AuthorData.UpdateAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -103,7 +103,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task AdminUpdateAuthor_WhenAuthorBelongsToUser_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByAdminRequest;
+        var request = AuthorData.UpdateAuthorByAdminRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -118,7 +118,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task UserUpdateAuthor_WhenAllOk_ReturnsOk()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByUserRequest;
+        var request = AuthorData.UpdateAuthorByUserRequest();
 
         //Act
         await Client.UserWithDataLoginAsync();
@@ -157,7 +157,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task UserUpdateAuthor_WhenAdmin_ReturnsForbidden()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByUserRequest;
+        var request = AuthorData.UpdateAuthorByUserRequest();
 
         //Act
         await Client.AdminLoginAsync();
@@ -172,7 +172,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task UserUpdateAuthor_WhenUnauthorized_ReturnsUnauthorized()
     {
         //Arrange
-        var request = AuthorData.UpdateAuthorByUserRequest;
+        var request = AuthorData.UpdateAuthorByUserRequest();
 
         //Act
         var updateResponse = await Client.PutAsync("api/authors/own", request);
@@ -185,7 +185,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task UserUpdateAuthor_WhenInvalid_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByUserRequest;
+        var request = AuthorData.InvalidAuthorByUserRequest();
 
         //Act
         await Client.UserWithDataLoginAsync();
@@ -200,7 +200,7 @@ public sealed class AuthorsControllerPutMethodsTests : BaseControllerTests
     public async Task UserUpdateAuthor_WhenAuthorNotExists_ReturnsBadRequest()
     {
         //Arrange
-        var request = AuthorData.InvalidAuthorByUserRequest;
+        var request = AuthorData.InvalidAuthorByUserRequest();
 
         //Act
         await Client.EmptyUserLoginAsync();
