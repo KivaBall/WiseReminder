@@ -7,17 +7,17 @@ public static class RepositoryExtensions
         AppDbContext context)
     {
         return query
-            .GroupJoin(
-                context.Quotes,
-                a => a.Id,
-                q => q.AuthorId,
-                (a, q) => new { a, q })
-            .Select(t => new AuthorDetails
+            .Select(a => new AuthorDetails
             {
-                Author = t.a,
-                Quotes = t.q.Count(),
-                MinQuoteDate = t.q.Min(q => q.QuoteDate),
-                MaxQuoteDate = t.q.Max(q => q.QuoteDate)
+                Author = a,
+                Quotes = context.Quotes
+                    .Count(quote => quote.AuthorId == a.Id),
+                MinQuoteDate = context.Quotes
+                    .Where(q => q.AuthorId == a.Id)
+                    .Min(q => q.QuoteDate),
+                MaxQuoteDate = context.Quotes
+                    .Where(q => q.AuthorId == a.Id)
+                    .Max(q => q.QuoteDate)
             });
     }
 
@@ -26,10 +26,11 @@ public static class RepositoryExtensions
         AppDbContext context)
     {
         return query
-            .Select(category => new CategoryDetails
+            .Select(c => new CategoryDetails
             {
-                Category = category,
-                Quotes = context.Quotes.Count(quote => quote.CategoryId == category.Id)
+                Category = c,
+                Quotes = context.Quotes
+                    .Count(quote => quote.CategoryId == c.Id)
             });
     }
 
@@ -38,16 +39,15 @@ public static class RepositoryExtensions
         AppDbContext context)
     {
         return query
-            .GroupJoin(
-                context.Reactions,
-                q => q.Id,
-                r => r.QuoteId,
-                (q, e) => new { q, e })
-            .Select(t => new QuoteDetails
+            .Select(q => new QuoteDetails
             {
-                Quote = t.q,
-                Likes = t.e.Count(r => r.IsLike == new IsLike(true)),
-                Dislikes = t.e.Count(r => r.IsLike == new IsLike(false))
+                Quote = q,
+                Likes = context.Reactions
+                    .Where(r => r.QuoteId == q.Id)
+                    .Count(r => r.IsLike == new IsLike(true)),
+                Dislikes = context.Reactions
+                    .Where(r => r.QuoteId == q.Id)
+                    .Count(r => r.IsLike == new IsLike(false))
             });
     }
 
@@ -56,17 +56,16 @@ public static class RepositoryExtensions
         AppDbContext context,
         TimeSpan period)
     {
-        return context.Quotes
-            .Where(q => DateTime.UtcNow - q.AddedAt < period)
-            .GroupJoin(
-                context.Reactions.Where(r => r.IsLike.Value),
-                q => q.Id,
-                r => r.QuoteId,
-                (quote, reactions) => new
-                {
-                    Quote = quote,
-                    LikeCount = reactions.Count()
-                })
+        var cutoffTime = DateTime.UtcNow - period;
+
+        return query
+            .Where(q => q.AddedAt >= cutoffTime)
+            .Select(q => new
+            {
+                Quote = q,
+                LikeCount = context.Reactions
+                    .Count(r => r.IsLike == new IsLike(true) && r.QuoteId == q.Id)
+            })
             .OrderByDescending(t => t.LikeCount)
             .Select(t => t.Quote);
     }

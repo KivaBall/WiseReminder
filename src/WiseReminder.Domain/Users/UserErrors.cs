@@ -8,9 +8,6 @@ public static class UserErrors
     public static readonly Result PasswordNotCorrect =
         new Error("The provided password is incorrect");
 
-    public static readonly Result UserIdNotValid =
-        new Error("The specified User ID is invalid");
-
     public static readonly Result LoginAlreadyExists =
         new Error("The provided login already exists");
 

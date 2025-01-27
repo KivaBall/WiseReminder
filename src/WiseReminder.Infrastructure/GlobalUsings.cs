@@ -30,7 +30,6 @@ global using WiseReminder.Infrastructure.Caching;
 global using WiseReminder.Infrastructure.Data;
 global using WiseReminder.Infrastructure.Encryption;
 global using WiseReminder.Infrastructure.JWT;
-global using WiseReminder.Infrastructure.Models;
 global using WiseReminder.Infrastructure.Repositories;
 global using WiseReminder.Infrastructure.Seeding;
 global using WiseReminder.Infrastructure.Translation;

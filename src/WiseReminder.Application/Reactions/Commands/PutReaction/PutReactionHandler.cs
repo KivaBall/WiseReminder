@@ -26,7 +26,7 @@ public sealed class PutReactionHandler(
         {
             var isLike = new IsLike(request.IsLike);
 
-            var result = reaction.Value.Update(isLike);
+            var result = reaction.Value.ChangeReaction(isLike);
 
             if (result.IsFailed)
             {

@@ -18,7 +18,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("{id}/reaction")]
+    [HttpPut("{id:guid}/reaction")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> PutReaction(Guid id, bool isLike)
     {
@@ -26,7 +26,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateQuoteByAdmin(Guid id, QuoteByAdminRequest request)
     {
@@ -34,7 +34,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("own/{id}")]
+    [HttpPut("own/{id:guid}")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UpdateMyQuote(Guid id, QuoteByUserRequest request)
     {
@@ -42,7 +42,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteQuoteByAdmin(Guid id)
     {
@@ -50,7 +50,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("own/{id}")]
+    [HttpDelete("own/{id:guid}")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteMyQuote(Guid id)
     {
@@ -58,7 +58,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("{id}/reaction")]
+    [HttpDelete("{id:guid}/reaction")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteReaction(Guid id)
     {
@@ -74,7 +74,7 @@ public sealed class QuotesController(ISender sender) : BaseController(sender)
         return await ExecuteQuery(query);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetQuoteById(Guid id, [FromQuery] string? desiredLanguage)
     {
         var query = new GetQuoteDtoByIdQuery(id, desiredLanguage);

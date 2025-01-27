@@ -23,12 +23,14 @@ public sealed class DeleteAuthorByUserHandler(
 
         var result = await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            var authorDeletedEvent = new AuthorDeletedEvent(author.Value.Id);
-
-            await mediator.Publish(authorDeletedEvent, cancellationToken);
+            return result;
         }
+
+        var authorDeletedEvent = new AuthorDeletedEvent(author.Value.Id);
+
+        await mediator.Publish(authorDeletedEvent, cancellationToken);
 
         return result;
     }

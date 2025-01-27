@@ -41,7 +41,7 @@ public sealed class QuoteRepository(
         CancellationToken cancellationToken)
     {
         return await context.Quotes
-            .OrderBy(q => Guid.NewGuid())
+            .OrderBy(_ => EF.Functions.Random())
             .Take(amount)
             .ConvertToQuoteDetails(context)
             .ToListAsync(cancellationToken);
@@ -90,19 +90,19 @@ public sealed class QuoteRepository(
 
         var quoteDetails = quotes.ConvertToQuoteDetails(context);
 
-        if (keywords != null && keywords.Any())
+        if (keywords == null || keywords.Count == 0)
         {
-            var list = await quoteDetails
+            return await quoteDetails
                 .ToListAsync(cancellationToken);
-
-            return list
-                .Where(quote => keywords.Any(str =>
-                    quote.Quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
         }
 
-        return await quoteDetails
+        var list = await quoteDetails
             .ToListAsync(cancellationToken);
+
+        return list
+            .Where(quote => keywords.Any(str =>
+                quote.Quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
     }
 
     public async Task<ICollection<Quote>> GetQuotesByClauses(Guid? categoryId, Guid? authorId,
@@ -120,19 +120,19 @@ public sealed class QuoteRepository(
             quotes = quotes.Where(q => q.AuthorId == authorId);
         }
 
-        if (keywords != null && keywords.Any())
+        if (keywords == null || keywords.Count == 0)
         {
-            var list = await quotes
+            return await quotes
                 .ToListAsync(cancellationToken);
-
-            return list
-                .Where(quote => keywords.Any(str =>
-                    quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
         }
 
-        return await quotes
+        var list = await quotes
             .ToListAsync(cancellationToken);
+
+        return list
+            .Where(quote => keywords.Any(str =>
+                quote.Text.Value.Contains(str, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
     }
 
     public async Task<QuoteDetails> GetDailyQuote(CancellationToken cancellationToken)

@@ -23,12 +23,14 @@ public sealed class DeleteCategoryHandler(
 
         var result = await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            var categoryDeletedEvent = new CategoryDeletedEvent(request.Id);
-
-            await mediator.Publish(categoryDeletedEvent, cancellationToken);
+            return result;
         }
+
+        var categoryDeletedEvent = new CategoryDeletedEvent(request.Id);
+
+        await mediator.Publish(categoryDeletedEvent, cancellationToken);
 
         return result;
     }

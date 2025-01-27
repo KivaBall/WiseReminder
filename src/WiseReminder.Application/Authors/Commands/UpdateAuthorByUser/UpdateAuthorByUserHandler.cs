@@ -33,6 +33,11 @@ public sealed class UpdateAuthorByUserHandler(
         var (minQuoteDate, _) =
             await repository.GetMinAndMaxQuoteDatesById(author.Value.Id, cancellationToken);
 
+        if (minQuoteDate == null)
+        {
+            return AuthorErrors.AuthorQuoteDatesNotFound;
+        }
+
         var result = author.Value.UpdateByUser(name, biography, birthDate.Value, minQuoteDate);
 
         if (result.IsFailed)

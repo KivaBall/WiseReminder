@@ -40,13 +40,8 @@ public sealed class Author : Entity<Author>
     }
 
     public Result UpdateByAdmin(AuthorName name, Biography biography, Date birthDate,
-        Date? deathDate, Date? minQuoteDate, Date? maxQuoteDate)
+        Date? deathDate, Date minQuoteDate, Date maxQuoteDate)
     {
-        if (minQuoteDate == null || maxQuoteDate == null)
-        {
-            return AuthorErrors.AuthorQuoteDatesNotFound;
-        }
-
         if (!IsValidBirthAndDeathDateRange(birthDate, deathDate))
         {
             return AuthorErrors.InvalidBirthAndDeathDateRange;
@@ -71,13 +66,8 @@ public sealed class Author : Entity<Author>
     }
 
     public Result UpdateByUser(AuthorName name, Biography biography, Date birthDate,
-        Date? minQuoteDate)
+        Date minQuoteDate)
     {
-        if (minQuoteDate == null)
-        {
-            return AuthorErrors.AuthorQuoteDatesNotFound;
-        }
-
         if (!IsValidBirthAndMinQuoteDateRange(birthDate, minQuoteDate))
         {
             return AuthorErrors.InvalidBirthAndMinQuoteDateRange;

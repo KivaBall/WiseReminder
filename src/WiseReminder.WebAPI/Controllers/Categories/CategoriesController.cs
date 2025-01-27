@@ -10,7 +10,7 @@ public sealed class CategoriesController(ISender sender) : BaseController(sender
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateCategory(Guid id, CategoryRequest request)
     {
@@ -18,7 +18,7 @@ public sealed class CategoriesController(ISender sender) : BaseController(sender
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
@@ -26,7 +26,7 @@ public sealed class CategoriesController(ISender sender) : BaseController(sender
         return await ExecuteCommand(command);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
         var query = new GetCategoryDtoByIdQuery(id);

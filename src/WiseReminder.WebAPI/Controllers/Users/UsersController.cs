@@ -10,9 +10,9 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsUser(LoginAsUserRequest asUserRequest)
+    public async Task<IActionResult> LoginAsUser(LoginAsUserRequest request)
     {
-        var command = asUserRequest.ToLoginAsUserCommand();
+        var command = request.ToLoginAsUserCommand();
         return await ExecuteCommand(command);
     }
 
@@ -23,7 +23,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpPut("{id}/subscription")]
+    [HttpPut("{id:guid}/subscription")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ApplySubscription(Guid id, ApplySubscriptionRequest request)
     {
@@ -39,7 +39,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
@@ -55,7 +55,7 @@ public sealed class UsersController(ISender sender) : BaseController(sender)
         return await ExecuteCommand(command);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetUserById(Guid id)
     {

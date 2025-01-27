@@ -33,11 +33,6 @@ public sealed class AppDbContext(
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseModel(AppDbContextModel.Instance);
-    }
-
     private async Task<Result> ExecuteSaveChangesAsync(CancellationToken cancellationToken)
     {
         try
