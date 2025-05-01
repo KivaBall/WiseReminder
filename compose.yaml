@@ -2,61 +2,95 @@ version: '3.8'
 
 services:
   wisereminder.webapi:
-    image: wisereminder.webapi
+    image: wisereminder.webapi:local
     container_name: webapi
     build:
       context: .
       dockerfile: src/WiseReminder.WebAPI/Dockerfile
+    env_file:
+      - secrets.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__RedisConnection=redis:6379
-      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=wisereminder;Username=postgres;Password=123456
-      - ConnectionStrings__SeqConnection=http://seq:5341/
-      - JWTPassword=ThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKeyThisIsSpecialSecurityKey
       - AllowMigrations=true
       - AllowSeeding=true
       - AllowScalar=true
-    env_file:
-      - secrets.env
     ports:
       - "8080:8080"
+    restart: on-failure
     depends_on:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
       seq:
         condition: service_started
-  
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   
   redis:
-    image: redis:latest
+    image: redis:7.4.3-alpine
     container_name: redis
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   postgres:
-    image: postgres:latest
+    image: postgres:17.4-alpine
     container_name: postgres
+    env_file:
+      - secrets.env
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
       POSTGRES_DB: wisereminder
     ports:
       - "5432:5432"
     restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2024.3
     container_name: seq
-    environment:
-      ACCEPT_EULA: "Y"
+    env_file:
+      - secrets.env
     ports:
       - "5341:5341"
+      - "8089:80"
     restart: always
+    volumes:
+      - seqdata:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  redisdata:
+  pgdata:
+  seqdata:
